@@ -16,16 +16,29 @@
 package main
 
 import (
-	"encoding/hex"
+	"flag"
 	"fmt"
+	"github.com/jacobsa/aes/testing"
+	"log"
 )
 
-func main() {
-	key, err := hex.DecodeString("2b7e151628aed2a6abf7158809cf4f3c")
-	if err != nil { panic(err) }
+var function = flag.String("func", "", "Function for which to generate cases.")
 
-	k1, k2 := generateSubkey(key)
-	fmt.Printf("K1: %x\n", k1)
-	fmt.Printf("K2: %x\n", k2)
+func doGenerateSubkey() []testing.GenerateSubkeyTestCase {
+	return nil
+}
+
+func main() {
+	var cases interface{}
+	switch *function {
+	case "":
+		log.Fatalf("You must set -func.")
+	case "generateSubkey":
+		cases = doGenerateSubkey()
+	default:
+		log.Fatalf("Unrecognized function: %s", *function)
+	}
+
+	fmt.Printf("Result: %v", cases)
 }
 
