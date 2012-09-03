@@ -15,9 +15,47 @@
 
 package cmac
 
+import (
+	"bytes"
+	"crypto/aes"
+	"fmt"
+)
+
+var subkeyZero []byte
+var subkeyRb []byte
+
+func init() {
+	subkeyZero = bytes.Repeat([]byte{0x00}, 16)
+	subkeyRb = append(bytes.Repeat([]byte{0x00}, 15), 0x87)
+}
+
 // Given a 128-bit key, generateSubkey returns two subkeys that can be used in
 // MAC generation and verification. This is the Generate_Subkey function of RFC
 // 4493.
 func generateSubkey(key []byte) (k1 []byte, k2 []byte) {
-	return nil, nil
+	if len(key) != 16 {
+		panic("generateSubkey requires a 16-byte key.")
+	}
+
+	c, err := aes.NewCipher(key)
+	if err != nil {
+		panic(fmt.Sprintf("aes.NewCipher: %v", err))
+	}
+
+	l := make([]byte, 16)
+	c.Encrypt(l, subkeyZero)
+
+	if msb(l) == 0 {
+		k1 = shiftLeft(l)
+	} else {
+		k1 = xor(shiftLeft(l), subkeyRb)
+	}
+
+	if msb(k1) == 0 {
+		k2 = shiftLeft(k1)
+	} else {
+		k2 = xor(shiftLeft(k1), subkeyRb)
+	}
+
+	return
 }
