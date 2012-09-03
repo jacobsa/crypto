@@ -152,3 +152,23 @@ void AES_CMAC ( unsigned char *key, unsigned char *input, int length,
 }
 */
 import "C"
+
+import (
+	"unsafe"
+)
+
+func generateSubkey(key []byte) (k1 []byte, k2 []byte) {
+	if len(key) != 16 {
+		panic("Invalid length.")
+	}
+
+	cK1 := (*C.uchar)(C.malloc(16))
+	defer C.free(unsafe.Pointer(cK1))
+
+	cK2 := (*C.uchar)(C.malloc(16))
+	defer C.free(unsafe.Pointer(cK2))
+
+	C.generate_subkey((*C.uchar)(&key[0]), cK1, cK2)
+
+	return C.GoBytes(unsafe.Pointer(cK1), 16), C.GoBytes(unsafe.Pointer(cK2), 16)
+}
