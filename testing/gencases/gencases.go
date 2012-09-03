@@ -16,11 +16,12 @@
 package main
 
 import (
+	"encoding/gob"
 	"flag"
-	"fmt"
 	"github.com/jacobsa/aes/testing"
 	"log"
 	"math/rand"
+	"os"
 )
 
 var function = flag.String("func", "", "Function for which to generate cases.")
@@ -61,6 +62,7 @@ func main() {
 		log.Fatalf("Unrecognized function: %s", *function)
 	}
 
-	fmt.Printf("Result: %v", cases)
+	encoder := gob.NewEncoder(os.Stdout)
+	encoder.Encode(cases)
 }
 
