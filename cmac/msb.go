@@ -17,6 +17,6 @@ package cmac
 
 // msb returns the most significant bit of the supplied data (which must be
 // non-empty). This is the MSB(L) function of RFC 4493.
-func msb(buf []byte) int {
+func msb(buf []byte) uint8 {
 	return 0
 }

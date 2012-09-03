@@ -18,6 +18,7 @@ package cmac
 import (
 	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
+	"strconv"
 	"testing"
 )
 
@@ -26,6 +27,15 @@ func TestMsb(t *testing.T) { RunTests(t) }
 ////////////////////////////////////////////////////////////////////////
 // Helpers
 ////////////////////////////////////////////////////////////////////////
+
+func fromBinary(s string) byte {
+	AssertEq(8, len(s), "%s", s)
+
+	u, err := strconv.ParseUint(s, 2, 8)
+	AssertEq(nil, err, "%s", s)
+
+	return byte(u)
+}
 
 type MsbTest struct{}
 
@@ -41,11 +51,21 @@ func (t *MsbTest) NilBuffer() {
 }
 
 func (t *MsbTest) EmptyBuffer() {
-	ExpectEq("TODO", "")
+	f := func() { msb([]byte{}) }
+	ExpectThat(f, Panics(HasSubstr("empty")))
 }
 
 func (t *MsbTest) MostSignficantIsOne() {
-	ExpectEq("TODO", "")
+	bufs := [][]byte{
+		[]byte{fromBinary("100000000")},
+		[]byte{fromBinary("110000000")},
+		[]byte{fromBinary("111000000")},
+		[]byte{fromBinary("100000000"), fromBinary("00000000")},
+	}
+
+	for i, buf := range bufs {
+		ExpectEq(1, buf, "Test case %d: %v", i, buf)
+	}
 }
 
 func (t *MsbTest) MostSignficantIsZero() {
