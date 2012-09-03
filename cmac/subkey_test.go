@@ -17,6 +17,7 @@ package cmac
 
 import (
 	"encoding/hex"
+	aes_testing "github.com/jacobsa/aes/testing"
 	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
 	"testing"
@@ -66,4 +67,15 @@ func (t *SubkeyTest) Rfc4493GoldenTestCase() {
 	k1, k2 := generateSubkey(key)
 	ExpectThat(k1, DeepEquals(expectedK1))
 	ExpectThat(k2, DeepEquals(expectedK2))
+}
+
+func (t *SubkeyTest) GeneratedTestCases() {
+	cases := aes_testing.GenerateSubkeyCases()
+	AssertGe(len(cases), 100)
+
+	for i, c := range cases {
+		k1, k2 := generateSubkey(c.Key)
+		ExpectThat(k1, DeepEquals(c.K1), "Test case %d: %v", i, c)
+		ExpectThat(k2, DeepEquals(c.K2), "Test case %d: %v", i, c)
+	}
 }

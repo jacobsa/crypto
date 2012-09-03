@@ -15,6 +15,14 @@
 
 package testing
 
+import (
+	"encoding/gob"
+	"fmt"
+	"go/build"
+	"os"
+	"path"
+)
+
 // SubkeyTestCase represents a test case for generateSubkey generated using the
 // reference implementation from RFC 4493.
 type GenerateSubkeyTestCase struct {
@@ -25,6 +33,30 @@ type GenerateSubkeyTestCase struct {
 
 // GenerateSubkeyCases returns test cases for generateSubkey.
 func GenerateSubkeyCases() []GenerateSubkeyTestCase {
-	// TODO
-	return nil
+	// Find the source package.
+	pkg, err := build.Import(
+		"github.com/jacobsa/aes/testing/cases",
+		"",
+		build.FindOnly)
+
+	if err != nil {
+		panic(fmt.Sprintf("Finding package: %v", err))
+	}
+
+	// Load the appropriate gob file.
+	gobPath := path.Join(pkg.Dir, "generateSubkey.gob")
+	f, err := os.Open(gobPath)
+	if err != nil {
+		panic(fmt.Sprintf("Opening %s: %v", gobPath, err))
+	}
+
+	defer f.Close()
+
+	// Parse it.
+	var cases []GenerateSubkeyTestCase
+	if err = gob.NewDecoder(f).Decode(&cases); err != nil {
+		panic(fmt.Sprintf("Decoding: %v", err))
+	}
+
+	return cases
 }
