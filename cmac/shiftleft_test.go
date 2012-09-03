@@ -34,6 +34,18 @@ func init() { RegisterTestSuite(&ShiftLeftTest{}) }
 // Tests
 ////////////////////////////////////////////////////////////////////////
 
-func (t *ShiftLeftTest) DoesFoo() {
+func (t *ShiftLeftTest) NilBuffer() {
+	ExpectEq("TODO", "")
+}
+
+func (t *ShiftLeftTest) EmptyBuffer() {
+	ExpectEq("TODO", "")
+}
+
+func (t *ShiftLeftTest) OneByteBuffers() {
+	ExpectEq("TODO", "")
+}
+
+func (t *ShiftLeftTest) MultiByteBuffers() {
 	ExpectEq("TODO", "")
 }
