@@ -1,18 +1,22 @@
-// This program was pulled from Appendix A of RFC 4493, and can be used as a
-// reference implementation for generating test cases by modifying
-// appropriately and then running:
+// Copyright 2012 Aaron Jacobs. All Rights Reserved.
+// Author: aaronjjacobs@gmail.com (Aaron Jacobs)
 //
-//     gcc -lcrypto cmac/gentest/gentest.c && ./a.out
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
-// It was modified by Aaron Jacobs (aaronjjacobs@gmail.com) to implement the
-// missing AES_128 function using OpenSSL.
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
-/****************************************************************/
-/* AES-CMAC with AES-128 bit                                    */
-/* CMAC     Algorithm described in SP800-38B                    */
-/* Author: Junhyuk Song (junhyuk.song@samsung.com)              */
-/*         Jicheol Lee  (jicheol.lee@samsung.com)               */
-/****************************************************************/
+// The C code in this file was pulled from Appendix A of RFC 4493 and modified
+// by Aaron Jacobs, adding an implementation of the missing AES_128 function
+// that uses OpenSSL. These modifications and the Go code is copyright Aaron
+// Jacobs.
 
 #include <assert.h>
 #include <openssl/aes.h>
