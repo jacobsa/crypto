@@ -49,15 +49,18 @@ func init() { RegisterTestSuite(&HashTest{}) }
 ////////////////////////////////////////////////////////////////////////
 
 func (t *HashTest) NilKey() {
-	ExpectEq("TODO", "")
+	_, err := cmac.New(nil)
+	ExpectThat(err, Error(HasSubstr("16-byte")))
 }
 
 func (t *HashTest) ShortKey() {
-	ExpectEq("TODO", "")
+	_, err := cmac.New(make([]byte, 15))
+	ExpectThat(err, Error(HasSubstr("16-byte")))
 }
 
 func (t *HashTest) LongKey() {
-	ExpectEq("TODO", "")
+	_, err := cmac.New(make([]byte, 17))
+	ExpectThat(err, Error(HasSubstr("16-byte")))
 }
 
 func (t *HashTest) SumAppendsToSlice() {
