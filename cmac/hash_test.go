@@ -29,6 +29,16 @@ func TestHash(t *testing.T) { RunTests(t) }
 // Helpers
 ////////////////////////////////////////////////////////////////////////
 
+func runCmac(key []byte, msg []byte) []byte {
+	h, err := New(key)
+	AssertEq(nil, err)
+
+	_, err = h.Write(msg)
+	AssertEq(nil, err)
+
+	return h.Sum([]byte{})
+}
+
 type HashTest struct{}
 
 func init() { RegisterTestSuite(&HashTest{}) }
@@ -38,18 +48,15 @@ func init() { RegisterTestSuite(&HashTest{}) }
 ////////////////////////////////////////////////////////////////////////
 
 func (t *HashTest) NilKey() {
-	_, err := generateCmac(nil, []byte{})
-	ExpectThat(err, Error(HasSubstr("16-byte")))
+	ExpectEq("TODO", "")
 }
 
 func (t *HashTest) ShortKey() {
-	_, err := generateCmac(make([]byte, 15), []byte{})
-	ExpectThat(err, Error(HasSubstr("16-byte")))
+	ExpectEq("TODO", "")
 }
 
 func (t *HashTest) LongKey() {
-	_, err := generateCmac(make([]byte, 17), []byte{})
-	ExpectThat(err, Error(HasSubstr("16-byte")))
+	ExpectEq("TODO", "")
 }
 
 func (t *HashTest) NilMessage() {
@@ -61,8 +68,7 @@ func (t *HashTest) NilMessage() {
 	expectedMac, err := hex.DecodeString("bb1d6929e95937287fa37d129b756746")
 	AssertEq(nil, err)
 
-	mac, err := generateCmac(key, msg)
-	AssertEq(nil, err)
+	mac := runCmac(key, msg)
 	ExpectThat(mac, DeepEquals(expectedMac))
 }
 
@@ -76,8 +82,7 @@ func (t *HashTest) Rfc4493GoldenTestCase1() {
 	expectedMac, err := hex.DecodeString("bb1d6929e95937287fa37d129b756746")
 	AssertEq(nil, err)
 
-	mac, err := generateCmac(key, msg)
-	AssertEq(nil, err)
+	mac := runCmac(key, msg)
 	ExpectThat(mac, DeepEquals(expectedMac))
 }
 
@@ -91,8 +96,7 @@ func (t *HashTest) Rfc4493GoldenTestCase2() {
 	expectedMac, err := hex.DecodeString("070a16b46b4d4144f79bdd9dd04a287c")
 	AssertEq(nil, err)
 
-	mac, err := generateCmac(key, msg)
-	AssertEq(nil, err)
+	mac := runCmac(key, msg)
 	ExpectThat(mac, DeepEquals(expectedMac))
 }
 
@@ -109,8 +113,7 @@ func (t *HashTest) Rfc4493GoldenTestCase3() {
 	expectedMac, err := hex.DecodeString("dfa66747de9ae63030ca32611497c827")
 	AssertEq(nil, err)
 
-	mac, err := generateCmac(key, msg)
-	AssertEq(nil, err)
+	mac := runCmac(key, msg)
 	ExpectThat(mac, DeepEquals(expectedMac))
 }
 
@@ -128,8 +131,7 @@ func (t *HashTest) Rfc4493GoldenTestCase4() {
 	expectedMac, err := hex.DecodeString("51f0bebf7e3b9d92fc49741779363cfe")
 	AssertEq(nil, err)
 
-	mac, err := generateCmac(key, msg)
-	AssertEq(nil, err)
+	mac := runCmac(key, msg)
 	ExpectThat(mac, DeepEquals(expectedMac))
 }
 
@@ -138,8 +140,7 @@ func (t *HashTest) GeneratedTestCases() {
 	AssertGe(len(cases), 100)
 
 	for i, c := range cases {
-		mac, err := generateCmac(c.Key, c.Msg)
-		AssertEq(nil, err)
+		mac := runCmac(c.Key, c.Msg)
 		ExpectThat(mac, DeepEquals(c.Mac), "Test case %d: %v", i, c)
 	}
 }

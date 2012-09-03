@@ -132,19 +132,3 @@ func New(key []byte) (hash.Hash, error) {
 
 	return h, nil
 }
-
-// Given a 128-bit key and a message, return a MAC that can be used to validate
-// the input message. This is the AES-CMAC function of RFC 4493.
-func generateCmac(key []byte, msg []byte) ([]byte, error) {
-	h, err := New(key)
-	if err != nil {
-		return nil, err
-	}
-
-	// TODO: Get rid of this.
-	if _, err := h.Write(msg); err != nil {
-		return nil, err
-	}
-
-	return h.Sum([]byte{}), nil
-}
