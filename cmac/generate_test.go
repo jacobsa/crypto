@@ -17,6 +17,7 @@ package cmac
 
 import (
 	"encoding/hex"
+	aes_testing "github.com/jacobsa/aes/testing"
 	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
 	"testing"
@@ -133,5 +134,12 @@ func (t *GenerateTest) Rfc4493GoldenTestCase4() {
 }
 
 func (t *GenerateTest) GeneratedTestCases() {
-	ExpectEq("TODO", "")
+	cases := aes_testing.GenerateCmacCases()
+	AssertGe(len(cases), 100)
+
+	for i, c := range cases {
+		mac, err := generateCmac(c.Key, c.Msg)
+		AssertEq(nil, err)
+		ExpectThat(mac, DeepEquals(c.Mac), "Test case %d: %v", i, c)
+	}
 }
