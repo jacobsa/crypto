@@ -64,7 +64,7 @@ func (t *MsbTest) MostSignficantIsOne() {
 	}
 
 	for i, buf := range bufs {
-		ExpectEq(1, buf, "Test case %d: %v", i, buf)
+		ExpectEq(1, msb(buf), "Test case %d: %v", i, buf)
 	}
 }
 
@@ -77,6 +77,6 @@ func (t *MsbTest) MostSignficantIsZero() {
 	}
 
 	for i, buf := range bufs {
-		ExpectEq(0, buf, "Test case %d: %v", i, buf)
+		ExpectEq(0, msb(buf), "Test case %d: %v", i, buf)
 	}
 }
