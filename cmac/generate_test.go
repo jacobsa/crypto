@@ -114,7 +114,22 @@ func (t *GenerateTest) Rfc4493GoldenTestCase3() {
 }
 
 func (t *GenerateTest) Rfc4493GoldenTestCase4() {
-	ExpectEq("TODO", "")
+	key, err := hex.DecodeString("2b7e151628aed2a6abf7158809cf4f3c")
+	AssertEq(nil, err)
+
+	msg, err := hex.DecodeString(
+		"6bc1bee22e409f96e93d7e117393172a" +
+		"ae2d8a571e03ac9c9eb76fac45af8e51" +
+		"30c81c46a35ce411e5fbc1191a0a52ef" +
+		"f69f2445df4f9b17ad2b417be66c3710")
+	AssertEq(nil, err)
+
+	expectedMac, err := hex.DecodeString("dfa66747de9ae63030ca32611497c827")
+	AssertEq(nil, err)
+
+	mac, err := generateCmac(key, msg)
+	AssertEq(nil, err)
+	ExpectThat(mac, DeepEquals(expectedMac))
 }
 
 func (t *GenerateTest) GeneratedTestCases() {
