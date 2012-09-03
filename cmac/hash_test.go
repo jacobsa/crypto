@@ -116,7 +116,25 @@ func (t *HashTest) SumDoesntAffectState() {
 }
 
 func (t *HashTest) Reset() {
-	ExpectEq("TODO", "")
+	// Grab a test case.
+	cases := aes_testing.GenerateCmacCases()
+	AssertGt(len(cases), 10)
+	c := cases[10]
+
+	// Create a hash and feed it some data, then reset it.
+	h, err := cmac.New(c.Key)
+	AssertEq(nil, err)
+
+	_, err = h.Write([]byte{0xde, 0xad})
+	AssertEq(nil, err)
+
+	h.Reset()
+
+	// Feed the hash the test case's data and make sure the result is correct.
+	_, err = h.Write(c.Msg)
+	AssertEq(nil, err)
+
+	ExpectThat(h.Sum([]byte{}), DeepEquals(c.Mac))
 }
 
 func (t *HashTest) Size() {
