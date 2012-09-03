@@ -16,6 +16,7 @@
 package cmac
 
 import (
+	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
 	"testing"
 )
@@ -34,6 +35,25 @@ func init() { RegisterTestSuite(&XorTest{}) }
 // Tests
 ////////////////////////////////////////////////////////////////////////
 
-func (t *XorTest) DoesFoo() {
+func (t *XorTest) LengthNotEqual() {
+	a := []byte{0x00}
+	b := []byte{0x00, 0x11}
+	f := func() { xor(a, b) }
+	ExpectThat(f, Panics(HasSubstr("length")))
+}
+
+func (t *XorTest) NilBuffers() {
+	ExpectEq("TODO", "")
+}
+
+func (t *XorTest) EmptyBuffers() {
+	ExpectEq("TODO", "")
+}
+
+func (t *XorTest) OneByteBuffers() {
+	ExpectEq("TODO", "")
+}
+
+func (t *XorTest) MultiByteBuffers() {
 	ExpectEq("TODO", "")
 }
