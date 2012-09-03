@@ -1,3 +1,12 @@
+// This program was pulled from Appendix A of RFC 4493, and can be used as a
+// reference implementation for generating test cases by modifying
+// appropriately and then running:
+//
+//     gcc -lcrypto cmac/gentest/gentest.c && ./a.out
+//
+// It was modified by Aaron Jacobs (aaronjjacobs@gmail.com) to implement the
+// missing AES_128 function using OpenSSL.
+
 /****************************************************************/
 /* AES-CMAC with AES-128 bit                                    */
 /* CMAC     Algorithm described in SP800-38B                    */
@@ -5,6 +14,8 @@
 /*         Jicheol Lee  (jicheol.lee@samsung.com)               */
 /****************************************************************/
 
+#include <assert.h>
+#include <openssl/aes.h>
 #include <stdio.h>
 
 /* For CMAC Calculation */
@@ -18,6 +29,13 @@ unsigned char const_Zero[16] = {
 };
 
 /* Basic Functions */
+
+void AES_128(const unsigned char *key, const unsigned char *in, unsigned char *out) {
+	AES_KEY key_struct;
+	assert(AES_set_encrypt_key(key, 128, &key_struct) == 0);
+
+	AES_encrypt(in, out, &key_struct);
+}
 
 void xor_128(unsigned char *a, unsigned char *b, unsigned char *out)
 {
