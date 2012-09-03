@@ -19,5 +19,19 @@ package cmac
 // most-signficant bit to disappear and a zero to be introduced at the right.
 // This corresponds to the `x << 1` notation of RFC 4493.
 func shiftLeft(b []byte) []byte {
-	return nil
+	l := len(b)
+	if l == 0 {
+		panic("shiftLeft requires a non-empty buffer.")
+	}
+
+	output := make([]byte, l)
+
+	overflow := byte(0)
+	for i := int(l-1); i >= 0; i-- {
+		output[i] = b[i] << 1
+		output[i] |= overflow
+		overflow = (b[i] & 0x80) >> 7
+	}
+
+	return output
 }
