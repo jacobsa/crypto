@@ -16,6 +16,7 @@
 package cmac
 
 import (
+	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
 	"testing"
 )
@@ -35,15 +36,20 @@ func init() { RegisterTestSuite(&SubkeyTest{}) }
 ////////////////////////////////////////////////////////////////////////
 
 func (t *SubkeyTest) NilKey() {
-	ExpectEq("TODO", "")
+	f := func() { generateSubkey(nil) }
+	ExpectThat(f, Panics(HasSubstr("16 bytes")))
 }
 
 func (t *SubkeyTest) KeyTooShort() {
-	ExpectEq("TODO", "")
+	key := make([]byte, 15)
+	f := func() { generateSubkey(key) }
+	ExpectThat(f, Panics(HasSubstr("16 bytes")))
 }
 
 func (t *SubkeyTest) KeyTooLong() {
-	ExpectEq("TODO", "")
+	key := make([]byte, 17)
+	f := func() { generateSubkey(key) }
+	ExpectThat(f, Panics(HasSubstr("16 bytes")))
 }
 
 func (t *SubkeyTest) Rfc4493GoldenTestCase() {
