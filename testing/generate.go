@@ -23,20 +23,20 @@ import (
 	"path"
 )
 
-// GenerateSubkeyTestCase represents a test case for generateSubkey generated
-// using the reference implementation from RFC 4493.
-type GenerateSubkeyTestCase struct {
+// GenerateCmacTestCase represents a test case for generateCmac generated using
+// the reference implementation from RFC 4493.
+type GenerateCmacTestCase struct {
 	Key []byte
-	K1 []byte
-	K2 []byte
+	Msg []byte
+	Mac []byte
 }
 
-func (c GenerateSubkeyTestCase) String() string {
-	return fmt.Sprintf("generateSubkey(%x) = (%x, %x)", c.Key, c.K1, c.K2)
+func (c GenerateCmacTestCase) String() string {
+	return fmt.Sprintf("generateCmac(%x, %x) = %x", c.Key, c.Msg, c.Mac)
 }
 
-// GenerateSubkeyCases returns test cases for generateSubkey.
-func GenerateSubkeyCases() []GenerateSubkeyTestCase {
+// GenerateCmacTestCases returns test cases for generateCmac.
+func GenerateCmacCases() []GenerateCmacTestCase {
 	// Find the source package.
 	pkg, err := build.Import(
 		"github.com/jacobsa/aes/testing/cases",
@@ -48,7 +48,7 @@ func GenerateSubkeyCases() []GenerateSubkeyTestCase {
 	}
 
 	// Load the appropriate gob file.
-	gobPath := path.Join(pkg.Dir, "generateSubkey.gob")
+	gobPath := path.Join(pkg.Dir, "generateCmac.gob")
 	f, err := os.Open(gobPath)
 	if err != nil {
 		panic(fmt.Sprintf("Opening %s: %v", gobPath, err))
@@ -57,10 +57,11 @@ func GenerateSubkeyCases() []GenerateSubkeyTestCase {
 	defer f.Close()
 
 	// Parse it.
-	var cases []GenerateSubkeyTestCase
+	var cases []GenerateCmacTestCase
 	if err = gob.NewDecoder(f).Decode(&cases); err != nil {
 		panic(fmt.Sprintf("Decoding: %v", err))
 	}
 
 	return cases
 }
+
