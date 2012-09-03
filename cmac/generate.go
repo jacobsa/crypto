@@ -34,14 +34,6 @@ func padBlock(block []byte) []byte {
 	return result
 }
 
-func minUint64(a, b uint64) uint64 {
-	if a < b {
-		return a
-	}
-
-	return b
-}
-
 // Given a 128-bit key and a message, return a MAC that can be used to validate
 // the input message. This is the AES-CMAC function of RFC 4493.
 func generateCmac(key []byte, msg []byte) ([]byte, error) {
@@ -82,11 +74,8 @@ func generateCmac(key []byte, msg []byte) ([]byte, error) {
 
 	// Run the rounds.
 	x := make([]byte, 16)
-	for i := uint64(0); i <= n-1; i++ {
-		blockStart := 16 * i
-		blockEnd := minUint64(16 * (i+1), uint64(msgLen))
-
-		block := msg[blockStart:blockEnd]
+	for i := uint64(0); i < n-1; i++ {
+		block := msg[16*i:16*(i+1)]
 		y := xor(x, block)
 		c.Encrypt(x, y)
 	}
