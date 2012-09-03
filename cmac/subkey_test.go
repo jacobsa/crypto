@@ -34,6 +34,18 @@ func init() { RegisterTestSuite(&SubkeyTest{}) }
 // Tests
 ////////////////////////////////////////////////////////////////////////
 
-func (t *SubkeyTest) DoesFoo() {
+func (t *SubkeyTest) NilKey() {
+	ExpectEq("TODO", "")
+}
+
+func (t *SubkeyTest) KeyTooShort() {
+	ExpectEq("TODO", "")
+}
+
+func (t *SubkeyTest) KeyTooLong() {
+	ExpectEq("TODO", "")
+}
+
+func (t *SubkeyTest) Rfc4493GoldenTestCase() {
 	ExpectEq("TODO", "")
 }
