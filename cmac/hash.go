@@ -19,6 +19,7 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"fmt"
+	"hash"
 )
 
 func padBlock(block []byte) []byte {
@@ -112,11 +113,10 @@ func (h *cmacHash) BlockSize() int {
 	return 16
 }
 
-// Given a 128-bit key and a message, return a MAC that can be used to validate
-// the input message. This is the AES-CMAC function of RFC 4493.
-func generateCmac(key []byte, msg []byte) ([]byte, error) {
+// New returns a CMAC hash using the supplied key, which must be 16 bytes long.
+func New(key []byte) (hash.Hash, error) {
 	if len(key) != 16 {
-		return nil, fmt.Errorf("generateCmac requires a 16-byte key.")
+		return nil, fmt.Errorf("AES-CMAC requires a 16-byte key.")
 	}
 
 	// Create a cipher.
@@ -125,9 +125,21 @@ func generateCmac(key []byte, msg []byte) ([]byte, error) {
 		return nil, fmt.Errorf("aes.NewCipher: %v", err)
 	}
 
+	// Set up the hash object.
 	h := &cmacHash{ciph: c}
 	h.k1, h.k2 = generateSubkey(key)
 	h.Reset()
+
+	return h, nil
+}
+
+// Given a 128-bit key and a message, return a MAC that can be used to validate
+// the input message. This is the AES-CMAC function of RFC 4493.
+func generateCmac(key []byte, msg []byte) ([]byte, error) {
+	h, err := New(key)
+	if err != nil {
+		return nil, err
+	}
 
 	// TODO: Get rid of this.
 	if _, err := h.Write(msg); err != nil {
