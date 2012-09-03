@@ -35,7 +35,7 @@ func init() { RegisterTestSuite(&XorTest{}) }
 // Tests
 ////////////////////////////////////////////////////////////////////////
 
-func (t *XorTest) LengthNotEqual() {
+func (t *XorTest) LengthsNotEqual() {
 	a := []byte{0x00}
 	b := []byte{0x00, 0x11}
 	f := func() { xor(a, b) }
@@ -43,7 +43,12 @@ func (t *XorTest) LengthNotEqual() {
 }
 
 func (t *XorTest) NilBuffers() {
-	ExpectEq("TODO", "")
+	a := []byte(nil)
+	b := []byte(nil)
+	result := xor(a, b)
+
+	ExpectNe(nil, result)
+	ExpectThat(result, DeepEquals([]byte{}))
 }
 
 func (t *XorTest) EmptyBuffers() {
