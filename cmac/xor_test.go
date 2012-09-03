@@ -104,6 +104,6 @@ func (t *XorTest) MultiByteBuffers() {
 
 	a = []byte{fromBinary("00000000"), fromBinary("11111111")}
 	b = []byte{fromBinary("11111111"), fromBinary("00000000")}
-	expected = []byte{fromBinary("00000000"), fromBinary("00000000")}
+	expected = []byte{fromBinary("11111111"), fromBinary("11111111")}
 	ExpectThat(xor(a, b), DeepEquals(expected))
 }
