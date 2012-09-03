@@ -16,6 +16,7 @@
 package cmac
 
 import (
+	"encoding/hex"
 	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
 	"testing"
@@ -53,5 +54,16 @@ func (t *SubkeyTest) KeyTooLong() {
 }
 
 func (t *SubkeyTest) Rfc4493GoldenTestCase() {
-	ExpectEq("TODO", "")
+	key, err := hex.DecodeString("2b7e151628aed2a6abf7158809cf4f3c")
+	AssertEq(nil, err)
+
+	expectedK1, err := hex.DecodeString("fbeed618357133667c85e08f7236a8de")
+	AssertEq(nil, err)
+
+	expectedK2, err := hex.DecodeString("f7ddac306ae266ccf90bc11ee46d513b")
+	AssertEq(nil, err)
+
+	k1, k2 := generateSubkey(key)
+	ExpectThat(k1, DeepEquals(expectedK1))
+	ExpectThat(k2, DeepEquals(expectedK2))
 }
