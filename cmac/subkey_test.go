@@ -38,19 +38,19 @@ func init() { RegisterTestSuite(&SubkeyTest{}) }
 
 func (t *SubkeyTest) NilKey() {
 	f := func() { generateSubkey(nil) }
-	ExpectThat(f, Panics(HasSubstr("16 bytes")))
+	ExpectThat(f, Panics(HasSubstr("16-byte")))
 }
 
 func (t *SubkeyTest) KeyTooShort() {
 	key := make([]byte, 15)
 	f := func() { generateSubkey(key) }
-	ExpectThat(f, Panics(HasSubstr("16 bytes")))
+	ExpectThat(f, Panics(HasSubstr("16-byte")))
 }
 
 func (t *SubkeyTest) KeyTooLong() {
 	key := make([]byte, 17)
 	f := func() { generateSubkey(key) }
-	ExpectThat(f, Panics(HasSubstr("16 bytes")))
+	ExpectThat(f, Panics(HasSubstr("16-byte")))
 }
 
 func (t *SubkeyTest) Rfc4493GoldenTestCase() {
