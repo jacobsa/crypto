@@ -47,12 +47,17 @@ func (t *XorTest) NilBuffers() {
 	b := []byte(nil)
 	result := xor(a, b)
 
-	ExpectNe(nil, result)
+	AssertNe(nil, result)
 	ExpectThat(result, DeepEquals([]byte{}))
 }
 
 func (t *XorTest) EmptyBuffers() {
-	ExpectEq("TODO", "")
+	a := []byte{}
+	b := []byte{}
+	result := xor(a, b)
+
+	AssertNe(nil, result)
+	ExpectThat(result, DeepEquals([]byte{}))
 }
 
 func (t *XorTest) OneByteBuffers() {
