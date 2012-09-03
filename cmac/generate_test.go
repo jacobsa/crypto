@@ -52,7 +52,17 @@ func (t *GenerateTest) LongKey() {
 }
 
 func (t *GenerateTest) NilMessage() {
-	ExpectEq("TODO", "")
+	key, err := hex.DecodeString("2b7e151628aed2a6abf7158809cf4f3c")
+	AssertEq(nil, err)
+
+	var msg []byte = nil
+
+	expectedMac, err := hex.DecodeString("bb1d6929e95937287fa37d129b756746")
+	AssertEq(nil, err)
+
+	mac, err := generateCmac(key, msg)
+	AssertEq(nil, err)
+	ExpectThat(mac, DeepEquals(expectedMac))
 }
 
 func (t *GenerateTest) Rfc4493GoldenTestCase1() {
