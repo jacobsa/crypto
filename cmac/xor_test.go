@@ -90,5 +90,20 @@ func (t *XorTest) OneByteBuffers() {
 }
 
 func (t *XorTest) MultiByteBuffers() {
-	ExpectEq("TODO", "")
+	var a, b, expected []byte
+
+	a = []byte{fromBinary("00000000"), fromBinary("00000000")}
+	b = []byte{fromBinary("00000000"), fromBinary("00000000")}
+	expected = []byte{fromBinary("00000000"), fromBinary("00000000")}
+	ExpectThat(xor(a, b), DeepEquals(expected))
+
+	a = []byte{fromBinary("11111111"), fromBinary("11111111")}
+	b = []byte{fromBinary("11111111"), fromBinary("11111111")}
+	expected = []byte{fromBinary("00000000"), fromBinary("00000000")}
+	ExpectThat(xor(a, b), DeepEquals(expected))
+
+	a = []byte{fromBinary("00000000"), fromBinary("11111111")}
+	b = []byte{fromBinary("11111111"), fromBinary("00000000")}
+	expected = []byte{fromBinary("00000000"), fromBinary("00000000")}
+	ExpectThat(xor(a, b), DeepEquals(expected))
 }
