@@ -57,10 +57,10 @@ func (t *MsbTest) EmptyBuffer() {
 
 func (t *MsbTest) MostSignficantIsOne() {
 	bufs := [][]byte{
-		[]byte{fromBinary("100000000")},
-		[]byte{fromBinary("110000000")},
-		[]byte{fromBinary("111000000")},
-		[]byte{fromBinary("100000000"), fromBinary("00000000")},
+		[]byte{fromBinary("10000000")},
+		[]byte{fromBinary("11000000")},
+		[]byte{fromBinary("11100000")},
+		[]byte{fromBinary("10000000"), fromBinary("00000000")},
 	}
 
 	for i, buf := range bufs {
@@ -70,10 +70,10 @@ func (t *MsbTest) MostSignficantIsOne() {
 
 func (t *MsbTest) MostSignficantIsZero() {
 	bufs := [][]byte{
-		[]byte{fromBinary("000000000")},
-		[]byte{fromBinary("010000000")},
-		[]byte{fromBinary("011000000")},
-		[]byte{fromBinary("000000000"), fromBinary("10000000")},
+		[]byte{fromBinary("00000000")},
+		[]byte{fromBinary("01000000")},
+		[]byte{fromBinary("01100000")},
+		[]byte{fromBinary("00000000"), fromBinary("10000000")},
 	}
 
 	for i, buf := range bufs {
