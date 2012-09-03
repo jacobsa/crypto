@@ -100,6 +100,19 @@ func (h *cmacHash) Sum(b []byte) []byte {
 	return b
 }
 
+func (h *cmacHash) Reset() {
+	h.data = []byte{}
+	h.x = make([]byte, 16)
+}
+
+func (h *cmacHash) Size() int {
+	return 16
+}
+
+func (h *cmacHash) BlockSize() int {
+	return 16
+}
+
 // Given a 128-bit key and a message, return a MAC that can be used to validate
 // the input message. This is the AES-CMAC function of RFC 4493.
 func generateCmac(key []byte, msg []byte) ([]byte, error) {
