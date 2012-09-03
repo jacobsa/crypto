@@ -16,6 +16,7 @@
 package cmac
 
 import (
+	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
 	"testing"
 )
@@ -33,6 +34,11 @@ func init() { RegisterTestSuite(&MsbTest{}) }
 ////////////////////////////////////////////////////////////////////////
 // Tests
 ////////////////////////////////////////////////////////////////////////
+
+func (t *MsbTest) NilBuffer() {
+	f := func() { msb(nil) }
+	ExpectThat(f, Panics(HasSubstr("empty")))
+}
 
 func (t *MsbTest) EmptyBuffer() {
 	ExpectEq("TODO", "")
