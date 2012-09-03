@@ -80,7 +80,7 @@ func (t *HashTest) SumAppendsToSlice() {
 	prefix := []byte{0xde, 0xad, 0xbe, 0xef}
 	mac := h.Sum(prefix)
 
-	AssertEq(24, len(mac))
+	AssertEq(20, len(mac))
 	ExpectThat(mac[0:4], DeepEquals(prefix))
 	ExpectThat(mac[4:], DeepEquals(c.Mac))
 }
