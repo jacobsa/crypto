@@ -40,7 +40,7 @@ func doGenerateSubkey() []testing.GenerateSubkeyTestCase {
 	cases := make([]testing.GenerateSubkeyTestCase, numCases)
 
 	for i, _ := range cases {
-		c := cases[i]
+		c := &cases[i]
 		c.Key = randBytes(16)
 		c.K1, c.K2 = generateSubkey(c.Key)
 	}
