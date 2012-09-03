@@ -172,3 +172,29 @@ func generateSubkey(key []byte) (k1 []byte, k2 []byte) {
 
 	return C.GoBytes(unsafe.Pointer(cK1), 16), C.GoBytes(unsafe.Pointer(cK2), 16)
 }
+
+func generateCmac(key []byte, msg []byte) []byte {
+	if len(key) != 16 {
+		panic("Invalid length.")
+	}
+
+	cMac := (*C.uchar)(C.malloc(16))
+	defer C.free(unsafe.Pointer(cMac))
+
+	var msgStart *C.uchar
+	if len(msg) > 0 {
+		msgStart = (*C.uchar)(&msg[0])
+	} else {
+		// Avoid indexing into empty slice/C array.
+		msgStart = (*C.uchar)(C.malloc(1))
+		defer C.free(unsafe.Pointer(msgStart))
+	}
+
+	C.AES_CMAC(
+		(*C.uchar)(&key[0]),
+		msgStart,
+		C.int(len(msg)),
+		cMac)
+
+	return C.GoBytes(unsafe.Pointer(cMac), 16)
+}
