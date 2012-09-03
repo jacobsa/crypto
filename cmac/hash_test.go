@@ -64,6 +64,28 @@ func (t *HashTest) LongKey() {
 }
 
 func (t *HashTest) SumAppendsToSlice() {
+	// Grab a test case.
+	cases := aes_testing.GenerateCmacCases()
+	AssertGe(len(cases), 100)
+	c := cases[0]
+
+	// Create a hash and feed it the test case's data.
+	h, err := cmac.New(c.Key)
+	AssertEq(nil, err)
+
+	_, err = h.Write(c.Msg)
+	AssertEq(nil, err)
+
+	// Ask it to append to a non-empty slice.
+	prefix := []byte{0xde, 0xad, 0xbe, 0xef}
+	mac := h.Sum(prefix)
+
+	AssertEq(24, len(mac))
+	ExpectThat(mac[0:4], DeepEquals(prefix))
+	ExpectThat(mac[4:], DeepEquals(c.Mac))
+}
+
+func (t *HashTest) SumDoesntAffectState() {
 	ExpectEq("TODO", "")
 }
 
