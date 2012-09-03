@@ -17,5 +17,14 @@ package cmac
 
 // xor computes `a XOR b`, as defined by RFC 4493.
 func xor(a []byte, b []byte) []byte {
-	return nil
+	if len(a) != len(b) {
+		panic("xor requires buffers to have identical lengths.")
+	}
+
+	output := make([]byte, len(a))
+	for i, _ := range a {
+		output[i] = a[i] ^ b[i]
+	}
+
+	return output
 }
