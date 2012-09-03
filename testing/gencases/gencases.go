@@ -20,15 +20,37 @@ import (
 	"fmt"
 	"github.com/jacobsa/aes/testing"
 	"log"
+	"math/rand"
 )
 
 var function = flag.String("func", "", "Function for which to generate cases.")
+var randSrc = rand.New(rand.NewSource(0xdeadbeef))
+
+func randBytes(n uint32) []byte {
+	b := make([]byte, n)
+	for i, _ := range b {
+		b[i] = byte(rand.Intn(256))
+	}
+
+	return b
+}
 
 func doGenerateSubkey() []testing.GenerateSubkeyTestCase {
-	return nil
+	numCases := 1024
+	cases := make([]testing.GenerateSubkeyTestCase, numCases)
+
+	for i, _ := range cases {
+		c := cases[i]
+		c.Key = randBytes(16)
+		c.K1, c.K2 = generateSubkey(c.Key)
+	}
+
+	return cases
 }
 
 func main() {
+	flag.Parse()
+
 	var cases interface{}
 	switch *function {
 	case "":

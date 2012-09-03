@@ -18,9 +18,9 @@ package testing
 // SubkeyTestCase represents a test case for generateSubkey generated using the
 // reference implementation from RFC 4493.
 type GenerateSubkeyTestCase struct {
-	key []byte
-	k1 []byte
-	k2 []byte
+	Key []byte
+	K1 []byte
+	K2 []byte
 }
 
 // GenerateSubkeyCases returns test cases for generateSubkey.
