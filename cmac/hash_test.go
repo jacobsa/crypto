@@ -59,6 +59,22 @@ func (t *HashTest) LongKey() {
 	ExpectEq("TODO", "")
 }
 
+func (t *HashTest) SumAppendsToSlice() {
+	ExpectEq("TODO", "")
+}
+
+func (t *HashTest) Reset() {
+	ExpectEq("TODO", "")
+}
+
+func (t *HashTest) Size() {
+	ExpectEq("TODO", "")
+}
+
+func (t *HashTest) BlockSize() {
+	ExpectEq("TODO", "")
+}
+
 func (t *HashTest) NilMessage() {
 	key, err := hex.DecodeString("2b7e151628aed2a6abf7158809cf4f3c")
 	AssertEq(nil, err)
