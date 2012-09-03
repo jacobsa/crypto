@@ -16,6 +16,7 @@
 package cmac
 
 import (
+	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
 	"testing"
 )
@@ -35,15 +36,34 @@ func init() { RegisterTestSuite(&ShiftLeftTest{}) }
 ////////////////////////////////////////////////////////////////////////
 
 func (t *ShiftLeftTest) NilBuffer() {
-	ExpectEq("TODO", "")
+	f := func() { shiftLeft(nil) }
+	ExpectThat(f, Panics(HasSubstr("empty")))
 }
 
 func (t *ShiftLeftTest) EmptyBuffer() {
-	ExpectEq("TODO", "")
+	f := func() { shiftLeft([]byte{}) }
+	ExpectThat(f, Panics(HasSubstr("empty")))
 }
 
 func (t *ShiftLeftTest) OneByteBuffers() {
-	ExpectEq("TODO", "")
+	var input []byte
+	var expected []byte
+
+	input = []byte{fromBinary("00000000")}
+	expected = []byte{fromBinary("00000000")}
+	ExpectThat(shiftLeft(input), DeepEquals(expected))
+
+	input = []byte{fromBinary("10000000")}
+	expected = []byte{fromBinary("00000000")}
+	ExpectThat(shiftLeft(input), DeepEquals(expected))
+
+	input = []byte{fromBinary("00000001")}
+	expected = []byte{fromBinary("00000010")}
+	ExpectThat(shiftLeft(input), DeepEquals(expected))
+
+	input = []byte{fromBinary("11000001")}
+	expected = []byte{fromBinary("10000010")}
+	ExpectThat(shiftLeft(input), DeepEquals(expected))
 }
 
 func (t *ShiftLeftTest) MultiByteBuffers() {
