@@ -34,6 +34,42 @@ func init() { RegisterTestSuite(&GenerateTest{}) }
 // Tests
 ////////////////////////////////////////////////////////////////////////
 
-func (t *GenerateTest) DoesFoo() {
+func (t *GenerateTest) NilKey() {
+	ExpectEq("TODO", "")
+}
+
+func (t *GenerateTest) ShortKey() {
+	ExpectEq("TODO", "")
+}
+
+func (t *GenerateTest) LongKey() {
+	ExpectEq("TODO", "")
+}
+
+func (t *GenerateTest) NilMessage() {
+	ExpectEq("TODO", "")
+}
+
+func (t *GenerateTest) EmptyMessage() {
+	ExpectEq("TODO", "")
+}
+
+func (t *GenerateTest) Rfc4493GoldenTestCase1() {
+	ExpectEq("TODO", "")
+}
+
+func (t *GenerateTest) Rfc4493GoldenTestCase2() {
+	ExpectEq("TODO", "")
+}
+
+func (t *GenerateTest) Rfc4493GoldenTestCase3() {
+	ExpectEq("TODO", "")
+}
+
+func (t *GenerateTest) Rfc4493GoldenTestCase4() {
+	ExpectEq("TODO", "")
+}
+
+func (t *GenerateTest) GeneratedTestCases() {
 	ExpectEq("TODO", "")
 }
