@@ -15,14 +15,14 @@
 
 // The C code in this file was pulled from Appendix A of RFC 4493 and modified
 // by Aaron Jacobs, adding an implementation of the missing AES_128 function
-// that uses OpenSSL. These modifications and the Go code is copyright Aaron
-// Jacobs.
+// that uses OpenSSL and changing the formatting slightly. These modifications
+// and the Go code is copyright Aaron Jacobs.
 
+/*
 #include <assert.h>
 #include <openssl/aes.h>
 #include <stdio.h>
 
-/* For CMAC Calculation */
 unsigned char const_Rb[16] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x87
@@ -31,8 +31,6 @@ unsigned char const_Zero[16] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
-
-/* Basic Functions */
 
 void AES_128(const unsigned char *key, const unsigned char *in, unsigned char *out) {
 	AES_KEY key_struct;
@@ -81,8 +79,6 @@ void print96(unsigned char *bytes)
     }
 }
 
-/* AES-CMAC Generation Function */
-
 void leftshift_onebit(unsigned char *input,unsigned char *output)
 {
     int         i;
@@ -108,9 +104,9 @@ void generate_subkey(unsigned char *key, unsigned char *K1, unsigned
 
     AES_128(key,Z,L);
 
-    if ( (L[0] & 0x80) == 0 ) { /* If MSB(L) = 0, then K1 = L << 1 */
+    if ( (L[0] & 0x80) == 0 ) {
         leftshift_onebit(L,K1);
-    } else {    /* Else K1 = ( L << 1 ) (+) Rb */
+    } else {
         leftshift_onebit(L,tmp);
         xor_128(tmp,const_Rb,K1);
     }
@@ -128,7 +124,6 @@ void padding ( unsigned char *lastb, unsigned char *pad, int length )
 {
     int         j;
 
-    /* original last block */
     for ( j=0; j<16; j++ ) {
         if ( j < length ) {
             pad[j] = lastb[j];
@@ -148,20 +143,20 @@ void AES_CMAC ( unsigned char *key, unsigned char *input, int length,
     int         n, i, flag;
     generate_subkey(key,K1,K2);
 
-    n = (length+15) / 16;       /* n is number of rounds */
+    n = (length+15) / 16;
 
     if ( n == 0 ) {
         n = 1;
         flag = 0;
     } else {
-        if ( (length%16) == 0 ) { /* last block is a complete block */
+        if ( (length%16) == 0 ) {
             flag = 1;
-        } else { /* last block is not complete block */
+        } else {
             flag = 0;
         }
     }
 
-    if ( flag ) { /* last block is complete block */
+    if ( flag ) {
         xor_128(&input[16*(n-1)],K1,M_last);
     } else {
         padding(&input[16*(n-1)],padded,length%16);
@@ -170,8 +165,8 @@ void AES_CMAC ( unsigned char *key, unsigned char *input, int length,
 
     for ( i=0; i<16; i++ ) X[i] = 0;
     for ( i=0; i<n-1; i++ ) {
-        xor_128(X,&input[16*i],Y); /* Y := Mi (+) X  */
-        AES_128(key,Y,X);      /* X := AES-128(KEY, Y); */
+        xor_128(X,&input[16*i],Y);
+        AES_128(key,Y,X);
     }
 
     xor_128(X,M_last,Y);
@@ -235,3 +230,5 @@ int main()
 
     return 0;
 }
+*/
+import "C"
