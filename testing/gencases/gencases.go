@@ -56,7 +56,7 @@ func doGenerateCmac() []testing.GenerateCmacTestCase {
 	for i, _ := range cases {
 		c := &cases[i]
 		c.Key = randBytes(16)
-		c.Msg = randBytes(uint32(i%256))
+		c.Msg = randBytes(uint32(i % 256))
 		c.Mac = generateCmac(c.Key, c.Msg)
 	}
 
@@ -81,4 +81,3 @@ func main() {
 	encoder := gob.NewEncoder(os.Stdout)
 	encoder.Encode(cases)
 }
-

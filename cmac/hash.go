@@ -60,12 +60,12 @@ func (h *cmacHash) Write(p []byte) (n int, err error) {
 
 	// Consume any blocks that we're sure aren't the last.
 	blocksToProcess := len(h.data) / 16
-	if blocksToProcess > 0 && len(h.data) % 16 == 0 {
+	if blocksToProcess > 0 && len(h.data)%16 == 0 {
 		blocksToProcess--
 	}
 
 	for i := 0; i < blocksToProcess; i++ {
-		block := h.data[16*i:16*(i+1)]
+		block := h.data[16*i : 16*(i+1)]
 		y := xor(h.x, block)
 		h.ciph.Encrypt(h.x, y)
 	}

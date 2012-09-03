@@ -27,8 +27,8 @@ import (
 // using the reference implementation from RFC 4493.
 type GenerateSubkeyTestCase struct {
 	Key []byte
-	K1 []byte
-	K2 []byte
+	K1  []byte
+	K2  []byte
 }
 
 func (c GenerateSubkeyTestCase) String() string {

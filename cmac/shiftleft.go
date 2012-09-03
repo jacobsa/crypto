@@ -27,7 +27,7 @@ func shiftLeft(b []byte) []byte {
 	output := make([]byte, l)
 
 	overflow := byte(0)
-	for i := int(l-1); i >= 0; i-- {
+	for i := int(l - 1); i >= 0; i-- {
 		output[i] = b[i] << 1
 		output[i] |= overflow
 		overflow = (b[i] & 0x80) >> 7

@@ -64,4 +64,3 @@ func GenerateCmacCases() []GenerateCmacTestCase {
 
 	return cases
 }
-
