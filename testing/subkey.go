@@ -31,6 +31,10 @@ type GenerateSubkeyTestCase struct {
 	K2 []byte
 }
 
+func (c GenerateSubkeyTestCase) String() string {
+	return fmt.Sprintf("generateSubkey(%x) = (%x, %x)", c.Key, c.K1, c.K2)
+}
+
 // GenerateSubkeyCases returns test cases for generateSubkey.
 func GenerateSubkeyCases() []GenerateSubkeyTestCase {
 	// Find the source package.
