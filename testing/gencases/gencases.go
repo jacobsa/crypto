@@ -37,7 +37,7 @@ func randBytes(n uint32) []byte {
 }
 
 func doGenerateSubkey() []testing.GenerateSubkeyTestCase {
-	numCases := 1024
+	numCases := (1 << 13)
 	cases := make([]testing.GenerateSubkeyTestCase, numCases)
 
 	for i, _ := range cases {
