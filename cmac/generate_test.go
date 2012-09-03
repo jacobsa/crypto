@@ -16,6 +16,7 @@
 package cmac
 
 import (
+	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
 	"testing"
 )
@@ -35,15 +36,18 @@ func init() { RegisterTestSuite(&GenerateTest{}) }
 ////////////////////////////////////////////////////////////////////////
 
 func (t *GenerateTest) NilKey() {
-	ExpectEq("TODO", "")
+	_, err := generateCmac(nil, []byte{})
+	ExpectThat(err, Error(HasSubstr("16-byte")))
 }
 
 func (t *GenerateTest) ShortKey() {
-	ExpectEq("TODO", "")
+	_, err := generateCmac(make([]byte, 15), []byte{})
+	ExpectThat(err, Error(HasSubstr("16-byte")))
 }
 
 func (t *GenerateTest) LongKey() {
-	ExpectEq("TODO", "")
+	_, err := generateCmac(make([]byte, 17), []byte{})
+	ExpectThat(err, Error(HasSubstr("16-byte")))
 }
 
 func (t *GenerateTest) NilMessage() {
