@@ -58,7 +58,7 @@ func generateCmac(key []byte, msg []byte) ([]byte, error) {
 	}
 
 	// Calculate M_last.
-	lastBlock := msg[msgLen - (msgLen / 16 * 16):]
+	lastBlock := msg[16*(n-1):]
 	var mLast []byte
 	if lastBlockComplete {
 		mLast = xor(lastBlock, k1)
