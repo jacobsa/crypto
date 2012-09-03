@@ -50,13 +50,13 @@ func doGenerateSubkey() []testing.GenerateSubkeyTestCase {
 }
 
 func doGenerateCmac() []testing.GenerateCmacTestCase {
-	numCases := (1 << 10)
+	numCases := (1 << 13)
 	cases := make([]testing.GenerateCmacTestCase, numCases)
 
 	for i, _ := range cases {
 		c := &cases[i]
 		c.Key = randBytes(16)
-		c.Msg = randBytes(uint32(i))
+		c.Msg = randBytes(uint32(i%256))
 		c.Mac = generateCmac(c.Key, c.Msg)
 	}
 
