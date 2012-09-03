@@ -138,11 +138,15 @@ func (t *HashTest) Reset() {
 }
 
 func (t *HashTest) Size() {
-	ExpectEq("TODO", "")
+	h, err := cmac.New(make([]byte, 16))
+	AssertEq(nil, err)
+	ExpectEq(16, h.Size())
 }
 
 func (t *HashTest) BlockSize() {
-	ExpectEq("TODO", "")
+	h, err := cmac.New(make([]byte, 16))
+	AssertEq(nil, err)
+	ExpectEq(16, h.BlockSize())
 }
 
 func (t *HashTest) NilMessage() {
