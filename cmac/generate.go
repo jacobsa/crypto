@@ -17,6 +17,7 @@ package cmac
 
 import (
 	"crypto/aes"
+	"crypto/cipher"
 	"fmt"
 	"math"
 )
@@ -32,6 +33,47 @@ func padBlock(block []byte) []byte {
 	result[blockLen] = 0x80
 
 	return result
+}
+
+type cmacHash struct {
+	// An AES cipher configured with the original key.
+	ciph cipher.Block
+
+	// Generated sub-keys.
+	k1 []byte
+	k2 []byte
+
+	// Data that has been seen since the last block was disposed of (i.e. since
+	// we finished an iteration of the for loop in RFC 4493's AES-CMAC algorithm
+	// and were sure we were going into a new one).
+	data []byte
+
+	// The current value of X, as defined in the AES-CMAC algorithm in RFC 4493.
+	// Initially this is a 128-bit zero, and it is updated with the current block
+	// when we're sure it's not the last one.
+	x []byte
+}
+
+func (h *cmacHash) Write(p []byte) (n int, err error) {
+	// Consume the data.
+	n = len(p)
+	h.data = append(h.data, p...)
+
+	// Consume any blocks that we're sure aren't the last.
+	blocksToProcess := len(h.data) / 16
+	if blocksToProcess > 0 && len(h.data) % 16 == 0 {
+		blocksToProcess--
+	}
+
+	for i := 0; i < blocksToProcess; i++ {
+		block := h.data[16*i:16*(i+1)]
+		y := xor(h.x, block)
+		h.ciph.Encrypt(h.x, y)
+	}
+
+	h.data = h.data[16*blocksToProcess:]
+
+	return
 }
 
 // Given a 128-bit key and a message, return a MAC that can be used to validate
