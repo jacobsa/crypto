@@ -66,8 +66,8 @@ func (t *HashTest) LongKey() {
 func (t *HashTest) SumAppendsToSlice() {
 	// Grab a test case.
 	cases := aes_testing.GenerateCmacCases()
-	AssertGe(len(cases), 100)
-	c := cases[0]
+	AssertGt(len(cases), 10)
+	c := cases[10]
 
 	// Create a hash and feed it the test case's data.
 	h, err := cmac.New(c.Key)
@@ -86,7 +86,29 @@ func (t *HashTest) SumAppendsToSlice() {
 }
 
 func (t *HashTest) SumDoesntAffectState() {
-	ExpectEq("TODO", "")
+	// Grab a test case.
+	cases := aes_testing.GenerateCmacCases()
+	AssertGt(len(cases), 10)
+	c := cases[10]
+
+	// Create a hash and feed it some of the test case's data.
+	h, err := cmac.New(c.Key)
+	AssertEq(nil, err)
+
+	AssertGt(len(c.Msg), 5)
+	_, err = h.Write(c.Msg[0:5])
+	AssertEq(nil, err)
+
+	// Call Sum.
+	AssertEq(16, len(h.Sum([]byte{})))
+
+	// Feed the rest of the data and call Sum again. We should get the correct
+	// result.
+	_, err = h.Write(c.Msg[5:])
+	AssertEq(nil, err)
+
+	mac := h.Sum([]byte{})
+	ExpectThat(mac, DeepEquals(c.Mac))
 }
 
 func (t *HashTest) Reset() {
