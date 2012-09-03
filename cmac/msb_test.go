@@ -34,6 +34,14 @@ func init() { RegisterTestSuite(&MsbTest{}) }
 // Tests
 ////////////////////////////////////////////////////////////////////////
 
-func (t *MsbTest) DoesFoo() {
+func (t *MsbTest) EmptyBuffer() {
+	ExpectEq("TODO", "")
+}
+
+func (t *MsbTest) MostSignficantIsOne() {
+	ExpectEq("TODO", "")
+}
+
+func (t *MsbTest) MostSignficantIsZero() {
 	ExpectEq("TODO", "")
 }
