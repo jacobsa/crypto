@@ -19,7 +19,6 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"fmt"
-	"math"
 )
 
 func padBlock(block []byte) []byte {
@@ -120,48 +119,20 @@ func generateCmac(key []byte, msg []byte) ([]byte, error) {
 		return nil, fmt.Errorf("generateCmac requires a 16-byte key.")
 	}
 
-	msgLen := len(msg)
-
-	// Generate subkeys.
-	k1, k2 := generateSubkey(key)
-
-	// Calculate the number of rounds.
-	lastBlockComplete := false
-	n := uint64(math.Ceil(float64(msgLen) / 16))
-	if n == 0 {
-		n = 1
-	} else {
-		if msgLen % 16 == 0 {
-			lastBlockComplete = true
-		}
-	}
-
-	// Calculate M_last.
-	lastBlock := msg[16*(n-1):]
-	var mLast []byte
-	if lastBlockComplete {
-		mLast = xor(lastBlock, k1)
-	} else {
-		mLast = xor(padBlock(lastBlock), k2)
-	}
-
 	// Create a cipher.
 	c, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, fmt.Errorf("aes.NewCipher: %v", err)
 	}
 
-	// Run the rounds.
-	x := make([]byte, 16)
-	for i := uint64(0); i < n-1; i++ {
-		block := msg[16*i:16*(i+1)]
-		y := xor(x, block)
-		c.Encrypt(x, y)
+	h := &cmacHash{ciph: c}
+	h.k1, h.k2 = generateSubkey(key)
+	h.Reset()
+
+	// TODO: Get rid of this.
+	if _, err := h.Write(msg); err != nil {
+		return nil, err
 	}
 
-	y := xor(mLast, x)
-	result := make([]byte, 16)
-	c.Encrypt(result, y)
-
-	return result, nil
+	return h.Sum([]byte{}), nil
 }
