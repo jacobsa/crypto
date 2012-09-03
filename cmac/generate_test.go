@@ -125,7 +125,7 @@ func (t *GenerateTest) Rfc4493GoldenTestCase4() {
 		"f69f2445df4f9b17ad2b417be66c3710")
 	AssertEq(nil, err)
 
-	expectedMac, err := hex.DecodeString("dfa66747de9ae63030ca32611497c827")
+	expectedMac, err := hex.DecodeString("51f0bebf7e3b9d92fc49741779363cfe")
 	AssertEq(nil, err)
 
 	mac, err := generateCmac(key, msg)
