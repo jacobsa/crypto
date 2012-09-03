@@ -16,6 +16,7 @@
 package cmac
 
 import (
+	"encoding/hex"
 	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
 	"testing"
@@ -54,12 +55,19 @@ func (t *GenerateTest) NilMessage() {
 	ExpectEq("TODO", "")
 }
 
-func (t *GenerateTest) EmptyMessage() {
-	ExpectEq("TODO", "")
-}
-
 func (t *GenerateTest) Rfc4493GoldenTestCase1() {
-	ExpectEq("TODO", "")
+	key, err := hex.DecodeString("2b7e151628aed2a6abf7158809cf4f3c")
+	AssertEq(nil, err)
+
+	msg, err := hex.DecodeString("")
+	AssertEq(nil, err)
+
+	expectedMac, err := hex.DecodeString("bb1d6929e95937287fa37d129b756746")
+	AssertEq(nil, err)
+
+	mac, err := generateCmac(key, msg)
+	AssertEq(nil, err)
+	ExpectThat(mac, DeepEquals(expectedMac))
 }
 
 func (t *GenerateTest) Rfc4493GoldenTestCase2() {
