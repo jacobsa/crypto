@@ -21,11 +21,12 @@
 package main
 
 /*
+#cgo CFLAGS: -Wno-deprecated-declarations
 #cgo LDFLAGS: -lcrypto
 
 #include <assert.h>
 #include <openssl/aes.h>
-#include <stdio.h>
+#include <stdlib.h>
 
 unsigned char const_Rb[16] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -49,37 +50,6 @@ void xor_128(unsigned char *a, unsigned char *b, unsigned char *out)
     for (i=0;i<16; i++)
     {
         out[i] = a[i] ^ b[i];
-    }
-}
-
-void print_hex(char *str, unsigned char *buf, int len)
-{
-    int     i;
-
-    for ( i=0; i<len; i++ ) {
-        if ( (i % 16) == 0 && i != 0 ) printf(str);
-        printf("%02x", buf[i]);
-        if ( (i % 4) == 3 ) printf(" ");
-        if ( (i % 16) == 15 ) printf("\n");
-    }
-    if ( (i % 16) != 0 ) printf("\n");
-}
-
-void print128(unsigned char *bytes)
-{
-    int         j;
-    for (j=0; j<16;j++) {
-        printf("%02x",bytes[j]);
-        if ( (j%4) == 3 ) printf(" ");
-    }
-}
-
-void print96(unsigned char *bytes)
-{
-    int         j;
-    for (j=0; j<12;j++) {
-        printf("%02x",bytes[j]);
-        if ( (j%4) == 3 ) printf(" ");
     }
 }
 
