@@ -107,8 +107,12 @@ func (t *HashTest) SumDoesntAffectState() {
 	_, err = h.Write(c.Msg[5:])
 	AssertEq(nil, err)
 
-	mac := h.Sum([]byte{})
-	ExpectThat(mac, DeepEquals(c.Mac))
+	ExpectThat(h.Sum([]byte{}), DeepEquals(c.Mac))
+
+	// Calling repeatedly should also work.
+	ExpectThat(h.Sum([]byte{}), DeepEquals(c.Mac))
+	ExpectThat(h.Sum([]byte{}), DeepEquals(c.Mac))
+	ExpectThat(h.Sum([]byte{}), DeepEquals(c.Mac))
 }
 
 func (t *HashTest) Reset() {
