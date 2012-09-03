@@ -67,5 +67,18 @@ func (t *ShiftLeftTest) OneByteBuffers() {
 }
 
 func (t *ShiftLeftTest) MultiByteBuffers() {
-	ExpectEq("TODO", "")
+	var input []byte
+	var expected []byte
+
+	input = []byte{fromBinary("00000000"), fromBinary("00000000")}
+	expected = []byte{fromBinary("00000000"), fromBinary("00000000")}
+	ExpectThat(shiftLeft(input), DeepEquals(expected))
+
+	input = []byte{fromBinary("10000000"), fromBinary("00000000")}
+	expected = []byte{fromBinary("00000000"), fromBinary("00000000")}
+	ExpectThat(shiftLeft(input), DeepEquals(expected))
+
+	input = []byte{fromBinary("01000001"), fromBinary("10000001")}
+	expected = []byte{fromBinary("10000011"), fromBinary("00000010")}
+	ExpectThat(shiftLeft(input), DeepEquals(expected))
 }
