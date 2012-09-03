@@ -24,8 +24,8 @@ import (
 
 func padBlock(block []byte) []byte {
 	blockLen := len(block)
-	if blockLen == 16 {
-		return block
+	if blockLen >= 16 {
+		panic(fmt.Sprintf("Unexpected block: %x", block))
 	}
 
 	result := make([]byte, 16)
@@ -74,6 +74,30 @@ func (h *cmacHash) Write(p []byte) (n int, err error) {
 	h.data = h.data[16*blocksToProcess:]
 
 	return
+}
+
+func (h *cmacHash) Sum(b []byte) []byte {
+	dataLen := len(h.data)
+
+	// We should have at most one block left.
+	if dataLen > 16 {
+		panic(fmt.Sprintf("Unexpected data: %x", h.data))
+	}
+
+	// Calculate M_last.
+	var mLast []byte
+	if dataLen == 16 {
+		mLast = xor(h.data, h.k1)
+	} else {
+		mLast = xor(padBlock(h.data), h.k2)
+	}
+
+	y := xor(mLast, h.x)
+	result := make([]byte, 16)
+	h.ciph.Encrypt(result, y)
+
+	b = append(b, result...)
+	return b
 }
 
 // Given a 128-bit key and a message, return a MAC that can be used to validate
