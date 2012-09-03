@@ -13,10 +13,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cmac
+package cmac_test
 
 import (
 	"encoding/hex"
+	"github.com/jacobsa/aes/cmac"
 	aes_testing "github.com/jacobsa/aes/testing"
 	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
@@ -30,7 +31,7 @@ func TestHash(t *testing.T) { RunTests(t) }
 ////////////////////////////////////////////////////////////////////////
 
 func runCmac(key []byte, msg []byte) []byte {
-	h, err := New(key)
+	h, err := cmac.New(key)
 	AssertEq(nil, err)
 
 	_, err = h.Write(msg)
