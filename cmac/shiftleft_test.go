@@ -61,6 +61,10 @@ func (t *ShiftLeftTest) OneByteBuffers() {
 	expected = []byte{fromBinary("00000010")}
 	ExpectThat(shiftLeft(input), DeepEquals(expected))
 
+	input = []byte{fromBinary("00001000")}
+	expected = []byte{fromBinary("00010000")}
+	ExpectThat(shiftLeft(input), DeepEquals(expected))
+
 	input = []byte{fromBinary("11000001")}
 	expected = []byte{fromBinary("10000010")}
 	ExpectThat(shiftLeft(input), DeepEquals(expected))
@@ -72,6 +76,10 @@ func (t *ShiftLeftTest) MultiByteBuffers() {
 
 	input = []byte{fromBinary("00000000"), fromBinary("00000000")}
 	expected = []byte{fromBinary("00000000"), fromBinary("00000000")}
+	ExpectThat(shiftLeft(input), DeepEquals(expected))
+
+	input = []byte{fromBinary("00001000"), fromBinary("01000000")}
+	expected = []byte{fromBinary("00010000"), fromBinary("10000000")}
 	ExpectThat(shiftLeft(input), DeepEquals(expected))
 
 	input = []byte{fromBinary("10000000"), fromBinary("00000000")}
