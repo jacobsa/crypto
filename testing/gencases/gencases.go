@@ -77,11 +77,11 @@ func doDbl() []testing.DblTestCase {
 }
 
 func doS2v() []testing.S2vTestCase {
-	numCases := (1 << 10)
+	numCases := (1 << 11)
 	cases := make([]testing.S2vTestCase, numCases)
 
 	for i, _ := range cases {
-		keyLens := []uint32{128, 192, 256}
+		keyLens := []uint32{16, 24, 32}
 		keyLen := keyLens[i % len(keyLens)]
 
 		c := &cases[i]

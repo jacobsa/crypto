@@ -420,7 +420,7 @@ func s2v(key []byte, strings [][]byte) []byte {
 
 	// Initialize the context struct.
 	var ctx C.siv_ctx
-	callResult := C.siv_init(&ctx, (*C.uchar)(&key[0]), C.int(len(key)))
+	callResult := C.siv_init(&ctx, (*C.uchar)(&key[0]), C.int(8*len(key)))
 	if callResult < 0 {
 		panic("Error from siv_init.")
 	}
