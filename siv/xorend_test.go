@@ -62,7 +62,11 @@ func (t *XorendTest) BothAreNil() {
 }
 
 func (t *XorendTest) BIsNil() {
-	ExpectEq("TODO", "")
+	a := []byte{fromBinary("10101010"), fromBinary("00000000")}
+	b := []byte(nil)
+
+	expected := a
+	ExpectThat(xorend(a, b), DeepEquals(expected))
 }
 
 func (t *XorendTest) BothAreEmpty() {
