@@ -17,6 +17,7 @@ package siv_test
 
 import (
 	"github.com/jacobsa/aes/siv"
+	aes_testing "github.com/jacobsa/aes/testing"
 	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
 	"testing"
@@ -84,7 +85,26 @@ func (t *EncryptTest) OutputIsDeterministic() {
 }
 
 func (t *EncryptTest) Rfc5297TestCaseA1() {
-	ExpectEq("TODO", "")
+	key := aes_testing.FromRfcHex(
+		"fffefdfc fbfaf9f8 f7f6f5f4 f3f2f1f0" +
+		"f0f1f2f3 f4f5f6f7 f8f9fafb fcfdfeff")
+
+	plaintext := aes_testing.FromRfcHex(
+		"11223344 55667788 99aabbcc ddee")
+
+	associated := [][]byte{
+		aes_testing.FromRfcHex(
+			"10111213 14151617 18191a1b 1c1d1e1f" +
+			"20212223 24252627"),
+	}
+
+	expected := aes_testing.FromRfcHex(
+		"85632d07 c6e8f37f 950acd32 0a2ecc93" +
+		"40c02b96 90c4dc04 daef7f6a fe5c")
+
+	output, err := siv.Encrypt(key, plaintext, associated)
+	AssertEq(nil, err)
+	ExpectThat(output, DeepEquals(expected))
 }
 
 func (t *EncryptTest) Rfc5297TestCaseA2() {
