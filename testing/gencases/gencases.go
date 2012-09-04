@@ -87,7 +87,7 @@ func doS2v() []testing.S2vTestCase {
 		c := &cases[i]
 		c.Key = randBytes(keyLen)
 
-		numStrings := i%5
+		numStrings := i%5 + 1
 		c.Strings = make([][]byte, numStrings)
 		for j, _ := range c.Strings {
 			c.Strings[j] = randBytes(uint32(i % 100))
