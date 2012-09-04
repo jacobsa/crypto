@@ -15,8 +15,20 @@
 
 package siv
 
+import (
+	"github.com/jacobsa/aes/common"
+)
+
 // Given strings A and B with len(A) >= len(B), xor B onto the right end of A.
 // This matches the xorend operator of RFC 5297.
 func xorend(a, b []byte) []byte {
-	return nil
+	aLen := len(a)
+	bLen := len(b)
+
+	if aLen < bLen {
+		panic("Invalid lengths.")
+	}
+
+	difference := aLen - bLen
+	return append(a[:difference], common.Xor(a[difference:], b)...)
 }
