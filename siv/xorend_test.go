@@ -57,7 +57,7 @@ func (t *XorendTest) BothAreNil() {
 	a := []byte(nil)
 	b := []byte(nil)
 
-	expected := []byte{}
+	expected := []byte(nil)
 	ExpectThat(xorend(a, b), DeepEquals(expected))
 }
 
