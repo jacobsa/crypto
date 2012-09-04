@@ -20,6 +20,7 @@ import (
 	aes_testing "github.com/jacobsa/aes/testing"
 	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
+	"hash"
 	"testing"
 )
 
@@ -149,9 +150,23 @@ func (t *HashTest) Size() {
 }
 
 func (t *HashTest) BlockSize() {
-	h, err := cmac.New(make([]byte, 16))
+	var h hash.Hash
+	var err error
+
+	// AES-128
+	h, err = cmac.New(make([]byte, 16))
 	AssertEq(nil, err)
 	ExpectEq(16, h.BlockSize())
+
+	// AES-192
+	h, err = cmac.New(make([]byte, 24))
+	AssertEq(nil, err)
+	ExpectEq(24, h.BlockSize())
+
+	// AES-256
+	h, err = cmac.New(make([]byte, 32))
+	AssertEq(nil, err)
+	ExpectEq(32, h.BlockSize())
 }
 
 func (t *HashTest) NilMessage() {
