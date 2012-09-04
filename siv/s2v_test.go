@@ -76,7 +76,21 @@ func (t *S2vTest) Rfc5297GoldenTestCaseA1() {
 }
 
 func (t *S2vTest) Rfc5297GoldenTestCaseA2() {
-	ExpectEq("TODO", "")
+	key := fromRfcHex(
+		"7f7e7d7c 7b7a7978 77767574 73727170" +
+		"40414243 44454647 48494a4b 4c4d4e4f")
+
+	associatedData := [][]byte{
+		fromRfcHex(
+			"00112233 44556677 8899aabb ccddeeff" +
+			"deaddada deaddada ffeeddcc bbaa9988" +
+			"77665544 33221100"),
+		fromRfcHex("10203040 50607080 90a0"),
+	}
+
+	expected := fromRfcHex("7bdb6e3b 432667eb 06f4d14b ff2fbd0f")
+
+	ExpectThat(s2v(key, associatedData), DeepEquals(expected))
 }
 
 func (t *S2vTest) GeneratedTestCases() {
