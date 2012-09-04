@@ -61,10 +61,7 @@ func (t *S2vTest) LongKey() {
 }
 
 func (t *S2vTest) EmptyStringsVector() {
-	key := aes_testing.FromRfcHex(
-		"fffefdfc fbfaf9f8 f7f6f5f4 f3f2f1f0" +
-		"f0f1f2f3 f4f5f6f7 f8f9fafb fcfdfeff")
-
+	key := aes_testing.FromRfcHex("fffefdfc fbfaf9f8 f7f6f5f4 f3f2f1f0")
 	strings := [][]byte{}
 
 	f := func() { s2v(key, strings) }
@@ -72,9 +69,7 @@ func (t *S2vTest) EmptyStringsVector() {
 }
 
 func (t *S2vTest) Rfc5297GoldenTestCaseA1() {
-	key := aes_testing.FromRfcHex(
-		"fffefdfc fbfaf9f8 f7f6f5f4 f3f2f1f0" +
-		"f0f1f2f3 f4f5f6f7 f8f9fafb fcfdfeff")
+	key := aes_testing.FromRfcHex("fffefdfc fbfaf9f8 f7f6f5f4 f3f2f1f0")
 
 	strings := [][]byte{
 		aes_testing.FromRfcHex(
@@ -88,9 +83,7 @@ func (t *S2vTest) Rfc5297GoldenTestCaseA1() {
 }
 
 func (t *S2vTest) Rfc5297GoldenTestCaseA2() {
-	key := aes_testing.FromRfcHex(
-		"7f7e7d7c 7b7a7978 77767574 73727170" +
-		"40414243 44454647 48494a4b 4c4d4e4f")
+	key := aes_testing.FromRfcHex("7f7e7d7c 7b7a7978 77767574 73727170")
 
 	strings := [][]byte{
 		aes_testing.FromRfcHex(
