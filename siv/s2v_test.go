@@ -38,26 +38,26 @@ func init() { RegisterTestSuite(&S2vTest{}) }
 
 func (t *S2vTest) NilKey() {
 	key := []byte(nil)
-	strings := [][]byte{}
+	strings := [][]byte{[]byte{}}
 
 	f := func() { s2v(key, strings) }
-	ExpectThat(f, Panics(HasSubstr("16-byte")))
+	ExpectThat(f, Panics(HasSubstr("-byte")))
 }
 
 func (t *S2vTest) ShortKey() {
 	key := make([]byte, 15)
-	strings := [][]byte{}
+	strings := [][]byte{[]byte{}}
 
 	f := func() { s2v(key, strings) }
-	ExpectThat(f, Panics(HasSubstr("16-byte")))
+	ExpectThat(f, Panics(HasSubstr("-byte")))
 }
 
 func (t *S2vTest) LongKey() {
-	key := make([]byte, 17)
-	strings := [][]byte{}
+	key := make([]byte, 33)
+	strings := [][]byte{[]byte{}}
 
 	f := func() { s2v(key, strings) }
-	ExpectThat(f, Panics(HasSubstr("16-byte")))
+	ExpectThat(f, Panics(HasSubstr("-byte")))
 }
 
 func (t *S2vTest) EmptyStringsVector() {
