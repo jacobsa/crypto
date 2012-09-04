@@ -23,19 +23,6 @@ import (
 	"hash"
 )
 
-func padBlock(block []byte) []byte {
-	blockLen := len(block)
-	if blockLen >= 16 {
-		panic(fmt.Sprintf("Unexpected block: %x", block))
-	}
-
-	result := make([]byte, 16)
-	copy(result, block)
-	result[blockLen] = 0x80
-
-	return result
-}
-
 type cmacHash struct {
 	// An AES cipher configured with the original key.
 	ciph cipher.Block
@@ -90,7 +77,7 @@ func (h *cmacHash) Sum(b []byte) []byte {
 	if dataLen == 16 {
 		mLast = common.Xor(h.data, h.k1)
 	} else {
-		mLast = common.Xor(padBlock(h.data), h.k2)
+		mLast = common.Xor(common.PadBlock(h.data), h.k2)
 	}
 
 	y := common.Xor(mLast, h.x)
