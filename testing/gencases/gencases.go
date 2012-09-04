@@ -76,6 +76,29 @@ func doDbl() []testing.DblTestCase {
 	return cases
 }
 
+func doS2v() []testing.S2vTestCase {
+	numCases := (1 << 10)
+	cases := make([]testing.S2vTestCase, numCases)
+
+	for i, _ := range cases {
+		keyLens := []uint32{128, 192, 256}
+		keyLen := keyLens[i % len(keyLens)]
+
+		c := &cases[i]
+		c.Key = randBytes(keyLen)
+
+		numStrings := i%5
+		c.Strings = make([][]byte, numStrings)
+		for j, _ := range c.Strings {
+			c.Strings[j] = randBytes(uint32(i % 100))
+		}
+
+		c.Output = s2v(c.Key, c.Strings)
+	}
+
+	return cases
+}
+
 func main() {
 	flag.Parse()
 
@@ -89,6 +112,8 @@ func main() {
 		cases = doCmac()
 	case "dbl":
 		cases = doDbl()
+	case "s2v":
+		cases = doS2v()
 	default:
 		log.Fatalf("Unrecognized function: %s", *function)
 	}
