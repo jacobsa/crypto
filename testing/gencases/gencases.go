@@ -49,9 +49,9 @@ func doGenerateSubkey() []testing.GenerateSubkeyTestCase {
 	return cases
 }
 
-func doGenerateCmac() []testing.GenerateCmacTestCase {
+func doCmac() []testing.CmacTestCase {
 	numCases := (1 << 13)
-	cases := make([]testing.GenerateCmacTestCase, numCases)
+	cases := make([]testing.CmacTestCase, numCases)
 
 	for i, _ := range cases {
 		c := &cases[i]
@@ -72,8 +72,8 @@ func main() {
 		log.Fatalf("You must set -func.")
 	case "generateSubkey":
 		cases = doGenerateSubkey()
-	case "generateCmac":
-		cases = doGenerateCmac()
+	case "AES-CMAC":
+		cases = doCmac()
 	default:
 		log.Fatalf("Unrecognized function: %s", *function)
 	}
