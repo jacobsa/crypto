@@ -22,6 +22,8 @@
 // modifications and the Go code are copyright Aaron Jacobs. The original
 // copyright notice is below.
 
+package main
+
 /*
  * Copyright (c) The Industrial Lounge, 2007
  *
