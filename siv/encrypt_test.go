@@ -108,7 +108,35 @@ func (t *EncryptTest) Rfc5297TestCaseA1() {
 }
 
 func (t *EncryptTest) Rfc5297TestCaseA2() {
-	ExpectEq("TODO", "")
+	key := aes_testing.FromRfcHex(
+		"7f7e7d7c 7b7a7978 77767574 73727170" +
+		"40414243 44454647 48494a4b 4c4d4e4f")
+
+	plaintext := aes_testing.FromRfcHex(
+		"74686973 20697320 736f6d65 20706c61" +
+		"696e7465 78742074 6f20656e 63727970" +
+		"74207573 696e6720 5349562d 414553")
+
+	associated := [][]byte{
+		aes_testing.FromRfcHex(
+			"00112233 44556677 8899aabb ccddeeff" +
+			"deaddada deaddada ffeeddcc bbaa9988" +
+			"77665544 33221100"),
+		aes_testing.FromRfcHex(
+			"10203040 50607080 90a0"),
+		aes_testing.FromRfcHex(
+			"09f91102 9d74e35b d84156c5 635688c0"),
+	}
+
+	expected := aes_testing.FromRfcHex(
+		"7bdb6e3b 432667eb 06f4d14b ff2fbd0f" +
+		"cb900f2f ddbe4043 26601965 c889bf17" +
+		"dba77ceb 094fa663 b7a3f748 ba8af829" +
+		"ea64ad54 4a272e9c 485b62a3 fd5c0d")
+
+	output, err := siv.Encrypt(key, plaintext, associated)
+	AssertEq(nil, err)
+	ExpectThat(output, DeepEquals(expected))
 }
 
 func (t *EncryptTest) GeneratedTestCases() {

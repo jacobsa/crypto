@@ -36,7 +36,9 @@ import (
 // associated data is desired, pass nil or an empty slice.
 //
 // If the same key, plaintext, and associated data are supplied to this
-// function multiple times, the output is guaranteed to be identical.
+// function multiple times, the output is guaranteed to be identical. As per
+// RFC 5297 section 3, you may use this function for nonce-based authenticated
+// encryption by passing a nonce as the last associated data element.
 func Encrypt(key, plaintext []byte, associated [][]byte) ([]byte, error) {
 	return nil, fmt.Errorf("TODO")
 }
