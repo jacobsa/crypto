@@ -59,7 +59,12 @@ func (t *PadBlockTest) OneByteMissing() {
 }
 
 func (t *PadBlockTest) MultipleBytesMissing() {
-	ExpectEq("TODO", "")
+	b, err := hex.DecodeString("deadbeeffeedfaceba5eba11ca")
+	AssertEq(nil, err)
+	AssertEq(13, len(b))
+
+	expected := append(b, 0x80, 0x00, 0x00)
+	ExpectThat(common.PadBlock(b), DeepEquals(expected))
 }
 
 func (t *PadBlockTest) AllBytesMissing() {
