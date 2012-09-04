@@ -31,7 +31,7 @@ func init() {
 // function of RFC 5297.
 func dbl(b []byte) []byte {
 	if len(b) != 16 {
-		panic("Invalid length.")
+		panic("dbl requires a 16-byte buffer.")
 	}
 
 	shiftedOne := common.Msb(b) == 1
