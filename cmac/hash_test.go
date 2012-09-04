@@ -16,7 +16,6 @@
 package cmac_test
 
 import (
-	"encoding/hex"
 	"github.com/jacobsa/aes/cmac"
 	aes_testing "github.com/jacobsa/aes/testing"
 	. "github.com/jacobsa/oglematchers"
@@ -160,8 +159,7 @@ func (t *HashTest) NilMessage() {
 
 	var msg []byte = nil
 
-	expectedMac, err := hex.DecodeString("bb1d6929e95937287fa37d129b756746")
-	AssertEq(nil, err)
+	expectedMac := aes_testing.FromRfcHex("bb1d6929 e9593728 7fa37d12 9b756746")
 
 	mac := runCmac(key, msg)
 	ExpectThat(mac, DeepEquals(expectedMac))
