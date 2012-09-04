@@ -25,8 +25,8 @@ var subkeyZero []byte
 var subkeyRb []byte
 
 func init() {
-	subkeyZero = bytes.Repeat([]byte{0x00}, 16)
-	subkeyRb = append(bytes.Repeat([]byte{0x00}, 15), 0x87)
+	subkeyZero = bytes.Repeat([]byte{0x00}, blockSize)
+	subkeyRb = append(bytes.Repeat([]byte{0x00}, blockSize-1), 0x87)
 }
 
 // Given the supplied cipher, whose block size must be 16 bytes, return two
@@ -34,12 +34,12 @@ func init() {
 // 800-38B. Note that the other NIST-approved block size of 8 bytes is not
 // supported by this function.
 func generateSubkeys(ciph cipher.Block) (k1 []byte, k2 []byte) {
-	if ciph.BlockSize() != 16 {
+	if ciph.BlockSize() != blockSize {
 		panic("generateSubkeys requires a cipher with a block size of 16 bytes.")
 	}
 
 	// Step 1
-	l := make([]byte, 16)
+	l := make([]byte, blockSize)
 	ciph.Encrypt(l, subkeyZero)
 
 	// Step 2: Derive the first subkey.

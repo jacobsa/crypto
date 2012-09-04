@@ -48,18 +48,18 @@ func (h *cmacHash) Write(p []byte) (n int, err error) {
 	h.data = append(h.data, p...)
 
 	// Consume any blocks that we're sure aren't the last.
-	blocksToProcess := len(h.data) / 16
-	if blocksToProcess > 0 && len(h.data)%16 == 0 {
+	blocksToProcess := len(h.data) / blockSize
+	if blocksToProcess > 0 && len(h.data)%blockSize == 0 {
 		blocksToProcess--
 	}
 
 	for i := 0; i < blocksToProcess; i++ {
-		block := h.data[16*i : 16*(i+1)]
+		block := h.data[blockSize*i : blockSize*(i+1)]
 		y := common.Xor(h.x, block)
 		h.ciph.Encrypt(h.x, y)
 	}
 
-	h.data = h.data[16*blocksToProcess:]
+	h.data = h.data[blockSize*blocksToProcess:]
 
 	return
 }
@@ -68,20 +68,20 @@ func (h *cmacHash) Sum(b []byte) []byte {
 	dataLen := len(h.data)
 
 	// We should have at most one block left.
-	if dataLen > 16 {
+	if dataLen > blockSize {
 		panic(fmt.Sprintf("Unexpected data: %x", h.data))
 	}
 
 	// Calculate M_last.
 	var mLast []byte
-	if dataLen == 16 {
+	if dataLen == blockSize {
 		mLast = common.Xor(h.data, h.k1)
 	} else {
 		mLast = common.Xor(common.PadBlock(h.data), h.k2)
 	}
 
 	y := common.Xor(mLast, h.x)
-	result := make([]byte, 16)
+	result := make([]byte, blockSize)
 	h.ciph.Encrypt(result, y)
 
 	b = append(b, result...)
@@ -90,11 +90,11 @@ func (h *cmacHash) Sum(b []byte) []byte {
 
 func (h *cmacHash) Reset() {
 	h.data = []byte{}
-	h.x = make([]byte, 16)
+	h.x = make([]byte, blockSize)
 }
 
 func (h *cmacHash) Size() int {
-	return 16
+	return h.ciph.BlockSize()
 }
 
 func (h *cmacHash) BlockSize() int {
