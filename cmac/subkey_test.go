@@ -18,7 +18,6 @@ package cmac
 import (
 	"crypto/aes"
 	"crypto/des"
-	"encoding/hex"
 	aes_testing "github.com/jacobsa/aes/testing"
 	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
@@ -48,14 +47,9 @@ func (t *SubkeyTest) WrongBlockSize() {
 }
 
 func (t *SubkeyTest) Rfc4493GoldenTestCase() {
-	key, err := hex.DecodeString("2b7e151628aed2a6abf7158809cf4f3c")
-	AssertEq(nil, err)
-
-	expectedK1, err := hex.DecodeString("fbeed618357133667c85e08f7236a8de")
-	AssertEq(nil, err)
-
-	expectedK2, err := hex.DecodeString("f7ddac306ae266ccf90bc11ee46d513b")
-	AssertEq(nil, err)
+	key := aes_testing.FromRfcHex("2b7e1516 28aed2a6 abf71588 09cf4f3c")
+	expectedK1 := aes_testing.FromRfcHex("fbeed618 35713366 7c85e08f 7236a8de")
+	expectedK2 := aes_testing.FromRfcHex("f7ddac30 6ae266cc f90bc11e e46d513b")
 
 	ciph, err := aes.NewCipher(key)
 	AssertEq(nil, err)
