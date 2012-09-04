@@ -13,7 +13,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package cmac implements the CMAC mode for message authentication, as defined
-// by NIST Special Publication 800-38B. When the AES-128 cipher is used, this
-// matches the AES-CMAC algorithm defined by RFC 4493.
 package cmac
+
+const blockSize = 16

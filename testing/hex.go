@@ -13,7 +13,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package cmac implements the CMAC mode for message authentication, as defined
-// by NIST Special Publication 800-38B. When the AES-128 cipher is used, this
-// matches the AES-CMAC algorithm defined by RFC 4493.
-package cmac
+package testing
+
+import (
+	"encoding/hex"
+	"fmt"
+	"strings"
+)
+
+// Decode a hex string that may contain spaces, as used in test vectors in
+// RFCs. Panic if the input is illegal.
+func FromRfcHex(s string) []byte {
+	// Remove spaces.
+	s = strings.Replace(s, " ", "", -1)
+
+	// Decode.
+	res, err := hex.DecodeString(s)
+	if err != nil {
+		panic(fmt.Sprintf("Invalid hex: %s", s))
+	}
+
+	return res
+}

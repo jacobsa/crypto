@@ -17,8 +17,7 @@ package cmac
 
 import (
 	"bytes"
-	"crypto/aes"
-	"fmt"
+	"crypto/cipher"
 	"github.com/jacobsa/aes/common"
 )
 
@@ -26,32 +25,31 @@ var subkeyZero []byte
 var subkeyRb []byte
 
 func init() {
-	subkeyZero = bytes.Repeat([]byte{0x00}, 16)
-	subkeyRb = append(bytes.Repeat([]byte{0x00}, 15), 0x87)
+	subkeyZero = bytes.Repeat([]byte{0x00}, blockSize)
+	subkeyRb = append(bytes.Repeat([]byte{0x00}, blockSize-1), 0x87)
 }
 
-// Given a 128-bit key, generateSubkey returns two subkeys that can be used in
-// MAC generation and verification. This is the Generate_Subkey function of RFC
-// 4493.
-func generateSubkey(key []byte) (k1 []byte, k2 []byte) {
-	if len(key) != 16 {
-		panic("generateSubkey requires a 16-byte key.")
+// Given the supplied cipher, whose block size must be 16 bytes, return two
+// subkeys that can be used in MAC generation. See section 5.3 of NIST SP
+// 800-38B. Note that the other NIST-approved block size of 8 bytes is not
+// supported by this function.
+func generateSubkeys(ciph cipher.Block) (k1 []byte, k2 []byte) {
+	if ciph.BlockSize() != blockSize {
+		panic("generateSubkeys requires a cipher with a block size of 16 bytes.")
 	}
 
-	c, err := aes.NewCipher(key)
-	if err != nil {
-		panic(fmt.Sprintf("aes.NewCipher: %v", err))
-	}
+	// Step 1
+	l := make([]byte, blockSize)
+	ciph.Encrypt(l, subkeyZero)
 
-	l := make([]byte, 16)
-	c.Encrypt(l, subkeyZero)
-
+	// Step 2: Derive the first subkey.
 	if common.Msb(l) == 0 {
 		k1 = common.ShiftLeft(l)
 	} else {
 		k1 = common.Xor(common.ShiftLeft(l), subkeyRb)
 	}
 
+	// Step 3: Derive the second subkey.
 	if common.Msb(k1) == 0 {
 		k2 = common.ShiftLeft(k1)
 	} else {

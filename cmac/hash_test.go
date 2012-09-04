@@ -16,11 +16,11 @@
 package cmac_test
 
 import (
-	"encoding/hex"
 	"github.com/jacobsa/aes/cmac"
 	aes_testing "github.com/jacobsa/aes/testing"
 	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
+	"hash"
 	"testing"
 )
 
@@ -50,17 +50,23 @@ func init() { RegisterTestSuite(&HashTest{}) }
 
 func (t *HashTest) NilKey() {
 	_, err := cmac.New(nil)
-	ExpectThat(err, Error(HasSubstr("16-byte")))
+	ExpectThat(err, Error(HasSubstr("16-")))
+	ExpectThat(err, Error(HasSubstr("24-")))
+	ExpectThat(err, Error(HasSubstr("32-")))
 }
 
 func (t *HashTest) ShortKey() {
 	_, err := cmac.New(make([]byte, 15))
-	ExpectThat(err, Error(HasSubstr("16-byte")))
+	ExpectThat(err, Error(HasSubstr("16-")))
+	ExpectThat(err, Error(HasSubstr("24-")))
+	ExpectThat(err, Error(HasSubstr("32-")))
 }
 
 func (t *HashTest) LongKey() {
-	_, err := cmac.New(make([]byte, 17))
-	ExpectThat(err, Error(HasSubstr("16-byte")))
+	_, err := cmac.New(make([]byte, 33))
+	ExpectThat(err, Error(HasSubstr("16-")))
+	ExpectThat(err, Error(HasSubstr("24-")))
+	ExpectThat(err, Error(HasSubstr("32-")))
 }
 
 func (t *HashTest) SumAppendsToSlice() {
@@ -144,85 +150,121 @@ func (t *HashTest) Size() {
 }
 
 func (t *HashTest) BlockSize() {
-	h, err := cmac.New(make([]byte, 16))
+	var h hash.Hash
+	var err error
+
+	// AES-128
+	h, err = cmac.New(make([]byte, 16))
+	AssertEq(nil, err)
+	ExpectEq(16, h.BlockSize())
+
+	// AES-192
+	h, err = cmac.New(make([]byte, 24))
+	AssertEq(nil, err)
+	ExpectEq(16, h.BlockSize())
+
+	// AES-256
+	h, err = cmac.New(make([]byte, 32))
 	AssertEq(nil, err)
 	ExpectEq(16, h.BlockSize())
 }
 
 func (t *HashTest) NilMessage() {
-	key, err := hex.DecodeString("2b7e151628aed2a6abf7158809cf4f3c")
-	AssertEq(nil, err)
+	key := aes_testing.FromRfcHex("2b7e1516 28aed2a6 abf71588 09cf4f3c")
 
 	var msg []byte = nil
 
-	expectedMac, err := hex.DecodeString("bb1d6929e95937287fa37d129b756746")
-	AssertEq(nil, err)
+	expectedMac := aes_testing.FromRfcHex("bb1d6929 e9593728 7fa37d12 9b756746")
 
 	mac := runCmac(key, msg)
 	ExpectThat(mac, DeepEquals(expectedMac))
 }
 
-func (t *HashTest) Rfc4493GoldenTestCase1() {
-	key, err := hex.DecodeString("2b7e151628aed2a6abf7158809cf4f3c")
-	AssertEq(nil, err)
+func (t *HashTest) NistTestCaseD1() {
+	key := aes_testing.FromRfcHex("2b7e1516 28aed2a6 abf71588 09cf4f3c")
+	msg := aes_testing.FromRfcHex(
+		"6bc1bee2 2e409f96 e93d7e11 7393172a" +
+		"ae2d8a57 1e03ac9c 9eb76fac 45af8e51" +
+		"30c81c46 a35ce411 e5fbc119 1a0a52ef" +
+		"f69f2445 df4f9b17 ad2b417b e66c3710")
 
-	msg, err := hex.DecodeString("")
-	AssertEq(nil, err)
+	var expectedMac []byte
 
-	expectedMac, err := hex.DecodeString("bb1d6929e95937287fa37d129b756746")
-	AssertEq(nil, err)
+	// Example 1
+	expectedMac = aes_testing.FromRfcHex("bb1d6929 e9593728 7fa37d12 9b756746")
+	ExpectThat(runCmac(key, msg[0:0]), DeepEquals(expectedMac))
 
-	mac := runCmac(key, msg)
-	ExpectThat(mac, DeepEquals(expectedMac))
+	// Example 2
+	expectedMac = aes_testing.FromRfcHex("070a16b4 6b4d4144 f79bdd9d d04a287c")
+	ExpectThat(runCmac(key, msg[0:16]), DeepEquals(expectedMac))
+
+	// Example 3
+	expectedMac = aes_testing.FromRfcHex("dfa66747 de9ae630 30ca3261 1497c827")
+	ExpectThat(runCmac(key, msg[0:40]), DeepEquals(expectedMac))
+
+	// Example 4
+	expectedMac = aes_testing.FromRfcHex("51f0bebf 7e3b9d92 fc497417 79363cfe")
+	ExpectThat(runCmac(key, msg[0:64]), DeepEquals(expectedMac))
 }
 
-func (t *HashTest) Rfc4493GoldenTestCase2() {
-	key, err := hex.DecodeString("2b7e151628aed2a6abf7158809cf4f3c")
-	AssertEq(nil, err)
+func (t *HashTest) NistTestCaseD2() {
+	key := aes_testing.FromRfcHex(
+		"8e73b0f7 da0e6452 c810f32b 809079e5" +
+		"62f8ead2 522c6b7b")
 
-	msg, err := hex.DecodeString("6bc1bee22e409f96e93d7e117393172a")
-	AssertEq(nil, err)
+	msg := aes_testing.FromRfcHex(
+		"6bc1bee2 2e409f96 e93d7e11 7393172a" +
+		"ae2d8a57 1e03ac9c 9eb76fac 45af8e51" +
+		"30c81c46 a35ce411 e5fbc119 1a0a52ef" +
+		"f69f2445 df4f9b17 ad2b417b e66c3710")
 
-	expectedMac, err := hex.DecodeString("070a16b46b4d4144f79bdd9dd04a287c")
-	AssertEq(nil, err)
+	var expectedMac []byte
 
-	mac := runCmac(key, msg)
-	ExpectThat(mac, DeepEquals(expectedMac))
+	// Example 1
+	expectedMac = aes_testing.FromRfcHex("d17ddf46 adaacde5 31cac483 de7a9367")
+	ExpectThat(runCmac(key, msg[0:0]), DeepEquals(expectedMac))
+
+	// Example 2
+	expectedMac = aes_testing.FromRfcHex("9e99a7bf 31e71090 0662f65e 617c5184")
+	ExpectThat(runCmac(key, msg[0:16]), DeepEquals(expectedMac))
+
+	// Example 3
+	expectedMac = aes_testing.FromRfcHex("8a1de5be 2eb31aad 089a82e6 ee908b0e")
+	ExpectThat(runCmac(key, msg[0:40]), DeepEquals(expectedMac))
+
+	// Example 4
+	expectedMac = aes_testing.FromRfcHex("a1d5df0e ed790f79 4d775896 59f39a11")
+	ExpectThat(runCmac(key, msg[0:64]), DeepEquals(expectedMac))
 }
 
-func (t *HashTest) Rfc4493GoldenTestCase3() {
-	key, err := hex.DecodeString("2b7e151628aed2a6abf7158809cf4f3c")
-	AssertEq(nil, err)
+func (t *HashTest) NistTestCaseD3() {
+	key := aes_testing.FromRfcHex(
+		"603deb10 15ca71be 2b73aef0 857d7781" +
+		"1f352c07 3b6108d7 2d9810a3 0914dff4")
 
-	msg, err := hex.DecodeString(
-		"6bc1bee22e409f96e93d7e117393172a" +
-			"ae2d8a571e03ac9c9eb76fac45af8e51" +
-			"30c81c46a35ce411")
-	AssertEq(nil, err)
+	msg := aes_testing.FromRfcHex(
+		"6bc1bee2 2e409f96 e93d7e11 7393172a" +
+		"ae2d8a57 1e03ac9c 9eb76fac 45af8e51" +
+		"30c81c46 a35ce411 e5fbc119 1a0a52ef" +
+		"f69f2445 df4f9b17 ad2b417b e66c3710")
 
-	expectedMac, err := hex.DecodeString("dfa66747de9ae63030ca32611497c827")
-	AssertEq(nil, err)
+	var expectedMac []byte
 
-	mac := runCmac(key, msg)
-	ExpectThat(mac, DeepEquals(expectedMac))
-}
+	// Example 1
+	expectedMac = aes_testing.FromRfcHex("028962f6 1b7bf89e fc6b551f 4667d983")
+	ExpectThat(runCmac(key, msg[0:0]), DeepEquals(expectedMac))
 
-func (t *HashTest) Rfc4493GoldenTestCase4() {
-	key, err := hex.DecodeString("2b7e151628aed2a6abf7158809cf4f3c")
-	AssertEq(nil, err)
+	// Example 2
+	expectedMac = aes_testing.FromRfcHex("28a7023f 452e8f82 bd4bf28d 8c37c35c")
+	ExpectThat(runCmac(key, msg[0:16]), DeepEquals(expectedMac))
 
-	msg, err := hex.DecodeString(
-		"6bc1bee22e409f96e93d7e117393172a" +
-			"ae2d8a571e03ac9c9eb76fac45af8e51" +
-			"30c81c46a35ce411e5fbc1191a0a52ef" +
-			"f69f2445df4f9b17ad2b417be66c3710")
-	AssertEq(nil, err)
+	// Example 3
+	expectedMac = aes_testing.FromRfcHex("aaf3d8f1 de5640c2 32f5b169 b9c911e6")
+	ExpectThat(runCmac(key, msg[0:40]), DeepEquals(expectedMac))
 
-	expectedMac, err := hex.DecodeString("51f0bebf7e3b9d92fc49741779363cfe")
-	AssertEq(nil, err)
-
-	mac := runCmac(key, msg)
-	ExpectThat(mac, DeepEquals(expectedMac))
+	// Example 4
+	expectedMac = aes_testing.FromRfcHex("e1992190 549f6ed5 696a2c05 6c315410")
+	ExpectThat(runCmac(key, msg[0:64]), DeepEquals(expectedMac))
 }
 
 func (t *HashTest) GeneratedTestCases() {
