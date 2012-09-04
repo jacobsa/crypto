@@ -75,6 +75,22 @@ func (t *SubkeyTest) NistTestCaseD2() {
 	ExpectThat(k2, DeepEquals(expectedK2))
 }
 
+func (t *SubkeyTest) NistTestCaseD3() {
+	key := aes_testing.FromRfcHex(
+		"603deb10 15ca71be 2b73aef0 857d7781" +
+		"1f352c07 3b6108d7 2d9810a3 0914dff4")
+
+	expectedK1 := aes_testing.FromRfcHex("cad1ed03 299eedac 2e9a9980 8621502f")
+	expectedK2 := aes_testing.FromRfcHex("95a3da06 533ddb58 5d353301 0c42a0d9")
+
+	ciph, err := aes.NewCipher(key)
+	AssertEq(nil, err)
+
+	k1, k2 := generateSubkeys(ciph)
+	ExpectThat(k1, DeepEquals(expectedK1))
+	ExpectThat(k2, DeepEquals(expectedK2))
+}
+
 func (t *SubkeyTest) GeneratedTestCases() {
 	cases := aes_testing.GenerateSubkeyCases()
 	AssertGe(len(cases), 100)
