@@ -183,11 +183,11 @@ func (t *HashTest) NistTestCaseD1() {
 	expectedMac = aes_testing.FromRfcHex("070a16b4 6b4d4144 f79bdd9d d04a287c")
 	ExpectThat(runCmac(key, msg[0:16]), DeepEquals(expectedMac))
 
-	// Example 1
+	// Example 3
 	expectedMac = aes_testing.FromRfcHex("dfa66747 de9ae630 30ca3261 1497c827")
 	ExpectThat(runCmac(key, msg[0:40]), DeepEquals(expectedMac))
 
-	// Example 1
+	// Example 4
 	expectedMac = aes_testing.FromRfcHex("51f0bebf 7e3b9d92 fc497417 79363cfe")
 	ExpectThat(runCmac(key, msg[0:64]), DeepEquals(expectedMac))
 }
@@ -213,12 +213,42 @@ func (t *HashTest) NistTestCaseD2() {
 	expectedMac = aes_testing.FromRfcHex("9e99a7bf 31e71090 0662f65e 617c5184")
 	ExpectThat(runCmac(key, msg[0:16]), DeepEquals(expectedMac))
 
-	// Example 1
+	// Example 3
 	expectedMac = aes_testing.FromRfcHex("8a1de5be 2eb31aad 089a82e6 ee908b0e")
 	ExpectThat(runCmac(key, msg[0:40]), DeepEquals(expectedMac))
 
-	// Example 1
+	// Example 4
 	expectedMac = aes_testing.FromRfcHex("a1d5df0e ed790f79 4d775896 59f39a11")
+	ExpectThat(runCmac(key, msg[0:64]), DeepEquals(expectedMac))
+}
+
+func (t *HashTest) NistTestCaseD3() {
+	key := aes_testing.FromRfcHex(
+		"603deb10 15ca71be 2b73aef0 857d7781" +
+		"1f352c07 3b6108d7 2d9810a3 0914dff4")
+
+	msg := aes_testing.FromRfcHex(
+		"6bc1bee2 2e409f96 e93d7e11 7393172a" +
+		"ae2d8a57 1e03ac9c 9eb76fac 45af8e51" +
+		"30c81c46 a35ce411 e5fbc119 1a0a52ef" +
+		"f69f2445 df4f9b17 ad2b417b e66c3710")
+
+	var expectedMac []byte
+
+	// Example 1
+	expectedMac = aes_testing.FromRfcHex("028962f6 1b7bf89e fc6b551f 4667d983")
+	ExpectThat(runCmac(key, msg[0:0]), DeepEquals(expectedMac))
+
+	// Example 2
+	expectedMac = aes_testing.FromRfcHex("28a7023f 452e8f82 bd4bf28d 8c37c35c")
+	ExpectThat(runCmac(key, msg[0:16]), DeepEquals(expectedMac))
+
+	// Example 3
+	expectedMac = aes_testing.FromRfcHex("aaf3d8f1 de5640c2 32f5b169 b9c911e6")
+	ExpectThat(runCmac(key, msg[0:40]), DeepEquals(expectedMac))
+
+	// Example 4
+	expectedMac = aes_testing.FromRfcHex("e1992190 549f6ed5 696a2c05 6c315410")
 	ExpectThat(runCmac(key, msg[0:64]), DeepEquals(expectedMac))
 }
 
