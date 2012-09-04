@@ -60,6 +60,17 @@ func (t *S2vTest) LongKey() {
 	ExpectThat(f, Panics(HasSubstr("16-byte")))
 }
 
+func (t *S2vTest) EmptyStringsVector() {
+	key := aes_testing.FromRfcHex(
+		"fffefdfc fbfaf9f8 f7f6f5f4 f3f2f1f0" +
+		"f0f1f2f3 f4f5f6f7 f8f9fafb fcfdfeff")
+
+	strings := [][]byte{}
+
+	f := func() { s2v(key, strings) }
+	ExpectThat(f, Panics(HasSubstr("non-empty")))
+}
+
 func (t *S2vTest) Rfc5297GoldenTestCaseA1() {
 	key := aes_testing.FromRfcHex(
 		"fffefdfc fbfaf9f8 f7f6f5f4 f3f2f1f0" +

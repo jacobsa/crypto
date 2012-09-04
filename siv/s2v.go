@@ -19,5 +19,9 @@ package siv
 // string vector, which must be non-empty. (RFC 5297 defines S2V to handle the
 // empty vector case, but it is never used that way by higher-level functions.)
 func s2v(key []byte, strings [][]byte) []byte {
+	if len(strings) == 0 {
+		panic("strings vector must be non-empty.")
+	}
+
 	panic("TODO")
 }
