@@ -34,6 +34,22 @@ func init() { RegisterTestSuite(&DblTest{}) }
 // Tests
 ////////////////////////////////////////////////////////////////////////
 
-func (t *DblTest) DoesFoo() {
+func (t *DblTest) NilBuffer() {
+	ExpectEq("TODO", "")
+}
+
+func (t *DblTest) ShortBuffer() {
+	ExpectEq("TODO", "")
+}
+
+func (t *DblTest) LongBuffer() {
+	ExpectEq("TODO", "")
+}
+
+func (t *DblTest) RfcTestCases() {
+	ExpectEq("TODO", "")
+}
+
+func (t *DblTest) GeneratedTestCases() {
 	ExpectEq("TODO", "")
 }
