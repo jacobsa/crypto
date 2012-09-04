@@ -16,6 +16,7 @@
 package cmac
 
 import (
+	"crypto/des"
 	"encoding/hex"
 	aes_testing "github.com/jacobsa/aes/testing"
 	. "github.com/jacobsa/oglematchers"
@@ -37,14 +38,9 @@ func init() { RegisterTestSuite(&SubkeyTest{}) }
 // Tests
 ////////////////////////////////////////////////////////////////////////
 
-func (t *SubkeyTest) NilKey() {
-	f := func() { generateSubkey(nil) }
-	ExpectThat(f, Panics(HasSubstr("16-byte")))
-}
-
-func (t *SubkeyTest) KeyTooShort() {
-	key := make([]byte, 15)
-	f := func() { generateSubkey(key) }
+func (t *SubkeyTest) BlockSizeTooSmall() {
+	ciph := des.NewCipher(make([]byte, 8))
+	f := func() { generateSubkeys(key) }
 	ExpectThat(f, Panics(HasSubstr("16-byte")))
 }
 
