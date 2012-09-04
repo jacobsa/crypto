@@ -161,12 +161,12 @@ func (t *HashTest) BlockSize() {
 	// AES-192
 	h, err = cmac.New(make([]byte, 24))
 	AssertEq(nil, err)
-	ExpectEq(24, h.BlockSize())
+	ExpectEq(16, h.BlockSize())
 
 	// AES-256
 	h, err = cmac.New(make([]byte, 32))
 	AssertEq(nil, err)
-	ExpectEq(32, h.BlockSize())
+	ExpectEq(16, h.BlockSize())
 }
 
 func (t *HashTest) NilMessage() {
