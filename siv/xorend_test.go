@@ -16,7 +16,9 @@
 package siv
 
 import (
+	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
+	"strconv"
 	"testing"
 )
 
@@ -26,6 +28,15 @@ func TestXorend(t *testing.T) { RunTests(t) }
 // Helpers
 ////////////////////////////////////////////////////////////////////////
 
+func fromBinary(s string) byte {
+	AssertEq(8, len(s), "%s", s)
+
+	u, err := strconv.ParseUint(s, 2, 8)
+	AssertEq(nil, err, "%s", s)
+
+	return byte(u)
+}
+
 type XorendTest struct{}
 
 func init() { RegisterTestSuite(&XorendTest{}) }
@@ -34,8 +45,12 @@ func init() { RegisterTestSuite(&XorendTest{}) }
 // Tests
 ////////////////////////////////////////////////////////////////////////
 
-func (t *XorendTest) AShorterThanB() {
-	ExpectEq("TODO", "")
+func (t *XorendTest) AIsShorterThanB() {
+	a := []byte{0xde}
+	b := []byte{0xde, 0xad}
+
+	f := func() { xorend(a, b) }
+	ExpectThat(f, Panics(HasSubstr("length")))
 }
 
 func (t *XorendTest) BothAreNil() {
