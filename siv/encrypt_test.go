@@ -16,6 +16,8 @@
 package siv_test
 
 import (
+	"github.com/jacobsa/aes/siv"
+	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
 	"testing"
 )
@@ -35,7 +37,11 @@ func init() { RegisterTestSuite(&EncryptTest{}) }
 ////////////////////////////////////////////////////////////////////////
 
 func (t *EncryptTest) NilKey() {
-	ExpectEq("TODO", "")
+	key := []byte(nil)
+	plaintext := []byte{}
+
+	_, err := siv.Encrypt(key, plaintext, nil)
+	ExpectThat(err, Error(HasSubstr("-byte")))
 }
 
 func (t *EncryptTest) ShortKey() {
@@ -56,6 +62,7 @@ func (t *EncryptTest) JustLittleEnoughAssociatedData() {
 
 func (t *EncryptTest) OutputIsDeterministic() {
 	ExpectEq("TODO", "")
+}
 
 func (t *EncryptTest) Rfc5297TestCaseA1() {
 	ExpectEq("TODO", "")
