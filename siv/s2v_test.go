@@ -60,7 +60,19 @@ func (t *S2vTest) LongKey() {
 }
 
 func (t *S2vTest) Rfc5297GoldenTestCaseA1() {
-	ExpectEq("TODO", "")
+	key := fromRfcHex(
+		"fffefdfc fbfaf9f8 f7f6f5f4 f3f2f1f0" +
+		"f0f1f2f3 f4f5f6f7 f8f9fafb fcfdfeff")
+
+	associatedData := [][]byte{
+		fromRfcHex(
+			"10111213 14151617 18191a1b 1c1d1e1f" +
+			"20212223 24252627"),
+	}
+
+	expected := fromRfcHex("85632d07 c6e8f37f 950acd32 0a2ecc93")
+
+	ExpectThat(s2v(key, associatedData), DeepEquals(expected))
 }
 
 func (t *S2vTest) Rfc5297GoldenTestCaseA2() {
