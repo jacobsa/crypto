@@ -388,7 +388,7 @@ func dbl(buf []byte) []byte {
 	cOutput := (*C.uchar)(C.malloc(16))
 	defer C.free(unsafe.Pointer(cOutput))
 
-	C.times_two((*C.uchar)(&buf[0]), cOutput)
+	C.times_two(cOutput, (*C.uchar)(&buf[0]))
 
 	return C.GoBytes(unsafe.Pointer(cOutput), 16)
 }
