@@ -65,7 +65,7 @@ func (t *HashTest) LongKey() {
 
 func (t *HashTest) SumAppendsToSlice() {
 	// Grab a test case.
-	cases := aes_testing.GenerateCmacCases()
+	cases := aes_testing.CmacCases()
 	AssertGt(len(cases), 10)
 	c := cases[10]
 
@@ -87,7 +87,7 @@ func (t *HashTest) SumAppendsToSlice() {
 
 func (t *HashTest) SumDoesntAffectState() {
 	// Grab a test case.
-	cases := aes_testing.GenerateCmacCases()
+	cases := aes_testing.CmacCases()
 	AssertGt(len(cases), 10)
 	c := cases[10]
 
@@ -117,7 +117,7 @@ func (t *HashTest) SumDoesntAffectState() {
 
 func (t *HashTest) Reset() {
 	// Grab a test case.
-	cases := aes_testing.GenerateCmacCases()
+	cases := aes_testing.CmacCases()
 	AssertGt(len(cases), 10)
 	c := cases[10]
 
@@ -226,7 +226,7 @@ func (t *HashTest) Rfc4493GoldenTestCase4() {
 }
 
 func (t *HashTest) GeneratedTestCases() {
-	cases := aes_testing.GenerateCmacCases()
+	cases := aes_testing.CmacCases()
 	AssertGe(len(cases), 100)
 
 	for i, c := range cases {

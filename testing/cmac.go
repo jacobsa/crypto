@@ -23,20 +23,20 @@ import (
 	"path"
 )
 
-// GenerateCmacTestCase represents a test case for generateCmac generated using
-// the reference implementation from RFC 4493.
-type GenerateCmacTestCase struct {
+// CmacTestCase represents a test case for AES-CMAC generated using the
+// reference implementation from RFC 4493.
+type CmacTestCase struct {
 	Key []byte
 	Msg []byte
 	Mac []byte
 }
 
-func (c GenerateCmacTestCase) String() string {
-	return fmt.Sprintf("generateCmac(%x, %x) = %x", c.Key, c.Msg, c.Mac)
+func (c CmacTestCase) String() string {
+	return fmt.Sprintf("AES-CMAC(%x, %x) = %x", c.Key, c.Msg, c.Mac)
 }
 
-// GenerateCmacTestCases returns test cases for generateCmac.
-func GenerateCmacCases() []GenerateCmacTestCase {
+// CmacTestCases returns test cases for AES-CMAC.
+func CmacCases() []CmacTestCase {
 	// Find the source package.
 	pkg, err := build.Import(
 		"github.com/jacobsa/aes/testing/cases",
@@ -48,7 +48,7 @@ func GenerateCmacCases() []GenerateCmacTestCase {
 	}
 
 	// Load the appropriate gob file.
-	gobPath := path.Join(pkg.Dir, "generateCmac.gob")
+	gobPath := path.Join(pkg.Dir, "cmac.gob")
 	f, err := os.Open(gobPath)
 	if err != nil {
 		panic(fmt.Sprintf("Opening %s: %v", gobPath, err))
@@ -57,7 +57,7 @@ func GenerateCmacCases() []GenerateCmacTestCase {
 	defer f.Close()
 
 	// Parse it.
-	var cases []GenerateCmacTestCase
+	var cases []CmacTestCase
 	if err = gob.NewDecoder(f).Decode(&cases); err != nil {
 		panic(fmt.Sprintf("Decoding: %v", err))
 	}
