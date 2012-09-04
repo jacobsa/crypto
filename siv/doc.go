@@ -13,8 +13,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package siv implements the SIV (Synthetic Initialization Vector) block
-// cipher mode of AES, as defined by RFC 5297.
+// Package siv implements the SIV (Synthetic Initialization Vector)block cipher
+// mode of AES, as defined by RFC 5297.
 //
 // This mode offers the choice of deterministic authenticated encryption or
 // nonce-based, misuse-resistant authenticated encryption.

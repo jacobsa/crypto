@@ -32,6 +32,9 @@ import (
 // though it is not included in the ciphertext. The user must supply the same
 // associated data to Decrypt in order for the latter to succeed. If no
 // associated data is desired, pass nil or an empty slice.
+//
+// If the same key, plaintext, and associated data are supplied to this
+// function multiple times, the output is guaranteed to be identical.
 func Encrypt(key, plaintext []byte, associated [][]byte) ([]byte, error) {
 	return nil, fmt.Errorf("TODO")
 }
