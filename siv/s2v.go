@@ -68,7 +68,7 @@ func s2v(key []byte, strings [][]byte) []byte {
 	if len(lastString) >= aes.BlockSize {
 		t = xorend(lastString, d)
 	} else {
-		t = common.Xor(d, common.PadBlock(lastString))
+		t = common.Xor(dbl(d), common.PadBlock(lastString))
 	}
 
 	if _, err := h.Write(t); err != nil {
