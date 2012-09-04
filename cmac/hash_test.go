@@ -156,8 +156,7 @@ func (t *HashTest) BlockSize() {
 }
 
 func (t *HashTest) NilMessage() {
-	key, err := hex.DecodeString("2b7e151628aed2a6abf7158809cf4f3c")
-	AssertEq(nil, err)
+	key := aes_testing.FromRfcHex("2b7e1516 28aed2a6 abf71588 09cf4f3c")
 
 	var msg []byte = nil
 
@@ -169,8 +168,7 @@ func (t *HashTest) NilMessage() {
 }
 
 func (t *HashTest) Rfc4493GoldenTestCase1() {
-	key, err := hex.DecodeString("2b7e151628aed2a6abf7158809cf4f3c")
-	AssertEq(nil, err)
+	key := aes_testing.FromRfcHex("2b7e1516 28aed2a6 abf71588 09cf4f3c")
 
 	msg, err := hex.DecodeString("")
 	AssertEq(nil, err)
@@ -183,8 +181,7 @@ func (t *HashTest) Rfc4493GoldenTestCase1() {
 }
 
 func (t *HashTest) Rfc4493GoldenTestCase2() {
-	key, err := hex.DecodeString("2b7e151628aed2a6abf7158809cf4f3c")
-	AssertEq(nil, err)
+	key := aes_testing.FromRfcHex("2b7e1516 28aed2a6 abf71588 09cf4f3c")
 
 	msg, err := hex.DecodeString("6bc1bee22e409f96e93d7e117393172a")
 	AssertEq(nil, err)
@@ -197,8 +194,7 @@ func (t *HashTest) Rfc4493GoldenTestCase2() {
 }
 
 func (t *HashTest) Rfc4493GoldenTestCase3() {
-	key, err := hex.DecodeString("2b7e151628aed2a6abf7158809cf4f3c")
-	AssertEq(nil, err)
+	key := aes_testing.FromRfcHex("2b7e1516 28aed2a6 abf71588 09cf4f3c")
 
 	msg, err := hex.DecodeString(
 		"6bc1bee22e409f96e93d7e117393172a" +
@@ -214,8 +210,7 @@ func (t *HashTest) Rfc4493GoldenTestCase3() {
 }
 
 func (t *HashTest) Rfc4493GoldenTestCase4() {
-	key, err := hex.DecodeString("2b7e151628aed2a6abf7158809cf4f3c")
-	AssertEq(nil, err)
+	key := aes_testing.FromRfcHex("2b7e1516 28aed2a6 abf71588 09cf4f3c")
 
 	msg, err := hex.DecodeString(
 		"6bc1bee22e409f96e93d7e117393172a" +
