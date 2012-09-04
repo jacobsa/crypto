@@ -70,13 +70,38 @@ func (t *XorendTest) BIsNil() {
 }
 
 func (t *XorendTest) BothAreEmpty() {
-	ExpectEq("TODO", "")
+	a := []byte{}
+	b := []byte{}
+
+	expected := []byte{}
+	ExpectThat(xorend(a, b), DeepEquals(expected))
 }
 
 func (t *XorendTest) BIsEmpty() {
-	ExpectEq("TODO", "")
+	a := []byte{fromBinary("10101010"), fromBinary("00000000")}
+	b := []byte{}
+
+	expected := a
+	ExpectThat(xorend(a, b), DeepEquals(expected))
 }
 
 func (t *XorendTest) BIsNonEmpty() {
-	ExpectEq("TODO", "")
+	a := []byte{
+		fromBinary("11110000"),
+		fromBinary("10101010"),
+		fromBinary("00000000"),
+	}
+
+	b := []byte{
+		fromBinary("11110000"),
+		fromBinary("00001111"),
+	}
+
+	expected := []byte{
+		fromBinary("11110000"),
+		fromBinary("01011010"),
+		fromBinary("00001111"),
+	}
+
+	ExpectThat(xorend(a, b), DeepEquals(expected))
 }
