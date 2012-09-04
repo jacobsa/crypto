@@ -16,8 +16,10 @@
 package siv
 
 import (
+	"encoding/hex"
 	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
+	"strings"
 	"testing"
 )
 
@@ -28,7 +30,14 @@ func TestDbl(t *testing.T) { RunTests(t) }
 ////////////////////////////////////////////////////////////////////////
 
 func fromRfcHex(s string) []byte {
-	panic("TODO")
+	// Remove spaces.
+	s = strings.Replace(s, " ", "", -1)
+
+	// Decode.
+	res, err := hex.DecodeString(s)
+	AssertEq(nil, err)
+
+	return res
 }
 
 type DblTest struct{}
