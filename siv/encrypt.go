@@ -28,6 +28,8 @@ import (
 // is, without the secret key, and attacker is unable to construct a byte
 // string that Decrypt will accept.
 //
+// The supplied key must be 32, 48, or 64 bytes long.
+//
 // The supplied associated data, up to 126 strings, may also be authenticated,
 // though it is not included in the ciphertext. The user must supply the same
 // associated data to Decrypt in order for the latter to succeed. If no
