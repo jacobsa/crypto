@@ -38,25 +38,25 @@ func init() { RegisterTestSuite(&S2vTest{}) }
 
 func (t *S2vTest) NilKey() {
 	key := []byte(nil)
-	associatedData := [][]byte{}
+	strings := [][]byte{}
 
-	f := func() { s2v(key, associatedData) }
+	f := func() { s2v(key, strings) }
 	ExpectThat(f, Panics(HasSubstr("16-byte")))
 }
 
 func (t *S2vTest) ShortKey() {
 	key := make([]byte, 15)
-	associatedData := [][]byte{}
+	strings := [][]byte{}
 
-	f := func() { s2v(key, associatedData) }
+	f := func() { s2v(key, strings) }
 	ExpectThat(f, Panics(HasSubstr("16-byte")))
 }
 
 func (t *S2vTest) LongKey() {
 	key := make([]byte, 17)
-	associatedData := [][]byte{}
+	strings := [][]byte{}
 
-	f := func() { s2v(key, associatedData) }
+	f := func() { s2v(key, strings) }
 	ExpectThat(f, Panics(HasSubstr("16-byte")))
 }
 
@@ -76,7 +76,7 @@ func (t *S2vTest) Rfc5297GoldenTestCaseA1() {
 		"fffefdfc fbfaf9f8 f7f6f5f4 f3f2f1f0" +
 		"f0f1f2f3 f4f5f6f7 f8f9fafb fcfdfeff")
 
-	associatedData := [][]byte{
+	strings := [][]byte{
 		aes_testing.FromRfcHex(
 			"10111213 14151617 18191a1b 1c1d1e1f" +
 			"20212223 24252627"),
@@ -84,7 +84,7 @@ func (t *S2vTest) Rfc5297GoldenTestCaseA1() {
 
 	expected := aes_testing.FromRfcHex("85632d07 c6e8f37f 950acd32 0a2ecc93")
 
-	ExpectThat(s2v(key, associatedData), DeepEquals(expected))
+	ExpectThat(s2v(key, strings), DeepEquals(expected))
 }
 
 func (t *S2vTest) Rfc5297GoldenTestCaseA2() {
@@ -92,7 +92,7 @@ func (t *S2vTest) Rfc5297GoldenTestCaseA2() {
 		"7f7e7d7c 7b7a7978 77767574 73727170" +
 		"40414243 44454647 48494a4b 4c4d4e4f")
 
-	associatedData := [][]byte{
+	strings := [][]byte{
 		aes_testing.FromRfcHex(
 			"00112233 44556677 8899aabb ccddeeff" +
 			"deaddada deaddada ffeeddcc bbaa9988" +
@@ -102,7 +102,7 @@ func (t *S2vTest) Rfc5297GoldenTestCaseA2() {
 
 	expected := aes_testing.FromRfcHex("7bdb6e3b 432667eb 06f4d14b ff2fbd0f")
 
-	ExpectThat(s2v(key, associatedData), DeepEquals(expected))
+	ExpectThat(s2v(key, strings), DeepEquals(expected))
 }
 
 func (t *S2vTest) GeneratedTestCases() {
