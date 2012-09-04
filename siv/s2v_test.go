@@ -34,6 +34,26 @@ func init() { RegisterTestSuite(&S2vTest{}) }
 // Tests
 ////////////////////////////////////////////////////////////////////////
 
-func (t *S2vTest) DoesFoo() {
+func (t *S2vTest) NilKey() {
+	ExpectEq("TODO", "")
+}
+
+func (t *S2vTest) ShortKey() {
+	ExpectEq("TODO", "")
+}
+
+func (t *S2vTest) LongKey() {
+	ExpectEq("TODO", "")
+}
+
+func (t *S2vTest) Rfc5297GoldenTestCaseA1() {
+	ExpectEq("TODO", "")
+}
+
+func (t *S2vTest) Rfc5297GoldenTestCaseA2() {
+	ExpectEq("TODO", "")
+}
+
+func (t *S2vTest) GeneratedTestCases() {
 	ExpectEq("TODO", "")
 }
