@@ -40,6 +40,21 @@ import (
 // RFC 5297 section 3, you may use this function for nonce-based authenticated
 // encryption by passing a nonce as the last associated data element.
 func Encrypt(key, plaintext []byte, associated [][]byte) ([]byte, error) {
+	keyLen := len(key)
+	associatedLen := len(associated)
+
+	// Make sure the key length is legal.
+	switch keyLen {
+	case 32, 48, 64:
+	default:
+		return nil, fmt.Errorf("SIV requires a 32-, 48-, or 64-byte key.")
+	}
+
+	// Make sure the number of associated data is legal, per RFC 5297 section 7.
+	if associatedLen > 126 {
+		return nil, fmt.Errorf("len(associated) may be no more than 126.")
+	}
+
 	return nil, fmt.Errorf("TODO")
 }
 
