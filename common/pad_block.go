@@ -15,17 +15,13 @@
 
 package common
 
-import (
-	"fmt"
-)
-
 // PadBlock pads a string of bytes less than 16 bytes long to a full block size
 // by appending a one bit followed by zero bits. This is the padding function
 // used in RFCs 4493 and 5297.
 func PadBlock(block []byte) []byte {
 	blockLen := len(block)
 	if blockLen >= 16 {
-		panic(fmt.Sprintf("Unexpected block: %x", block))
+		panic("PadBlock input must be less than 16 bytes.")
 	}
 
 	result := make([]byte, 16)
