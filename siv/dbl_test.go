@@ -100,7 +100,7 @@ func (t *DblTest) RfcTestCases() {
 	for i, c := range cases {
 		input := fromRfcHex(c.iHex)
 		expected := fromRfcHex(c.oHex)
-		ExpectThat(dbl(input), DeepEquals(expected), "Case %i: %v", i, c)
+		ExpectThat(dbl(input), DeepEquals(expected), "Case %d: %v", i, c)
 	}
 }
 
@@ -109,6 +109,6 @@ func (t *DblTest) GeneratedTestCases() {
 	AssertGe(len(cases), 100)
 
 	for i, c := range cases {
-		ExpectThat(dbl(c.Input), DeepEquals(c.Output), "Case %i: %v", i, c)
+		ExpectThat(dbl(c.Input), DeepEquals(c.Output), "Case %d: %v", i, c)
 	}
 }

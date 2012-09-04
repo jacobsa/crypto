@@ -16,12 +16,29 @@
 package siv
 
 import (
+	"bytes"
+	"github.com/jacobsa/aes/common"
 )
 
+var dblRb []byte
+
+func init() {
+	dblRb = append(bytes.Repeat([]byte{0x00}, 15), 0x87)
+}
 
 // Given a 128-bit binary string, shift the string left by one bit and XOR the
 // result with 0x00...87 if the bit shifted off was one. This is the dbl
 // function of RFC 5297.
 func dbl(b []byte) []byte {
-	panic("TODO")
+	if len(b) != 16 {
+		panic("Invalid length.")
+	}
+
+	shiftedOne := common.Msb(b) == 1
+	b = common.ShiftLeft(b)
+	if shiftedOne {
+		b = common.Xor(b, dblRb)
+	}
+
+	return b
 }
