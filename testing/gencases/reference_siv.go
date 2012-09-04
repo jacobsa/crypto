@@ -166,6 +166,13 @@ s2v_final (siv_ctx *ctx, const unsigned char *X, int xlen, unsigned char *digest
     unsigned char padX[AES_BLOCK_SIZE], *ptr;
     int blocks, i, slop;
 
+    // NOTE(jacobsa): For some reason, the memcpy of `zero` below never returns
+    // when zero is a global, as in the original program.
+    unsigned char zero[AES_BLOCK_SIZE] = {
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    };
+
     if (xlen < AES_BLOCK_SIZE) {
 	memcpy(padX, X, xlen);
 	pad(padX, xlen);
