@@ -95,5 +95,10 @@ func (t *S2vTest) Rfc5297GoldenTestCaseA2() {
 }
 
 func (t *S2vTest) GeneratedTestCases() {
-	ExpectEq("TODO", "")
+	cases := aes_testing.S2vCases()
+	AssertGe(len(cases), 100)
+
+	for i, c := range cases {
+		ExpectThat(s2v(c.Key, c.Strings), DeepEquals(c.Output), "Case %d: %v", i, c)
+	}
 }
