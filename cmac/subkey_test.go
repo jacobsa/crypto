@@ -46,7 +46,7 @@ func (t *SubkeyTest) WrongBlockSize() {
 	ExpectThat(f, Panics(HasSubstr("16 bytes")))
 }
 
-func (t *SubkeyTest) Rfc4493GoldenTestCase() {
+func (t *SubkeyTest) NistTestCaseD1() {
 	key := aes_testing.FromRfcHex("2b7e1516 28aed2a6 abf71588 09cf4f3c")
 	expectedK1 := aes_testing.FromRfcHex("fbeed618 35713366 7c85e08f 7236a8de")
 	expectedK2 := aes_testing.FromRfcHex("f7ddac30 6ae266cc f90bc11e e46d513b")
