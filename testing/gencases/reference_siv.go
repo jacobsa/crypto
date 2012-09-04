@@ -329,7 +329,7 @@ siv_encrypt (siv_ctx *ctx, const unsigned char *p, unsigned char *c,
     if (numad) {
         va_start(ap, nad);
         while (numad) {
-            ad = va_arg(ap, char *);
+            ad = va_arg(ap, unsigned char *);
             adlen = va_arg(ap, int);
             s2v_update(ctx, ad, adlen);
             numad--;
@@ -357,7 +357,7 @@ siv_decrypt (siv_ctx *ctx, const unsigned char *c, unsigned char *p,
     if (numad) {
         va_start(ap, nad);
         while (numad) {
-            ad = va_arg(ap, char *);
+            ad = va_arg(ap, unsigned char *);
             adlen = va_arg(ap, int);
             s2v_update(ctx, ad, adlen);
             numad--;
@@ -375,3 +375,20 @@ siv_decrypt (siv_ctx *ctx, const unsigned char *c, unsigned char *p,
 }
 */
 import "C"
+
+import (
+	"unsafe"
+)
+
+func dbl(buf []byte) []byte {
+	if len(buf) != 16 {
+		panic("Invalid length.")
+	}
+
+	cOutput := (*C.uchar)(C.malloc(16))
+	defer C.free(unsafe.Pointer(cOutput))
+
+	C.times_two((*C.uchar)(&buf[0]), cOutput)
+
+	return C.GoBytes(unsafe.Pointer(cOutput), 16)
+}
