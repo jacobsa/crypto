@@ -54,7 +54,11 @@ func (t *XorendTest) AIsShorterThanB() {
 }
 
 func (t *XorendTest) BothAreNil() {
-	ExpectEq("TODO", "")
+	a := []byte(nil)
+	b := []byte(nil)
+
+	expected := []byte{}
+	ExpectThat(xorend(a, b), DeepEquals(expected))
 }
 
 func (t *XorendTest) BIsNil() {
