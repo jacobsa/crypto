@@ -165,39 +165,34 @@ func (t *HashTest) NilMessage() {
 	ExpectThat(mac, DeepEquals(expectedMac))
 }
 
-func (t *HashTest) Rfc4493GoldenTestCase1() {
+func (t *HashTest) NistTestCaseD1() {
 	key := aes_testing.FromRfcHex("2b7e1516 28aed2a6 abf71588 09cf4f3c")
-	msg := aes_testing.FromRfcHex("")
-	expectedMac := aes_testing.FromRfcHex("bb1d6929 e9593728 7fa37d12 9b756746")
-
-	mac := runCmac(key, msg)
-	ExpectThat(mac, DeepEquals(expectedMac))
-}
-
-func (t *HashTest) Rfc4493GoldenTestCase2() {
-	key := aes_testing.FromRfcHex("2b7e1516 28aed2a6 abf71588 09cf4f3c")
-	msg := aes_testing.FromRfcHex("6bc1bee2 2e409f96 e93d7e11 7393172a")
-	expectedMac := aes_testing.FromRfcHex("070a16b4 6b4d4144 f79bdd9d d04a287c")
-
-	mac := runCmac(key, msg)
-	ExpectThat(mac, DeepEquals(expectedMac))
-}
-
-func (t *HashTest) Rfc4493GoldenTestCase3() {
-	key := aes_testing.FromRfcHex("2b7e1516 28aed2a6 abf71588 09cf4f3c")
-
 	msg := aes_testing.FromRfcHex(
 		"6bc1bee2 2e409f96 e93d7e11 7393172a" +
 		"ae2d8a57 1e03ac9c 9eb76fac 45af8e51" +
-		"30c81c46 a35ce411")
+		"30c81c46 a35ce411 e5fbc119 1a0a52ef" +
+		"f69f2445 df4f9b17 ad2b417b e66c3710")
 
-	expectedMac := aes_testing.FromRfcHex("dfa66747 de9ae630 30ca3261 1497c827")
+	var expectedMac []byte
 
-	mac := runCmac(key, msg)
-	ExpectThat(mac, DeepEquals(expectedMac))
+	// Example 1
+	expectedMac = aes_testing.FromRfcHex("bb1d6929 e9593728 7fa37d12 9b756746")
+	ExpectThat(runCmac(key, msg[0:0]), DeepEquals(expectedMac))
+
+	// Example 2
+	expectedMac = aes_testing.FromRfcHex("070a16b4 6b4d4144 f79bdd9d d04a287c")
+	ExpectThat(runCmac(key, msg[0:16]), DeepEquals(expectedMac))
+
+	// Example 1
+	expectedMac = aes_testing.FromRfcHex("dfa66747 de9ae630 30ca3261 1497c827")
+	ExpectThat(runCmac(key, msg[0:40]), DeepEquals(expectedMac))
+
+	// Example 1
+	expectedMac = aes_testing.FromRfcHex("51f0bebf 7e3b9d92 fc497417 79363cfe")
+	ExpectThat(runCmac(key, msg[0:64]), DeepEquals(expectedMac))
 }
 
-func (t *HashTest) Rfc4493GoldenTestCase4() {
+func (t *HashTest) NistTestCaseD2() {
 	key := aes_testing.FromRfcHex("2b7e1516 28aed2a6 abf71588 09cf4f3c")
 
 	msg := aes_testing.FromRfcHex(
