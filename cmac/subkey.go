@@ -47,15 +47,15 @@ func generateSubkey(key []byte) (k1 []byte, k2 []byte) {
 	c.Encrypt(l, subkeyZero)
 
 	if common.Msb(l) == 0 {
-		k1 = shiftLeft(l)
+		k1 = common.ShiftLeft(l)
 	} else {
-		k1 = common.Xor(shiftLeft(l), subkeyRb)
+		k1 = common.Xor(common.ShiftLeft(l), subkeyRb)
 	}
 
 	if common.Msb(k1) == 0 {
-		k2 = shiftLeft(k1)
+		k2 = common.ShiftLeft(k1)
 	} else {
-		k2 = common.Xor(shiftLeft(k1), subkeyRb)
+		k2 = common.Xor(common.ShiftLeft(k1), subkeyRb)
 	}
 
 	return

@@ -13,9 +13,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cmac
+package common_test
 
 import (
+	"github.com/jacobsa/aes/common"
 	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
 	"testing"
@@ -36,12 +37,12 @@ func init() { RegisterTestSuite(&ShiftLeftTest{}) }
 ////////////////////////////////////////////////////////////////////////
 
 func (t *ShiftLeftTest) NilBuffer() {
-	f := func() { shiftLeft(nil) }
+	f := func() { common.ShiftLeft(nil) }
 	ExpectThat(f, Panics(HasSubstr("empty")))
 }
 
 func (t *ShiftLeftTest) EmptyBuffer() {
-	f := func() { shiftLeft([]byte{}) }
+	f := func() { common.ShiftLeft([]byte{}) }
 	ExpectThat(f, Panics(HasSubstr("empty")))
 }
 
@@ -51,23 +52,23 @@ func (t *ShiftLeftTest) OneByteBuffers() {
 
 	input = []byte{fromBinary("00000000")}
 	expected = []byte{fromBinary("00000000")}
-	ExpectThat(shiftLeft(input), DeepEquals(expected))
+	ExpectThat(common.ShiftLeft(input), DeepEquals(expected))
 
 	input = []byte{fromBinary("10000000")}
 	expected = []byte{fromBinary("00000000")}
-	ExpectThat(shiftLeft(input), DeepEquals(expected))
+	ExpectThat(common.ShiftLeft(input), DeepEquals(expected))
 
 	input = []byte{fromBinary("00000001")}
 	expected = []byte{fromBinary("00000010")}
-	ExpectThat(shiftLeft(input), DeepEquals(expected))
+	ExpectThat(common.ShiftLeft(input), DeepEquals(expected))
 
 	input = []byte{fromBinary("00001000")}
 	expected = []byte{fromBinary("00010000")}
-	ExpectThat(shiftLeft(input), DeepEquals(expected))
+	ExpectThat(common.ShiftLeft(input), DeepEquals(expected))
 
 	input = []byte{fromBinary("11000001")}
 	expected = []byte{fromBinary("10000010")}
-	ExpectThat(shiftLeft(input), DeepEquals(expected))
+	ExpectThat(common.ShiftLeft(input), DeepEquals(expected))
 }
 
 func (t *ShiftLeftTest) MultiByteBuffers() {
@@ -76,17 +77,17 @@ func (t *ShiftLeftTest) MultiByteBuffers() {
 
 	input = []byte{fromBinary("00000000"), fromBinary("00000000")}
 	expected = []byte{fromBinary("00000000"), fromBinary("00000000")}
-	ExpectThat(shiftLeft(input), DeepEquals(expected))
+	ExpectThat(common.ShiftLeft(input), DeepEquals(expected))
 
 	input = []byte{fromBinary("00001000"), fromBinary("01000000")}
 	expected = []byte{fromBinary("00010000"), fromBinary("10000000")}
-	ExpectThat(shiftLeft(input), DeepEquals(expected))
+	ExpectThat(common.ShiftLeft(input), DeepEquals(expected))
 
 	input = []byte{fromBinary("10000000"), fromBinary("00000000")}
 	expected = []byte{fromBinary("00000000"), fromBinary("00000000")}
-	ExpectThat(shiftLeft(input), DeepEquals(expected))
+	ExpectThat(common.ShiftLeft(input), DeepEquals(expected))
 
 	input = []byte{fromBinary("01000001"), fromBinary("10000001")}
 	expected = []byte{fromBinary("10000011"), fromBinary("00000010")}
-	ExpectThat(shiftLeft(input), DeepEquals(expected))
+	ExpectThat(common.ShiftLeft(input), DeepEquals(expected))
 }

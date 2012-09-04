@@ -13,12 +13,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cmac
+package common
 
-// shiftLeft shifts the binary string left by one bit, causing the
+// ShiftLeft shifts the binary string left by one bit, causing the
 // most-signficant bit to disappear and a zero to be introduced at the right.
 // This corresponds to the `x << 1` notation of RFC 4493.
-func shiftLeft(b []byte) []byte {
+func ShiftLeft(b []byte) []byte {
 	l := len(b)
 	if l == 0 {
 		panic("shiftLeft requires a non-empty buffer.")
