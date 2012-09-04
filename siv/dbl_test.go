@@ -17,6 +17,7 @@ package siv
 
 import (
 	"encoding/hex"
+	aes_testing "github.com/jacobsa/aes/testing"
 	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
 	"strings"
@@ -104,5 +105,10 @@ func (t *DblTest) RfcTestCases() {
 }
 
 func (t *DblTest) GeneratedTestCases() {
-	ExpectEq("TODO", "")
+	cases := aes_testing.DblCases()
+	AssertGe(len(cases), 100)
+
+	for i, c := range cases {
+		ExpectThat(dbl(c.Input), DeepEquals(c.Output), "Case %i: %v", i, c)
+	}
 }
