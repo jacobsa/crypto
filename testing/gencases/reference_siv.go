@@ -405,6 +405,12 @@ func s2v(key []byte, strings [][]byte) []byte {
 		panic("strings must be non-empty.")
 	}
 
+	// siv_init requires a full SIV key, i.e. twice the length of the key used by
+	// S2V. It uses the first half for the S2V key.
+	tmpKey := make([]byte, 2 * len(key))
+	copy(tmpKey, key)
+	key = tmpKey
+
 	// Initialize the context struct.
 	var ctx C.siv_ctx
 	callResult := C.siv_init(&ctx, (*C.uchar)(&key[0]), C.int(len(key)))
