@@ -15,16 +15,20 @@
 
 package common
 
+import (
+	"crypto/aes"
+)
+
 // PadBlock pads a string of bytes less than 16 bytes long to a full block size
 // by appending a one bit followed by zero bits. This is the padding function
 // used in RFCs 4493 and 5297.
 func PadBlock(block []byte) []byte {
 	blockLen := len(block)
-	if blockLen >= 16 {
+	if blockLen >= aes.BlockSize {
 		panic("PadBlock input must be less than 16 bytes.")
 	}
 
-	result := make([]byte, 16)
+	result := make([]byte, aes.BlockSize)
 	copy(result, block)
 	result[blockLen] = 0x80
 

@@ -17,6 +17,7 @@ package siv
 
 import (
 	"bytes"
+	"crypto/aes"
 	"github.com/jacobsa/aes/common"
 )
 
@@ -30,7 +31,7 @@ func init() {
 // result with 0x00...87 if the bit shifted off was one. This is the dbl
 // function of RFC 5297.
 func dbl(b []byte) []byte {
-	if len(b) != 16 {
+	if len(b) != aes.BlockSize {
 		panic("dbl requires a 16-byte buffer.")
 	}
 
