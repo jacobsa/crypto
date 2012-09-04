@@ -13,9 +13,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cmac
+package common_test
 
 import (
+	"github.com/jacobsa/aes/common"
 	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
 	"strconv"
@@ -46,12 +47,12 @@ func init() { RegisterTestSuite(&MsbTest{}) }
 ////////////////////////////////////////////////////////////////////////
 
 func (t *MsbTest) NilBuffer() {
-	f := func() { msb(nil) }
+	f := func() { common.Msb(nil) }
 	ExpectThat(f, Panics(HasSubstr("empty")))
 }
 
 func (t *MsbTest) EmptyBuffer() {
-	f := func() { msb([]byte{}) }
+	f := func() { common.Msb([]byte{}) }
 	ExpectThat(f, Panics(HasSubstr("empty")))
 }
 
@@ -64,7 +65,7 @@ func (t *MsbTest) MostSignficantIsOne() {
 	}
 
 	for i, buf := range bufs {
-		ExpectEq(1, msb(buf), "Test case %d: %v", i, buf)
+		ExpectEq(1, common.Msb(buf), "Test case %d: %v", i, buf)
 	}
 }
 
@@ -77,6 +78,6 @@ func (t *MsbTest) MostSignficantIsZero() {
 	}
 
 	for i, buf := range bufs {
-		ExpectEq(0, msb(buf), "Test case %d: %v", i, buf)
+		ExpectEq(0, common.Msb(buf), "Test case %d: %v", i, buf)
 	}
 }

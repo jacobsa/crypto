@@ -13,11 +13,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cmac
+package common
 
-// msb returns the most significant bit of the supplied data (which must be
+// Msb returns the most significant bit of the supplied data (which must be
 // non-empty). This is the MSB(L) function of RFC 4493.
-func msb(buf []byte) uint8 {
+func Msb(buf []byte) uint8 {
 	if len(buf) == 0 {
 		panic("msb requires non-empty buffer.")
 	}
