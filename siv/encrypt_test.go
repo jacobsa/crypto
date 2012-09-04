@@ -61,11 +61,22 @@ func (t *EncryptTest) LongKey() {
 }
 
 func (t *EncryptTest) TooMuchAssociatedData() {
-	ExpectEq("TODO", "")
+	key := make([]byte, 64)
+	plaintext := []byte{}
+	associated := make([][]byte, 127)
+
+	_, err := siv.Encrypt(key, plaintext, associated)
+	ExpectThat(err, Error(HasSubstr("Associated")))
+	ExpectThat(err, Error(HasSubstr("126")))
 }
 
 func (t *EncryptTest) JustLittleEnoughAssociatedData() {
-	ExpectEq("TODO", "")
+	key := make([]byte, 64)
+	plaintext := []byte{}
+	associated := make([][]byte, 126)
+
+	_, err := siv.Encrypt(key, plaintext, associated)
+	ExpectEq(nil, err)
 }
 
 func (t *EncryptTest) OutputIsDeterministic() {
