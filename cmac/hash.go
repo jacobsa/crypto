@@ -108,14 +108,14 @@ func New(key []byte) (hash.Hash, error) {
 	}
 
 	// Create a cipher.
-	c, err := aes.NewCipher(key)
+	ciph, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, fmt.Errorf("aes.NewCipher: %v", err)
 	}
 
 	// Set up the hash object.
-	h := &cmacHash{ciph: c}
-	h.k1, h.k2 = generateSubkey(key)
+	h := &cmacHash{ciph: ciph}
+	h.k1, h.k2 = generateSubkeys(ciph)
 	h.Reset()
 
 	return h, nil

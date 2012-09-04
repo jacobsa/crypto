@@ -18,7 +18,6 @@ package cmac
 import (
 	"bytes"
 	"crypto/cipher"
-	"fmt"
 	"github.com/jacobsa/aes/common"
 )
 
