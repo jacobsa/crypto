@@ -34,6 +34,26 @@ func init() { RegisterTestSuite(&XorendTest{}) }
 // Tests
 ////////////////////////////////////////////////////////////////////////
 
-func (t *XorendTest) DoesFoo() {
+func (t *XorendTest) AShorterThanB() {
+	ExpectEq("TODO", "")
+}
+
+func (t *XorendTest) BothAreNil() {
+	ExpectEq("TODO", "")
+}
+
+func (t *XorendTest) BIsNil() {
+	ExpectEq("TODO", "")
+}
+
+func (t *XorendTest) BothAreEmpty() {
+	ExpectEq("TODO", "")
+}
+
+func (t *XorendTest) BIsEmpty() {
+	ExpectEq("TODO", "")
+}
+
+func (t *XorendTest) BIsNonEmpty() {
 	ExpectEq("TODO", "")
 }
