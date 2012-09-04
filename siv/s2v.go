@@ -45,13 +45,19 @@ func s2v(key []byte, strings [][]byte) []byte {
 	}
 
 	// Initialize.
-	h.Write(s2vZero)
+	if _, err := h.Write(s2vZero); err != nil {
+		panic(fmt.Sprintf("h.Write: %v", err))
+	}
+
 	d := h.Sum([]byte{})
 	h.Reset()
 
 	// Handle all strings but the last.
 	for i := 0; i < numStrings-1; i++ {
-		h.Write(strings[i])
+		if _, err := h.Write(strings[i]); err != nil {
+			panic(fmt.Sprintf("h.Write: %v", err))
+		}
+
 		d = common.Xor(dbl(d), h.Sum([]byte{}))
 		h.Reset()
 	}
@@ -65,6 +71,9 @@ func s2v(key []byte, strings [][]byte) []byte {
 		t = common.Xor(d, common.PadBlock(lastString))
 	}
 
-	h.Write(t)
+	if _, err := h.Write(t); err != nil {
+		panic(fmt.Sprintf("h.Write: %v", err))
+	}
+
 	return h.Sum([]byte{})
 }
