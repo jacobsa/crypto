@@ -16,6 +16,7 @@
 package siv
 
 import (
+	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
 	"testing"
 )
@@ -35,15 +36,18 @@ func init() { RegisterTestSuite(&DblTest{}) }
 ////////////////////////////////////////////////////////////////////////
 
 func (t *DblTest) NilBuffer() {
-	ExpectEq("TODO", "")
+	f := func() { dbl(nil) }
+	ExpectThat(f, Panics(HasSubstr("16-byte")))
 }
 
 func (t *DblTest) ShortBuffer() {
-	ExpectEq("TODO", "")
+	f := func() { dbl(make([]byte, 15)) }
+	ExpectThat(f, Panics(HasSubstr("16-byte")))
 }
 
 func (t *DblTest) LongBuffer() {
-	ExpectEq("TODO", "")
+	f := func() { dbl(make([]byte, 17)) }
+	ExpectThat(f, Panics(HasSubstr("16-byte")))
 }
 
 func (t *DblTest) RfcTestCases() {
