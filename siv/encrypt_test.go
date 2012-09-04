@@ -34,6 +34,37 @@ func init() { RegisterTestSuite(&EncryptTest{}) }
 // Tests
 ////////////////////////////////////////////////////////////////////////
 
-func (t *EncryptTest) DoesFoo() {
+func (t *EncryptTest) NilKey() {
+	ExpectEq("TODO", "")
+}
+
+func (t *EncryptTest) ShortKey() {
+	ExpectEq("TODO", "")
+}
+
+func (t *EncryptTest) LongKey() {
+	ExpectEq("TODO", "")
+}
+
+func (t *EncryptTest) TooMuchAssociatedData() {
+	ExpectEq("TODO", "")
+}
+
+func (t *EncryptTest) JustLittleEnoughAssociatedData() {
+	ExpectEq("TODO", "")
+}
+
+func (t *EncryptTest) OutputIsDeterministic() {
+	ExpectEq("TODO", "")
+
+func (t *EncryptTest) Rfc5297TestCaseA1() {
+	ExpectEq("TODO", "")
+}
+
+func (t *EncryptTest) Rfc5297TestCaseA2() {
+	ExpectEq("TODO", "")
+}
+
+func (t *EncryptTest) GeneratedTestCases() {
 	ExpectEq("TODO", "")
 }
