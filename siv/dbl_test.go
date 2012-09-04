@@ -27,6 +27,10 @@ func TestDbl(t *testing.T) { RunTests(t) }
 // Helpers
 ////////////////////////////////////////////////////////////////////////
 
+func fromRfcHex(s string) []byte {
+	panic("TODO")
+}
+
 type DblTest struct{}
 
 func init() { RegisterTestSuite(&DblTest{}) }
@@ -51,7 +55,43 @@ func (t *DblTest) LongBuffer() {
 }
 
 func (t *DblTest) RfcTestCases() {
-	ExpectEq("TODO", "")
+	type testCase struct {
+		iHex string
+		oHex string
+	}
+
+	cases := []testCase{
+		testCase{
+			"0e04dfaf c1efbf04 01405828 59bf073a",
+			"1c09bf5f 83df7e08 0280b050 b37e0e74",
+		},
+		testCase{
+			"edf09de8 76c642ee 4d78bce4 ceedfc4f",
+			"dbe13bd0 ed8c85dc 9af179c9 9ddbf819",
+		},
+		testCase{
+			"0e04dfaf c1efbf04 01405828 59bf073a",
+			"1c09bf5f 83df7e08 0280b050 b37e0e74",
+		},
+		testCase{
+			"c8b43b59 74960e7c e6a5dd85 231e591a",
+			"916876b2 e92c1cf9 cd4bbb0a 463cb2b3",
+		},
+		testCase{
+			"adf31e28 5d3d1e1d 4ddefc1e 5bec63e9",
+			"5be63c50 ba7a3c3a 9bbdf83c b7d8c755",
+		},
+		testCase{
+			"826aa75b 5e568eed 3125bfb2 66c61d4e",
+			"04d54eb6 bcad1dda 624b7f64 cd8c3a1b",
+		},
+	}
+
+	for i, c := range cases {
+		input := fromRfcHex(c.iHex)
+		expected := fromRfcHex(c.oHex)
+		ExpectThat(dbl(input), DeepEquals(expected), "Case %i: %v", i, c)
+	}
 }
 
 func (t *DblTest) GeneratedTestCases() {
