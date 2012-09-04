@@ -75,6 +75,8 @@ func (t *S2vTest) Rfc5297GoldenTestCaseA1() {
 		aes_testing.FromRfcHex(
 			"10111213 14151617 18191a1b 1c1d1e1f" +
 			"20212223 24252627"),
+		aes_testing.FromRfcHex(
+			"11223344 55667788 99aabbcc ddee"),
 	}
 
 	expected := aes_testing.FromRfcHex("85632d07 c6e8f37f 950acd32 0a2ecc93")
@@ -91,6 +93,11 @@ func (t *S2vTest) Rfc5297GoldenTestCaseA2() {
 			"deaddada deaddada ffeeddcc bbaa9988" +
 			"77665544 33221100"),
 		aes_testing.FromRfcHex("10203040 50607080 90a0"),
+		aes_testing.FromRfcHex("09f91102 9d74e35b d84156c5 635688c0"),
+		aes_testing.FromRfcHex(
+			"74686973 20697320 736f6d65 20706c61" +
+			"696e7465 78742074 6f20656e 63727970" +
+			"74207573 696e6720 5349562d 414553"),
 	}
 
 	expected := aes_testing.FromRfcHex("7bdb6e3b 432667eb 06f4d14b ff2fbd0f")
