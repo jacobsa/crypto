@@ -63,6 +63,19 @@ func doCmac() []testing.CmacTestCase {
 	return cases
 }
 
+func doDbl() []testing.DblTestCase {
+	numCases := (1 << 10)
+	cases := make([]testing.DblTestCase, numCases)
+
+	for i, _ := range cases {
+		c := &cases[i]
+		c.Input = randBytes(16)
+		c.Output = dbl(c.Input)
+	}
+
+	return cases
+}
+
 func main() {
 	flag.Parse()
 
@@ -74,6 +87,8 @@ func main() {
 		cases = doGenerateSubkey()
 	case "AES-CMAC":
 		cases = doCmac()
+	case "dbl":
+		cases = doDbl()
 	default:
 		log.Fatalf("Unrecognized function: %s", *function)
 	}
