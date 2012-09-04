@@ -98,14 +98,16 @@ func (h *cmacHash) Size() int {
 }
 
 func (h *cmacHash) BlockSize() int {
-	return 16
+	return h.ciph.BlockSize()
 }
 
 // New returns an AES-CMAC hash using the supplied key. The key must be 16, 24,
 // or 32 bytes long.
 func New(key []byte) (hash.Hash, error) {
-	if len(key) != 16 {
-		return nil, fmt.Errorf("AES-CMAC requires a 16-byte key.")
+	switch len(key) {
+	case 16, 24, 32:
+	default:
+		return nil, fmt.Errorf("AES-CMAC requires a 16-, 24-, or 32-byte key.")
 	}
 
 	// Create a cipher.
