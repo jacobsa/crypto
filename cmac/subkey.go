@@ -19,6 +19,7 @@ import (
 	"bytes"
 	"crypto/aes"
 	"fmt"
+	"github.com/jacobsa/aes/common"
 )
 
 var subkeyZero []byte
@@ -48,13 +49,13 @@ func generateSubkey(key []byte) (k1 []byte, k2 []byte) {
 	if msb(l) == 0 {
 		k1 = shiftLeft(l)
 	} else {
-		k1 = xor(shiftLeft(l), subkeyRb)
+		k1 = common.Xor(shiftLeft(l), subkeyRb)
 	}
 
 	if msb(k1) == 0 {
 		k2 = shiftLeft(k1)
 	} else {
-		k2 = xor(shiftLeft(k1), subkeyRb)
+		k2 = common.Xor(shiftLeft(k1), subkeyRb)
 	}
 
 	return

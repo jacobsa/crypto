@@ -19,6 +19,7 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"fmt"
+	"github.com/jacobsa/aes/common"
 	"hash"
 )
 
@@ -67,7 +68,7 @@ func (h *cmacHash) Write(p []byte) (n int, err error) {
 
 	for i := 0; i < blocksToProcess; i++ {
 		block := h.data[16*i : 16*(i+1)]
-		y := xor(h.x, block)
+		y := common.Xor(h.x, block)
 		h.ciph.Encrypt(h.x, y)
 	}
 
@@ -87,12 +88,12 @@ func (h *cmacHash) Sum(b []byte) []byte {
 	// Calculate M_last.
 	var mLast []byte
 	if dataLen == 16 {
-		mLast = xor(h.data, h.k1)
+		mLast = common.Xor(h.data, h.k1)
 	} else {
-		mLast = xor(padBlock(h.data), h.k2)
+		mLast = common.Xor(padBlock(h.data), h.k2)
 	}
 
-	y := xor(mLast, h.x)
+	y := common.Xor(mLast, h.x)
 	result := make([]byte, 16)
 	h.ciph.Encrypt(result, y)
 

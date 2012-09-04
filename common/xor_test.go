@@ -13,9 +13,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cmac
+package common_test
 
 import (
+	"github.com/jacobsa/aes/common"
 	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
 	"testing"
@@ -38,14 +39,14 @@ func init() { RegisterTestSuite(&XorTest{}) }
 func (t *XorTest) LengthsNotEqual() {
 	a := []byte{0x00}
 	b := []byte{0x00, 0x11}
-	f := func() { xor(a, b) }
+	f := func() { common.Xor(a, b) }
 	ExpectThat(f, Panics(HasSubstr("length")))
 }
 
 func (t *XorTest) NilBuffers() {
 	a := []byte(nil)
 	b := []byte(nil)
-	result := xor(a, b)
+	result := common.Xor(a, b)
 
 	AssertNe(nil, result)
 	ExpectThat(result, DeepEquals([]byte{}))
@@ -54,7 +55,7 @@ func (t *XorTest) NilBuffers() {
 func (t *XorTest) EmptyBuffers() {
 	a := []byte{}
 	b := []byte{}
-	result := xor(a, b)
+	result := common.Xor(a, b)
 
 	AssertNe(nil, result)
 	ExpectThat(result, DeepEquals([]byte{}))
@@ -66,27 +67,27 @@ func (t *XorTest) OneByteBuffers() {
 	a = []byte{fromBinary("00000000")}
 	b = []byte{fromBinary("00000000")}
 	expected = []byte{fromBinary("00000000")}
-	ExpectThat(xor(a, b), DeepEquals(expected))
+	ExpectThat(common.Xor(a, b), DeepEquals(expected))
 
 	a = []byte{fromBinary("11111111")}
 	b = []byte{fromBinary("11111111")}
 	expected = []byte{fromBinary("00000000")}
-	ExpectThat(xor(a, b), DeepEquals(expected))
+	ExpectThat(common.Xor(a, b), DeepEquals(expected))
 
 	a = []byte{fromBinary("11111111")}
 	b = []byte{fromBinary("00000000")}
 	expected = []byte{fromBinary("11111111")}
-	ExpectThat(xor(a, b), DeepEquals(expected))
+	ExpectThat(common.Xor(a, b), DeepEquals(expected))
 
 	a = []byte{fromBinary("00000000")}
 	b = []byte{fromBinary("11111111")}
 	expected = []byte{fromBinary("11111111")}
-	ExpectThat(xor(a, b), DeepEquals(expected))
+	ExpectThat(common.Xor(a, b), DeepEquals(expected))
 
 	a = []byte{fromBinary("10100100")}
 	b = []byte{fromBinary("11111111")}
 	expected = []byte{fromBinary("01011011")}
-	ExpectThat(xor(a, b), DeepEquals(expected))
+	ExpectThat(common.Xor(a, b), DeepEquals(expected))
 }
 
 func (t *XorTest) MultiByteBuffers() {
@@ -95,15 +96,15 @@ func (t *XorTest) MultiByteBuffers() {
 	a = []byte{fromBinary("00000000"), fromBinary("00000000")}
 	b = []byte{fromBinary("00000000"), fromBinary("00000000")}
 	expected = []byte{fromBinary("00000000"), fromBinary("00000000")}
-	ExpectThat(xor(a, b), DeepEquals(expected))
+	ExpectThat(common.Xor(a, b), DeepEquals(expected))
 
 	a = []byte{fromBinary("11111111"), fromBinary("11111111")}
 	b = []byte{fromBinary("11111111"), fromBinary("11111111")}
 	expected = []byte{fromBinary("00000000"), fromBinary("00000000")}
-	ExpectThat(xor(a, b), DeepEquals(expected))
+	ExpectThat(common.Xor(a, b), DeepEquals(expected))
 
 	a = []byte{fromBinary("00000000"), fromBinary("11111111")}
 	b = []byte{fromBinary("11111111"), fromBinary("00000000")}
 	expected = []byte{fromBinary("11111111"), fromBinary("11111111")}
-	ExpectThat(xor(a, b), DeepEquals(expected))
+	ExpectThat(common.Xor(a, b), DeepEquals(expected))
 }

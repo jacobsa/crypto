@@ -13,12 +13,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cmac
+package common
 
-// xor computes `a XOR b`, as defined by RFC 4493.
-func xor(a []byte, b []byte) []byte {
+// Xor computes `a XOR b`, as defined by RFC 4493.
+func Xor(a []byte, b []byte) []byte {
 	if len(a) != len(b) {
-		panic("xor requires buffers to have identical lengths.")
+		panic("Xor requires buffers to have identical lengths.")
 	}
 
 	output := make([]byte, len(a))
