@@ -73,11 +73,6 @@ package main
 
 #define Rb		0x87
 
-unsigned char zero[AES_BLOCK_SIZE] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-};
-
 static void
 xor (unsigned char *output, const unsigned char *input)
 {
@@ -129,6 +124,13 @@ aes_cmac (siv_ctx *ctx, const unsigned char *msg, int mlen, unsigned char *C)
     int n, i, slop;
     unsigned char Mn[AES_BLOCK_SIZE], *ptr;
 
+    // NOTE(jacobsa): For some reason, weird things happen when when `zero` is
+    // a global, as in the original program.
+    unsigned char zero[AES_BLOCK_SIZE] = {
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    };
+
     memcpy(C, zero, AES_BLOCK_SIZE);
 
     n = (mlen+(AES_BLOCK_SIZE-1))/AES_BLOCK_SIZE;
@@ -166,8 +168,8 @@ s2v_final (siv_ctx *ctx, const unsigned char *X, int xlen, unsigned char *digest
     unsigned char padX[AES_BLOCK_SIZE], *ptr;
     int blocks, i, slop;
 
-    // NOTE(jacobsa): For some reason, the memcpy of `zero` below never returns
-    // when zero is a global, as in the original program.
+    // NOTE(jacobsa): For some reason, weird things happen when when `zero` is
+    // a global, as in the original program.
     unsigned char zero[AES_BLOCK_SIZE] = {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -252,6 +254,13 @@ siv_init (siv_ctx *ctx, const unsigned char *key, int keylen)
 {
     unsigned char L[AES_BLOCK_SIZE];
 
+    // NOTE(jacobsa): For some reason, weird things happen when when `zero` is
+    // a global, as in the original program.
+    unsigned char zero[AES_BLOCK_SIZE] = {
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    };
+
     memset((char *)ctx, 0, sizeof(siv_ctx));
     switch (keylen) {
         case SIV_512:
@@ -282,6 +291,13 @@ siv_init (siv_ctx *ctx, const unsigned char *key, int keylen)
 void
 siv_restart (siv_ctx *ctx)
 {
+    // NOTE(jacobsa): For some reason, weird things happen when when `zero` is
+    // a global, as in the original program.
+    unsigned char zero[AES_BLOCK_SIZE] = {
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    };
+
     memset(ctx->benchmark, 0, AES_BLOCK_SIZE);
     memset(ctx->T, 0, AES_BLOCK_SIZE);
     aes_cmac(ctx, zero, AES_BLOCK_SIZE, ctx->T);
