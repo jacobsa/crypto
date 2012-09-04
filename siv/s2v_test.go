@@ -16,6 +16,7 @@
 package siv
 
 import (
+	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
 	"testing"
 )
@@ -35,15 +36,27 @@ func init() { RegisterTestSuite(&S2vTest{}) }
 ////////////////////////////////////////////////////////////////////////
 
 func (t *S2vTest) NilKey() {
-	ExpectEq("TODO", "")
+	key := []byte(nil)
+	associatedData := [][]byte{}
+
+	f := func() { s2v(key, associatedData) }
+	ExpectThat(f, Panics(HasSubstr("16-byte")))
 }
 
 func (t *S2vTest) ShortKey() {
-	ExpectEq("TODO", "")
+	key := make([]byte, 15)
+	associatedData := [][]byte{}
+
+	f := func() { s2v(key, associatedData) }
+	ExpectThat(f, Panics(HasSubstr("16-byte")))
 }
 
 func (t *S2vTest) LongKey() {
-	ExpectEq("TODO", "")
+	key := make([]byte, 17)
+	associatedData := [][]byte{}
+
+	f := func() { s2v(key, associatedData) }
+	ExpectThat(f, Panics(HasSubstr("16-byte")))
 }
 
 func (t *S2vTest) Rfc5297GoldenTestCaseA1() {
