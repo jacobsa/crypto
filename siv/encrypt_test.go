@@ -45,11 +45,19 @@ func (t *EncryptTest) NilKey() {
 }
 
 func (t *EncryptTest) ShortKey() {
-	ExpectEq("TODO", "")
+	key := make([]byte, 31)
+	plaintext := []byte{}
+
+	_, err := siv.Encrypt(key, plaintext, nil)
+	ExpectThat(err, Error(HasSubstr("-byte")))
 }
 
 func (t *EncryptTest) LongKey() {
-	ExpectEq("TODO", "")
+	key := make([]byte, 65)
+	plaintext := []byte{}
+
+	_, err := siv.Encrypt(key, plaintext, nil)
+	ExpectThat(err, Error(HasSubstr("-byte")))
 }
 
 func (t *EncryptTest) TooMuchAssociatedData() {
