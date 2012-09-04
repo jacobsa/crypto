@@ -16,6 +16,7 @@
 package common_test
 
 import (
+	"encoding/hex"
 	"github.com/jacobsa/aes/common"
 	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
@@ -43,11 +44,18 @@ func (t *PadBlockTest) FullBlock() {
 }
 
 func (t *PadBlockTest) LongBlock() {
-	ExpectEq("TODO", "")
+	b := make([]byte, 17)
+	f := func() { common.PadBlock(b) }
+	ExpectThat(f, Panics(HasSubstr("16 bytes")))
 }
 
 func (t *PadBlockTest) OneByteMissing() {
-	ExpectEq("TODO", "")
+	b, err := hex.DecodeString("deadbeeffeedfaceba5eba11cafeba")
+	AssertEq(nil, err)
+	AssertEq(15, len(b))
+
+	expected := append(b, 0x80)
+	ExpectThat(common.PadBlock(b), DeepEquals(expected))
 }
 
 func (t *PadBlockTest) MultipleBytesMissing() {
