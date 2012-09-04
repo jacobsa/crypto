@@ -15,13 +15,56 @@
 
 package siv
 
+import (
+	"bytes"
+	"crypto/aes"
+	"fmt"
+	"github.com/jacobsa/aes/cmac"
+	"github.com/jacobsa/aes/common"
+)
+
+var s2vZero []byte
+
+func init() {
+	s2vZero = bytes.Repeat([]byte{0x00}, aes.BlockSize)
+}
+
 // Run the S2V "string to vector" function of RFC 5297 using the input key and
 // string vector, which must be non-empty. (RFC 5297 defines S2V to handle the
 // empty vector case, but it is never used that way by higher-level functions.)
 func s2v(key []byte, strings [][]byte) []byte {
-	if len(strings) == 0 {
+	numStrings := len(strings)
+	if numStrings == 0 {
 		panic("strings vector must be non-empty.")
 	}
 
-	panic("TODO")
+	// Create a CMAC hash.
+	h, err := cmac.New(key)
+	if err != nil {
+		panic(fmt.Sprintf("cmac.New: %v", err))
+	}
+
+	// Initialize.
+	h.Write(s2vZero)
+	d := h.Sum([]byte{})
+	h.Reset()
+
+	// Handle all strings but the last.
+	for i := 0; i < numStrings-1; i++ {
+		h.Write(strings[i])
+		d = common.Xor(dbl(d), h.Sum([]byte{}))
+		h.Reset()
+	}
+
+	// Handle the last string.
+	lastString := strings[numStrings-1]
+	var t []byte
+	if len(lastString) >= aes.BlockSize {
+		t = xorend(lastString, d)
+	} else {
+		t = common.Xor(d, common.PadBlock(lastString))
+	}
+
+	h.Write(t)
+	return h.Sum([]byte{})
 }
