@@ -16,11 +16,9 @@
 package siv
 
 import (
-	"encoding/hex"
 	aes_testing "github.com/jacobsa/aes/testing"
 	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
-	"strings"
 	"testing"
 )
 
@@ -29,17 +27,6 @@ func TestDbl(t *testing.T) { RunTests(t) }
 ////////////////////////////////////////////////////////////////////////
 // Helpers
 ////////////////////////////////////////////////////////////////////////
-
-func fromRfcHex(s string) []byte {
-	// Remove spaces.
-	s = strings.Replace(s, " ", "", -1)
-
-	// Decode.
-	res, err := hex.DecodeString(s)
-	AssertEq(nil, err)
-
-	return res
-}
 
 type DblTest struct{}
 
@@ -98,8 +85,8 @@ func (t *DblTest) RfcTestCases() {
 	}
 
 	for i, c := range cases {
-		input := fromRfcHex(c.iHex)
-		expected := fromRfcHex(c.oHex)
+		input := aes_testing.FromRfcHex(c.iHex)
+		expected := aes_testing.FromRfcHex(c.oHex)
 		ExpectThat(dbl(input), DeepEquals(expected), "Case %d: %v", i, c)
 	}
 }
