@@ -16,8 +16,16 @@
 package siv
 
 import (
+	"crypto/aes"
+	"crypto/cipher"
 	"fmt"
 )
+
+func dup(d []byte) []byte {
+	result := make([]byte, len(d))
+	copy(result, d)
+	return result
+}
 
 // Given a key and plaintext, encrypt the plaintext using the SIV mode of AES,
 // as defined by RFC 5297, and return the result (including both the synthetic
@@ -55,6 +63,35 @@ func Encrypt(key, plaintext []byte, associated [][]byte) ([]byte, error) {
 		return nil, fmt.Errorf("len(associated) may be no more than 126.")
 	}
 
-	return nil, fmt.Errorf("TODO")
+	// Derive subkeys.
+	k1 := key[:keyLen/2]
+	k2 := key[keyLen/2:]
+
+	// Call S2V to derive the synthetic initialization vector.
+	v := s2v(k1, append(associated, plaintext))
+	if len(v) != aes.BlockSize {
+		panic(fmt.Sprintf("Unexpected vector: %v", v))
+	}
+
+	// Create a CTR cipher using a version of v with the 31st and 63rd bits
+	// zeroed out.
+	q := dup(v)
+	q[aes.BlockSize-1] &= 0x7f
+	q[aes.BlockSize-2] &= 0x7f
+
+	ciph, err := aes.NewCipher(k2)
+	if err != nil {
+		return nil, fmt.Errorf("aes.NewCipher: %v", err)
+	}
+
+	ctrCiph := cipher.NewCTR(ciph, q)
+
+	// Create a result buffer large enough to hold the SIV and the ciphertext.
+	// Copy in the SIV then fill in the ciphertext.
+	result := make([]byte, len(v) + len(plaintext))
+	copy(result, v)
+	ctrCiph.XORKeyStream(result[len(v):], plaintext)
+
+	return result, nil
 }
 
