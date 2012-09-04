@@ -16,7 +16,7 @@
 // The C code in this file was pulled from Appendix A of RFC 4493 and modified
 // by Aaron Jacobs, adding an implementation of the missing AES_128 function
 // that uses OpenSSL and changing the formatting slightly. These modifications
-// and the Go code is copyright Aaron Jacobs.
+// and the Go code are copyright Aaron Jacobs.
 
 package main
 
