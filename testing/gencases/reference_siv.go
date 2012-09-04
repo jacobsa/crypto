@@ -392,3 +392,58 @@ func dbl(buf []byte) []byte {
 
 	return C.GoBytes(unsafe.Pointer(cOutput), 16)
 }
+
+func s2v(key []byte, strings [][]byte) []byte {
+	if len(key) == 0 {
+		panic("Key must be non-empty.")
+	}
+
+	// RFC 5297 defines S2V to handle an empty array, but never actually uses it
+	// that way for encryption or decryption. Additionally, the s2v_* reference
+	// functions don't handle that case. So don't handle it here.
+	if len(strings) == 0 {
+		panic("strings must be non-empty.")
+	}
+
+	// Initialize the context struct.
+	var ctx C.siv_ctx
+	callResult := C.siv_init(&ctx, (*C.uchar)(&key[0]), C.int(len(key)))
+	if callResult < 0 {
+		panic("Error from siv_init.")
+	}
+
+	// Call s2v_update the requisite number of times.
+	for i := 0; i < len(strings)-1; i++ {
+		data := strings[i]
+		dataLen := len(data)
+
+		// Avoid indexing into an empty slice.
+		if dataLen == 0 {
+			data = make([]byte, 1)
+		}
+
+		C.s2v_update(&ctx, (*C.uchar)(&data[0]), C.int(dataLen))
+	}
+
+	// Now finalize with the last string. Avoid indexing into an empty slice.
+	lastString := strings[len(strings)-1]
+	lastStringLen := len(lastString)
+	if lastStringLen == 0 {
+		lastString = make([]byte, 1)
+	}
+
+	cDigest := (*C.uchar)(C.malloc(16))
+	defer C.free(unsafe.Pointer(cDigest))
+
+	callResult = C.s2v_final(
+		&ctx,
+		(*C.uchar)(&lastString[0]),
+		C.int(lastStringLen),
+		cDigest)
+
+	if callResult < 0 {
+		panic("Error from s2v_final.")
+	}
+
+	return C.GoBytes(unsafe.Pointer(cDigest), 16)
+}
