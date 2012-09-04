@@ -44,7 +44,7 @@ func (t *SubkeyTest) WrongBlockSize() {
 	AssertEq(nil, err)
 
 	f := func() { generateSubkeys(ciph) }
-	ExpectThat(f, Panics(HasSubstr("16-byte")))
+	ExpectThat(f, Panics(HasSubstr("16 bytes")))
 }
 
 func (t *SubkeyTest) Rfc4493GoldenTestCase() {
