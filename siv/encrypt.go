@@ -76,8 +76,8 @@ func Encrypt(key, plaintext []byte, associated [][]byte) ([]byte, error) {
 	// Create a CTR cipher using a version of v with the 31st and 63rd bits
 	// zeroed out.
 	q := dup(v)
-	q[aes.BlockSize-1] &= 0x7f
-	q[aes.BlockSize-2] &= 0x7f
+	q[aes.BlockSize-4] &= 0x7f
+	q[aes.BlockSize-8] &= 0x7f
 
 	ciph, err := aes.NewCipher(k2)
 	if err != nil {
