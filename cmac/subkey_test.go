@@ -16,6 +16,7 @@
 package cmac
 
 import (
+	"crypto/aes"
 	"crypto/des"
 	"encoding/hex"
 	aes_testing "github.com/jacobsa/aes/testing"
@@ -38,17 +39,11 @@ func init() { RegisterTestSuite(&SubkeyTest{}) }
 // Tests
 ////////////////////////////////////////////////////////////////////////
 
-func (t *SubkeyTest) BlockSizeTooSmall() {
+func (t *SubkeyTest) WrongBlockSize() {
 	ciph, err := des.NewCipher(make([]byte, 8))
 	AssertEq(nil, err)
 
 	f := func() { generateSubkeys(ciph) }
-	ExpectThat(f, Panics(HasSubstr("16-byte")))
-}
-
-func (t *SubkeyTest) KeyTooLong() {
-	key := make([]byte, 17)
-	f := func() { generateSubkey(key) }
 	ExpectThat(f, Panics(HasSubstr("16-byte")))
 }
 
@@ -62,7 +57,10 @@ func (t *SubkeyTest) Rfc4493GoldenTestCase() {
 	expectedK2, err := hex.DecodeString("f7ddac306ae266ccf90bc11ee46d513b")
 	AssertEq(nil, err)
 
-	k1, k2 := generateSubkey(key)
+	ciph, err := aes.NewCipher(key)
+	AssertEq(nil, err)
+
+	k1, k2 := generateSubkeys(ciph)
 	ExpectThat(k1, DeepEquals(expectedK1))
 	ExpectThat(k2, DeepEquals(expectedK2))
 }
@@ -72,7 +70,10 @@ func (t *SubkeyTest) GeneratedTestCases() {
 	AssertGe(len(cases), 100)
 
 	for i, c := range cases {
-		k1, k2 := generateSubkey(c.Key)
+		ciph, err := aes.NewCipher(c.Key)
+		AssertEq(nil, err)
+
+		k1, k2 := generateSubkeys(ciph)
 		ExpectThat(k1, DeepEquals(c.K1), "Test case %d: %v", i, c)
 		ExpectThat(k2, DeepEquals(c.K2), "Test case %d: %v", i, c)
 	}
