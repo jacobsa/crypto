@@ -16,6 +16,8 @@
 package common_test
 
 import (
+	"github.com/jacobsa/aes/common"
+	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
 	"testing"
 )
@@ -35,7 +37,9 @@ func init() { RegisterTestSuite(&PadBlockTest{}) }
 ////////////////////////////////////////////////////////////////////////
 
 func (t *PadBlockTest) FullBlock() {
-	ExpectEq("TODO", "")
+	b := make([]byte, 16)
+	f := func() { common.PadBlock(b) }
+	ExpectThat(f, Panics(HasSubstr("16 bytes")))
 }
 
 func (t *PadBlockTest) LongBlock() {
