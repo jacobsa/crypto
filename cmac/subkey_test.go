@@ -39,8 +39,10 @@ func init() { RegisterTestSuite(&SubkeyTest{}) }
 ////////////////////////////////////////////////////////////////////////
 
 func (t *SubkeyTest) BlockSizeTooSmall() {
-	ciph := des.NewCipher(make([]byte, 8))
-	f := func() { generateSubkeys(key) }
+	ciph, err := des.NewCipher(make([]byte, 8))
+	AssertEq(nil, err)
+
+	f := func() { generateSubkeys(ciph) }
 	ExpectThat(f, Panics(HasSubstr("16-byte")))
 }
 
