@@ -137,7 +137,20 @@ func (t *DecryptTest) DoesntClobberAssociatedSlice() {
 }
 
 func (t *DecryptTest) WrongKey() {
-	ExpectEq("TODO", "")
+	// Grab a test case.
+	cases := aes_testing.EncryptCases()
+	AssertGt(len(cases), 1)
+	c := cases[1]
+
+	// Corrupt its key and call.
+	AssertGt(len(c.Key), 13)
+	c.Key[13]++
+
+	_, err := siv.Decrypt(c.Key, c.Output, c.Associated)
+	ExpectThat(err, HasSubstr("authentic"))
+
+	_, ok := err.(siv.NotAuthenticError)
+	ExpectTrue(ok, "Not an instance of NotAuthenticError.")
 }
 
 func (t *DecryptTest) CorruptedSiv() {
