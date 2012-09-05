@@ -138,10 +138,10 @@ func (t *DecryptTest) WrongKey() {
 	c.Key[13]++
 
 	_, err := siv.Decrypt(c.Key, c.Output, c.Associated)
-	ExpectThat(err, HasSubstr("authentic"))
+	ExpectThat(err, Error(HasSubstr("authentic")))
 
-	_, ok := err.(siv.NotAuthenticError)
-	ExpectTrue(ok, "Not an instance of NotAuthenticError.")
+	_, ok := err.(*siv.NotAuthenticError)
+	ExpectTrue(ok, "Not an instance of *NotAuthenticError.")
 }
 
 func (t *DecryptTest) CorruptedSiv() {
@@ -155,10 +155,10 @@ func (t *DecryptTest) CorruptedSiv() {
 	c.Output[13]++
 
 	_, err := siv.Decrypt(c.Key, c.Output, c.Associated)
-	ExpectThat(err, HasSubstr("authentic"))
+	ExpectThat(err, Error(HasSubstr("authentic")))
 
-	_, ok := err.(siv.NotAuthenticError)
-	ExpectTrue(ok, "Not an instance of NotAuthenticError.")
+	_, ok := err.(*siv.NotAuthenticError)
+	ExpectTrue(ok, "Not an instance of *NotAuthenticError.")
 }
 
 func (t *DecryptTest) CorruptedCiphertext() {
@@ -172,10 +172,10 @@ func (t *DecryptTest) CorruptedCiphertext() {
 	c.Output[19]++
 
 	_, err := siv.Decrypt(c.Key, c.Output, c.Associated)
-	ExpectThat(err, HasSubstr("authentic"))
+	ExpectThat(err, Error(HasSubstr("authentic")))
 
-	_, ok := err.(siv.NotAuthenticError)
-	ExpectTrue(ok, "Not an instance of NotAuthenticError.")
+	_, ok := err.(*siv.NotAuthenticError)
+	ExpectTrue(ok, "Not an instance of *NotAuthenticError.")
 }
 
 func (t *DecryptTest) CorruptedAssociatedData() {
@@ -190,10 +190,10 @@ func (t *DecryptTest) CorruptedAssociatedData() {
 	c.Associated[2][3]++
 
 	_, err := siv.Decrypt(c.Key, c.Output, c.Associated)
-	ExpectThat(err, HasSubstr("authentic"))
+	ExpectThat(err, Error(HasSubstr("authentic")))
 
-	_, ok := err.(siv.NotAuthenticError)
-	ExpectTrue(ok, "Not an instance of NotAuthenticError.")
+	_, ok := err.(*siv.NotAuthenticError)
+	ExpectTrue(ok, "Not an instance of *NotAuthenticError.")
 }
 
 func (t *DecryptTest) Rfc5297TestCaseA1() {
