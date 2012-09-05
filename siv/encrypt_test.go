@@ -67,7 +67,7 @@ func (t *EncryptTest) TooMuchAssociatedData() {
 	associated := make([][]byte, 127)
 
 	_, err := siv.Encrypt(key, plaintext, associated)
-	ExpectThat(err, Error(HasSubstr("Associated")))
+	ExpectThat(err, Error(HasSubstr("associated")))
 	ExpectThat(err, Error(HasSubstr("126")))
 }
 
