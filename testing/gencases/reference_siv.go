@@ -508,6 +508,16 @@ func encrypt(key, plaintext []byte, associated [][]byte) []byte {
 		adLens = make([]C.int, 1)
 		ads = make([]*C.uchar, 1)
 	}
+
+	for i, _ := range associated {
+		aLen := len(associated[i])
+		adLens[i] = C.int(aLen)
+
+		if aLen > 0 {
+			ads[i] = (*C.uchar)(&associated[i][0])
+		}
+	}
+
 	cAdLens := (*C.int)(&adLens[0])
 	cAds := (**C.uchar)(&ads[0])
 
