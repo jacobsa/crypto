@@ -46,11 +46,19 @@ func (t *DecryptTest) NilKey() {
 }
 
 func (t *DecryptTest) ShortKey() {
-	ExpectEq("TODO", "")
+	key := make([]byte, 31)
+	ciphertext := []byte{}
+
+	_, err := siv.Decrypt(key, ciphertext, nil)
+	ExpectThat(err, Error(HasSubstr("-byte")))
 }
 
 func (t *DecryptTest) LongKey() {
-	ExpectEq("TODO", "")
+	key := make([]byte, 65)
+	ciphertext := []byte{}
+
+	_, err := siv.Decrypt(key, ciphertext, nil)
+	ExpectThat(err, Error(HasSubstr("-byte")))
 }
 
 func (t *DecryptTest) NilCiphertext() {
