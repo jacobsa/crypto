@@ -33,8 +33,8 @@ func dup(d []byte) []byte {
 // Decrypt to recover the plaintext.
 //
 // In addition to confidentiality, this function also offers authenticity. That
-// is, without the secret key, and attacker is unable to construct a byte
-// string that Decrypt will accept.
+// is, without the secret key an attacker is unable to construct a byte string
+// that Decrypt will accept.
 //
 // The supplied key must be 32, 48, or 64 bytes long.
 //
