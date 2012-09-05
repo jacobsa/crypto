@@ -16,7 +16,9 @@
 package siv
 
 import (
+	"bytes"
 	"crypto/aes"
+	"crypto/cipher"
 	"fmt"
 )
 
@@ -62,5 +64,38 @@ func Decrypt(key, ciphertext []byte, associated [][]byte) ([]byte, error) {
 		return nil, fmt.Errorf("len(associated) may be no more than 126.")
 	}
 
-	return nil, fmt.Errorf("TODO")
+	// Create a CTR cipher using a version of v with the 31st and 63rd bits
+	// zeroed out.
+	q := dup(v)
+	q[aes.BlockSize-4] &= 0x7f
+	q[aes.BlockSize-8] &= 0x7f
+
+	ciph, err := aes.NewCipher(k2)
+	if err != nil {
+		return nil, fmt.Errorf("aes.NewCipher: %v", err)
+	}
+
+	ctrCiph := cipher.NewCTR(ciph, q)
+
+	// Decrypt the ciphertext.
+	plaintext := make([]byte, len(c))
+	ctrCiph.XORKeyStream(plaintext, c)
+
+	// Verify the SIV.
+	s2vStrings := make([][]byte, associatedLen+1)
+	copy(s2vStrings, associated)
+	s2vStrings[associatedLen] = plaintext
+
+	t := s2v(k1, s2vStrings)
+	if len(t) != aes.BlockSize {
+		panic(fmt.Sprintf("Unexpected output of S2V: %v", t))
+	}
+
+	if !bytes.Equal(t, v) {
+		return nil, NotAuthenticError(
+			"Couldn't validate the authenticity of the ciphertext and " +
+			"associated data.")
+	}
+
+	return plaintext, nil
 }
