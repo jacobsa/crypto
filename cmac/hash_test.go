@@ -184,9 +184,9 @@ func (t *HashTest) NistTestCaseD1() {
 	key := aes_testing.FromRfcHex("2b7e1516 28aed2a6 abf71588 09cf4f3c")
 	msg := aes_testing.FromRfcHex(
 		"6bc1bee2 2e409f96 e93d7e11 7393172a" +
-		"ae2d8a57 1e03ac9c 9eb76fac 45af8e51" +
-		"30c81c46 a35ce411 e5fbc119 1a0a52ef" +
-		"f69f2445 df4f9b17 ad2b417b e66c3710")
+			"ae2d8a57 1e03ac9c 9eb76fac 45af8e51" +
+			"30c81c46 a35ce411 e5fbc119 1a0a52ef" +
+			"f69f2445 df4f9b17 ad2b417b e66c3710")
 
 	var expectedMac []byte
 
@@ -210,13 +210,13 @@ func (t *HashTest) NistTestCaseD1() {
 func (t *HashTest) NistTestCaseD2() {
 	key := aes_testing.FromRfcHex(
 		"8e73b0f7 da0e6452 c810f32b 809079e5" +
-		"62f8ead2 522c6b7b")
+			"62f8ead2 522c6b7b")
 
 	msg := aes_testing.FromRfcHex(
 		"6bc1bee2 2e409f96 e93d7e11 7393172a" +
-		"ae2d8a57 1e03ac9c 9eb76fac 45af8e51" +
-		"30c81c46 a35ce411 e5fbc119 1a0a52ef" +
-		"f69f2445 df4f9b17 ad2b417b e66c3710")
+			"ae2d8a57 1e03ac9c 9eb76fac 45af8e51" +
+			"30c81c46 a35ce411 e5fbc119 1a0a52ef" +
+			"f69f2445 df4f9b17 ad2b417b e66c3710")
 
 	var expectedMac []byte
 
@@ -240,13 +240,13 @@ func (t *HashTest) NistTestCaseD2() {
 func (t *HashTest) NistTestCaseD3() {
 	key := aes_testing.FromRfcHex(
 		"603deb10 15ca71be 2b73aef0 857d7781" +
-		"1f352c07 3b6108d7 2d9810a3 0914dff4")
+			"1f352c07 3b6108d7 2d9810a3 0914dff4")
 
 	msg := aes_testing.FromRfcHex(
 		"6bc1bee2 2e409f96 e93d7e11 7393172a" +
-		"ae2d8a57 1e03ac9c 9eb76fac 45af8e51" +
-		"30c81c46 a35ce411 e5fbc119 1a0a52ef" +
-		"f69f2445 df4f9b17 ad2b417b e66c3710")
+			"ae2d8a57 1e03ac9c 9eb76fac 45af8e51" +
+			"30c81c46 a35ce411 e5fbc119 1a0a52ef" +
+			"f69f2445 df4f9b17 ad2b417b e66c3710")
 
 	var expectedMac []byte
 

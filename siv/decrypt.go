@@ -94,7 +94,7 @@ func Decrypt(key, ciphertext []byte, associated [][]byte) ([]byte, error) {
 	if !bytes.Equal(t, v) {
 		return nil, NotAuthenticError(
 			"Couldn't validate the authenticity of the ciphertext and " +
-			"associated data.")
+				"associated data.")
 	}
 
 	return plaintext, nil

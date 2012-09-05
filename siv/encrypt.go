@@ -92,10 +92,9 @@ func Encrypt(key, plaintext []byte, associated [][]byte) ([]byte, error) {
 
 	// Create a result buffer large enough to hold the SIV and the ciphertext.
 	// Copy in the SIV then fill in the ciphertext.
-	result := make([]byte, len(v) + len(plaintext))
+	result := make([]byte, len(v)+len(plaintext))
 	copy(result, v)
 	ctrCiph.XORKeyStream(result[len(v):], plaintext)
 
 	return result, nil
 }
-

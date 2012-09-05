@@ -26,10 +26,10 @@ import (
 // EncryptTestCase represents a test case for Encrypt() generated using a
 // reference implementation.
 type EncryptTestCase struct {
-	Key []byte
-	Plaintext []byte
+	Key        []byte
+	Plaintext  []byte
 	Associated [][]byte
-	Output []byte
+	Output     []byte
 }
 
 func (c EncryptTestCase) String() string {

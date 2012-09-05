@@ -125,7 +125,7 @@ func (t *EncryptTest) OutputIsDeterministic() {
 func (t *EncryptTest) Rfc5297TestCaseA1() {
 	key := aes_testing.FromRfcHex(
 		"fffefdfc fbfaf9f8 f7f6f5f4 f3f2f1f0" +
-		"f0f1f2f3 f4f5f6f7 f8f9fafb fcfdfeff")
+			"f0f1f2f3 f4f5f6f7 f8f9fafb fcfdfeff")
 
 	plaintext := aes_testing.FromRfcHex(
 		"11223344 55667788 99aabbcc ddee")
@@ -133,12 +133,12 @@ func (t *EncryptTest) Rfc5297TestCaseA1() {
 	associated := [][]byte{
 		aes_testing.FromRfcHex(
 			"10111213 14151617 18191a1b 1c1d1e1f" +
-			"20212223 24252627"),
+				"20212223 24252627"),
 	}
 
 	expected := aes_testing.FromRfcHex(
 		"85632d07 c6e8f37f 950acd32 0a2ecc93" +
-		"40c02b96 90c4dc04 daef7f6a fe5c")
+			"40c02b96 90c4dc04 daef7f6a fe5c")
 
 	output, err := siv.Encrypt(key, plaintext, associated)
 	AssertEq(nil, err)
@@ -148,18 +148,18 @@ func (t *EncryptTest) Rfc5297TestCaseA1() {
 func (t *EncryptTest) Rfc5297TestCaseA2() {
 	key := aes_testing.FromRfcHex(
 		"7f7e7d7c 7b7a7978 77767574 73727170" +
-		"40414243 44454647 48494a4b 4c4d4e4f")
+			"40414243 44454647 48494a4b 4c4d4e4f")
 
 	plaintext := aes_testing.FromRfcHex(
 		"74686973 20697320 736f6d65 20706c61" +
-		"696e7465 78742074 6f20656e 63727970" +
-		"74207573 696e6720 5349562d 414553")
+			"696e7465 78742074 6f20656e 63727970" +
+			"74207573 696e6720 5349562d 414553")
 
 	associated := [][]byte{
 		aes_testing.FromRfcHex(
 			"00112233 44556677 8899aabb ccddeeff" +
-			"deaddada deaddada ffeeddcc bbaa9988" +
-			"77665544 33221100"),
+				"deaddada deaddada ffeeddcc bbaa9988" +
+				"77665544 33221100"),
 		aes_testing.FromRfcHex(
 			"10203040 50607080 90a0"),
 		aes_testing.FromRfcHex(
@@ -168,9 +168,9 @@ func (t *EncryptTest) Rfc5297TestCaseA2() {
 
 	expected := aes_testing.FromRfcHex(
 		"7bdb6e3b 432667eb 06f4d14b ff2fbd0f" +
-		"cb900f2f ddbe4043 26601965 c889bf17" +
-		"dba77ceb 094fa663 b7a3f748 ba8af829" +
-		"ea64ad54 4a272e9c 485b62a3 fd5c0d")
+			"cb900f2f ddbe4043 26601965 c889bf17" +
+			"dba77ceb 094fa663 b7a3f748 ba8af829" +
+			"ea64ad54 4a272e9c 485b62a3 fd5c0d")
 
 	output, err := siv.Encrypt(key, plaintext, associated)
 	AssertEq(nil, err)

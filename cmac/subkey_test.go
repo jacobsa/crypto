@@ -62,7 +62,7 @@ func (t *SubkeyTest) NistTestCaseD1() {
 func (t *SubkeyTest) NistTestCaseD2() {
 	key := aes_testing.FromRfcHex(
 		"8e73b0f7 da0e6452 c810f32b 809079e5" +
-		"62f8ead2 522c6b7b")
+			"62f8ead2 522c6b7b")
 
 	expectedK1 := aes_testing.FromRfcHex("448a5b1c 93514b27 3ee6439d d4daa296")
 	expectedK2 := aes_testing.FromRfcHex("8914b639 26a2964e 7dcc873b a9b5452c")
@@ -78,7 +78,7 @@ func (t *SubkeyTest) NistTestCaseD2() {
 func (t *SubkeyTest) NistTestCaseD3() {
 	key := aes_testing.FromRfcHex(
 		"603deb10 15ca71be 2b73aef0 857d7781" +
-		"1f352c07 3b6108d7 2d9810a3 0914dff4")
+			"1f352c07 3b6108d7 2d9810a3 0914dff4")
 
 	expectedK1 := aes_testing.FromRfcHex("cad1ed03 299eedac 2e9a9980 8621502f")
 	expectedK2 := aes_testing.FromRfcHex("95a3da06 533ddb58 5d353301 0c42a0d9")

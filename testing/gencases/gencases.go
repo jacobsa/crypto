@@ -82,7 +82,7 @@ func doS2v() []testing.S2vTestCase {
 
 	for i, _ := range cases {
 		keyLens := []uint32{16, 24, 32}
-		keyLen := keyLens[i % len(keyLens)]
+		keyLen := keyLens[i%len(keyLens)]
 
 		c := &cases[i]
 		c.Key = randBytes(keyLen)
@@ -105,13 +105,13 @@ func doEncrypt() []testing.EncryptTestCase {
 
 	for i, _ := range cases {
 		keyLens := []uint32{32, 48, 64}
-		keyLen := keyLens[i % len(keyLens)]
+		keyLen := keyLens[i%len(keyLens)]
 
 		c := &cases[i]
 		c.Key = randBytes(keyLen)
-		c.Plaintext = randBytes(uint32(i%107))
+		c.Plaintext = randBytes(uint32(i % 107))
 
-		numAssociated := i%127
+		numAssociated := i % 127
 		c.Associated = make([][]byte, numAssociated)
 		for j, _ := range c.Associated {
 			c.Associated[j] = randBytes(uint32(i % 37))

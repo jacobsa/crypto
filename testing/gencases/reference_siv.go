@@ -178,7 +178,7 @@ s2v_final (siv_ctx *ctx, const unsigned char *X, int xlen, unsigned char *digest
     if (xlen < AES_BLOCK_SIZE) {
 	memcpy(padX, X, xlen);
 	pad(padX, xlen);
-	
+
 	times_two(T, ctx->T);
 	xor(T, padX);
 	aes_cmac(ctx, T, AES_BLOCK_SIZE, digest);
@@ -225,7 +225,7 @@ s2v_final (siv_ctx *ctx, const unsigned char *X, int xlen, unsigned char *digest
             xor(C, T);
             AES_ecb_encrypt(C, digest, &ctx->s2v_sched, AES_ENCRYPT);
         }
-        
+
     }
     return 0;
 }
@@ -427,7 +427,7 @@ func s2v(key []byte, strings [][]byte) []byte {
 
 	// siv_init requires a full SIV key, i.e. twice the length of the key used by
 	// S2V. It uses the first half for the S2V key.
-	tmpKey := make([]byte, 2 * len(key))
+	tmpKey := make([]byte, 2*len(key))
 	copy(tmpKey, key)
 	key = tmpKey
 
