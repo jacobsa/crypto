@@ -99,6 +99,30 @@ func doS2v() []testing.S2vTestCase {
 	return cases
 }
 
+func doEncrypt() []testing.EncryptTestCase {
+	numCases := (1 << 10)
+	cases := make([]testing.EncryptTestCase, numCases)
+
+	for i, _ := range cases {
+		keyLens := []uint32{32, 48, 64}
+		keyLen := keyLens[i % len(keyLens)]
+
+		c := &cases[i]
+		c.Key = randBytes(keyLen)
+		c.Plaintext = randBytes(uint32(i%107))
+
+		numAssociated := i%127
+		c.Associated = make([][]byte, numAssociated)
+		for j, _ := range c.Associated {
+			c.Associated[j] = randBytes(uint32(i % 37))
+		}
+
+		c.Output = encrypt(c.Key, c.Plaintext, c.Associated)
+	}
+
+	return cases
+}
+
 func main() {
 	flag.Parse()
 
@@ -114,6 +138,8 @@ func main() {
 		cases = doDbl()
 	case "s2v":
 		cases = doS2v()
+	case "encrypt":
+		cases = doEncrypt()
 	default:
 		log.Fatalf("Unrecognized function: %s", *function)
 	}
