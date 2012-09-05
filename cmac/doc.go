@@ -14,6 +14,6 @@
 // limitations under the License.
 
 // Package cmac implements the CMAC mode for message authentication, as defined
-// by NIST Special Publication 800-38B. When the AES-128 cipher is used, this
+// by NIST Special Publication 800-38B. When a 16-byte key is used, this
 // matches the AES-CMAC algorithm defined by RFC 4493.
 package cmac
