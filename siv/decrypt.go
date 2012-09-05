@@ -16,6 +16,7 @@
 package siv
 
 import (
+	"crypto/aes"
 	"fmt"
 )
 
@@ -34,5 +35,32 @@ func (e NotAuthenticError) Error() string {
 // plaintext given to Encrypt. If the input is well-formed but the key is
 // incorrect, return an instance of WrongKeyError.
 func Decrypt(key, ciphertext []byte, associated [][]byte) ([]byte, error) {
+	keyLen := len(key)
+	associatedLen := len(associated)
+
+	// The first 16 bytes of the ciphertext are the SIV.
+	if len(ciphertext) < aes.BlockSize {
+		return nil, fmt.Errorf("Invalid ciphertext; length must be at least 16.")
+	}
+
+	v := ciphertext[0:aes.BlockSize]
+	c := ciphertext[aes.BlockSize:]
+
+	// Make sure the key length is legal.
+	switch keyLen {
+	case 32, 48, 64:
+	default:
+		return nil, fmt.Errorf("SIV requires a 32-, 48-, or 64-byte key.")
+	}
+
+	// Derive subkeys.
+	k1 := key[:keyLen/2]
+	k2 := key[keyLen/2:]
+
+	// Make sure the number of associated data is legal, per RFC 5297 section 7.
+	if associatedLen > 126 {
+		return nil, fmt.Errorf("len(associated) may be no more than 126.")
+	}
+
 	return nil, fmt.Errorf("TODO")
 }
