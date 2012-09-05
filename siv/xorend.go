@@ -29,6 +29,11 @@ func xorend(a, b []byte) []byte {
 		panic("Invalid lengths.")
 	}
 
+	result := make([]byte, aLen)
+	copy(result, a)
+
 	difference := aLen - bLen
-	return append(a[:difference], common.Xor(a[difference:], b)...)
+	copy(result[difference:], common.Xor(a[difference:], b))
+
+	return result
 }
