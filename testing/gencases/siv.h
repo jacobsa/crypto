@@ -69,8 +69,9 @@ int s2v_final(siv_ctx *, const unsigned char *, int, unsigned char *);
 void siv_restart(siv_ctx *);
 void siv_aes_ctr(siv_ctx *, const unsigned char *, const int, unsigned char *, 
                  const unsigned char *);
-int siv_encrypt(siv_ctx *, const unsigned char *, unsigned char *, 
-                const int, unsigned char *, const int, ... );
+int siv_encrypt (siv_ctx *ctx, const unsigned char *p, unsigned char *c,
+             const int len, unsigned char *counter,
+             const int nad, const int* adlens, const unsigned char** ads);
 int siv_decrypt(siv_ctx *, const unsigned char *, unsigned char *,
                 const int, unsigned char *, const int, ... );
 

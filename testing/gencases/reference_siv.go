@@ -342,22 +342,19 @@ siv_aes_ctr (siv_ctx *ctx, const unsigned char *p, const int lenp,
 int
 siv_encrypt (siv_ctx *ctx, const unsigned char *p, unsigned char *c,
              const int len, unsigned char *counter, 
-             const int nad, ...)
+             const int nad, const int* adlens, const unsigned char** ads)
 {
-    va_list ap;
-    unsigned char *ad;
-    int adlen, numad = nad;
+    const unsigned char *ad;
+    int adlen;
+    int i;
     unsigned char ctr[AES_BLOCK_SIZE];
 
-    if (numad) {
-        va_start(ap, nad);
-        while (numad) {
-            ad = va_arg(ap, unsigned char *);
-            adlen = va_arg(ap, int);
-            s2v_update(ctx, ad, adlen);
-            numad--;
-        }
-    }
+		for (i = 0; i < nad; ++i) {
+				ad = ads[i];
+				adlen = adlens[i];
+				s2v_update(ctx, ad, adlen);
+		}
+
     s2v_final(ctx, p, len, ctr);
     memcpy(counter, ctr, AES_BLOCK_SIZE);
     siv_aes_ctr(ctx, p, len, c, ctr);
@@ -475,4 +472,65 @@ func s2v(key []byte, strings [][]byte) []byte {
 	}
 
 	return C.GoBytes(unsafe.Pointer(cDigest), 16)
+}
+
+func encrypt(key, plaintext []byte, associated [][]byte) []byte {
+	if len(key) == 0 {
+		panic("Key must be non-empty.")
+	}
+
+	// Initialize the context struct.
+	var ctx C.siv_ctx
+	callResult := C.siv_init(&ctx, (*C.uchar)(&key[0]), C.int(8*len(key)))
+	if callResult < 0 {
+		panic("Error from siv_init.")
+	}
+
+	// Grab the right pointer for the plaintext, taking care not to index an
+	// empty slice.
+	var cPlaintext *C.uchar
+	cPlaintextLen := C.int(len(plaintext))
+	if cPlaintextLen > 0 {
+		cPlaintext = (*C.uchar)(&plaintext[0])
+	}
+
+	// Create a buffer to store the SIV.
+	cCounter := (*C.uchar)(C.malloc(16))
+	defer C.free(unsafe.Pointer(cCounter))
+
+	// Create associated data-related arguments. Take care not to index empty
+	// slices.
+	cNumAssociated := C.int(len(associated))
+
+	adLens := make([]C.int, cNumAssociated)
+	ads := make([]*C.uchar, cNumAssociated)
+	if cNumAssociated == 0 {
+		adLens = make([]C.int, 1)
+		ads = make([]*C.uchar, 1)
+	}
+	cAdLens := (*C.int)(&adLens[0])
+	cAds := (**C.uchar)(&ads[0])
+
+	// Call siv_encrypt.
+	cCiphertext := (*C.uchar)(C.malloc(C.size_t(cPlaintextLen)))
+	defer C.free(unsafe.Pointer(cCiphertext))
+
+	callResult = C.siv_encrypt(
+		&ctx,
+		cPlaintext,
+		cCiphertext,
+		cPlaintextLen,
+		cCounter,
+		cNumAssociated,
+		cAdLens,
+		cAds)
+
+	if callResult < 0 {
+		panic("Error from siv_encrypt.")
+	}
+
+	iv := C.GoBytes(unsafe.Pointer(cCounter), 16)
+	ciphertext := C.GoBytes(unsafe.Pointer(cCiphertext), cPlaintextLen)
+
+	return append(iv, ciphertext...)
 }
