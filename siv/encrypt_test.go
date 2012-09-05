@@ -163,5 +163,12 @@ func (t *EncryptTest) Rfc5297TestCaseA2() {
 }
 
 func (t *EncryptTest) GeneratedTestCases() {
-	ExpectEq("TODO", "")
+	cases := aes_testing.EncryptCases()
+	AssertGe(len(cases), 100)
+
+	for i, c := range cases {
+		output, err := siv.Encrypt(c.Key, c.Plaintext, c.Associated)
+		AssertEq(nil, err, "Case %d: %v", i, c)
+		ExpectThat(output, DeepEquals(c.Output), "Case %d: %v", i, c)
+	}
 }
