@@ -34,6 +34,42 @@ func init() { RegisterTestSuite(&DecryptTest{}) }
 // Tests
 ////////////////////////////////////////////////////////////////////////
 
-func (t *DecryptTest) DoesFoo() {
+func (t *DecryptTest) NilKey() {
+	ExpectEq("TODO", "")
+}
+
+func (t *DecryptTest) ShortKey() {
+	ExpectEq("TODO", "")
+}
+
+func (t *DecryptTest) LongKey() {
+	ExpectEq("TODO", "")
+}
+
+func (t *DecryptTest) TooMuchAssociatedData() {
+	ExpectEq("TODO", "")
+}
+
+func (t *DecryptTest) JustLittleEnoughAssociatedData() {
+	ExpectEq("TODO", "")
+}
+
+func (t *DecryptTest) DoesntClobberAssociatedSlice() {
+	ExpectEq("TODO", "")
+}
+
+func (t *DecryptTest) WrongKey() {
+	ExpectEq("TODO", "")
+}
+
+func (t *DecryptTest) Rfc5297TestCaseA1() {
+	ExpectEq("TODO", "")
+}
+
+func (t *DecryptTest) Rfc5297TestCaseA2() {
+	ExpectEq("TODO", "")
+}
+
+func (t *DecryptTest) GeneratedTestCases() {
 	ExpectEq("TODO", "")
 }
