@@ -80,6 +80,29 @@ func (t *EncryptTest) JustLittleEnoughAssociatedData() {
 	ExpectEq(nil, err)
 }
 
+func (t *EncryptTest) DoesntClobberAssociatedSlice() {
+	key := make([]byte, 32)
+	plaintext := []byte{}
+
+	associated0 := aes_testing.FromRfcHex("deadbeef")
+	associated1 := aes_testing.FromRfcHex("feedface")
+	associated2 := aes_testing.FromRfcHex("ba5eba11")
+	associated := [][]byte{associated0, associated1, associated2}
+
+	// Call with a slice of associated missing the last element. The last element
+	// shouldn't be clobbered.
+	_, err := siv.Encrypt(key, plaintext, associated[:2])
+	AssertEq(nil, err)
+
+	ExpectThat(
+		associated,
+		ElementsAre(
+			DeepEquals(associated0),
+			DeepEquals(associated1),
+			DeepEquals(associated2),
+		))
+}
+
 func (t *EncryptTest) OutputIsDeterministic() {
 	ExpectEq("TODO", "")
 }
