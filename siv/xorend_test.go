@@ -105,3 +105,22 @@ func (t *XorendTest) BIsNonEmpty() {
 
 	ExpectThat(xorend(a, b), DeepEquals(expected))
 }
+
+func (t *XorendTest) DoesntClobberInputData() {
+	a := []byte{
+		fromBinary("11110000"),
+		fromBinary("10101010"),
+		fromBinary("00000000"),
+	}
+	aCopy := dup(a)
+
+	b := []byte{
+		fromBinary("11110000"),
+		fromBinary("00001111"),
+	}
+	bCopy := dup(b)
+
+	xorend(a, b)
+	ExpectThat(a, DeepEquals(aCopy))
+	ExpectThat(b, DeepEquals(bCopy))
+}
