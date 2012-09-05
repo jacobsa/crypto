@@ -1,4 +1,4 @@
-This project contains Go packages related to AES cryptographic standards that
+This repository contains Go packages related to AES cryptographic standards that
 are not included in the Go standard library. These include:
 
  *  [SIV mode][siv], which provides deterministic encryption with
