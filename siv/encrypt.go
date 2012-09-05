@@ -68,7 +68,11 @@ func Encrypt(key, plaintext []byte, associated [][]byte) ([]byte, error) {
 	k2 := key[keyLen/2:]
 
 	// Call S2V to derive the synthetic initialization vector.
-	v := s2v(k1, append(associated, plaintext))
+	s2vStrings := make([][]byte, associatedLen+1)
+	copy(s2vStrings, associated)
+	s2vStrings[associatedLen] = plaintext
+
+	v := s2v(k1, s2vStrings)
 	if len(v) != aes.BlockSize {
 		panic(fmt.Sprintf("Unexpected vector: %v", v))
 	}
