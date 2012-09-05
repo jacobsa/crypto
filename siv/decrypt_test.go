@@ -82,7 +82,13 @@ func (t *DecryptTest) ShortCiphertext() {
 }
 
 func (t *DecryptTest) TooMuchAssociatedData() {
-	ExpectEq("TODO", "")
+	key := make([]byte, 64)
+	ciphertext := make([]byte, 16)
+	associated := make([][]byte, 127)
+
+	_, err := siv.Decrypt(key, ciphertext, associated)
+	ExpectThat(err, Error(HasSubstr("associated")))
+	ExpectThat(err, Error(HasSubstr("126")))
 }
 
 func (t *DecryptTest) JustLittleEnoughAssociatedData() {
