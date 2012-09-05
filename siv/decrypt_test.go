@@ -101,7 +101,33 @@ func (t *DecryptTest) JustLittleEnoughAssociatedData() {
 }
 
 func (t *DecryptTest) DoesntClobberAssociatedSlice() {
-	ExpectEq("TODO", "")
+	// Grab a test case with some associated data.
+	cases := aes_testing.EncryptCases()
+	AssertGt(len(cases), 1)
+	c := cases[1]
+	AssertEq(len(c.Associated), 1)
+
+	// Make a copy of the associated data.
+	associated0 := dup(c.Associated[0])
+
+	// Create a longer slice with some other data too.
+	associated1 := aes_testing.FromRfcHex("deadbeef")
+	longSlice := [][]byte{
+		associated0,
+		associated1,
+	}
+
+	// Call with a slice missing the last element, equivalent to the original
+	// associated data. The last element shouldn't be clobbered.
+	_, err := siv.Decrypt(c.Key, c.Output, longSlice[:1])
+	AssertEq(nil, err)
+
+	ExpectThat(
+		longSlice,
+		ElementsAre(
+			DeepEquals(associated0),
+			DeepEquals(associated1),
+		))
 }
 
 func (t *DecryptTest) WrongKey() {
