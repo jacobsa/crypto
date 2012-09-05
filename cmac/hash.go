@@ -19,7 +19,7 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"fmt"
-	"github.com/jacobsa/aes/common"
+	"github.com/jacobsa/crypto/common"
 	"hash"
 )
 

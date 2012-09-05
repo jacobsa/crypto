@@ -19,8 +19,8 @@ import (
 	"bytes"
 	"crypto/aes"
 	"fmt"
-	"github.com/jacobsa/aes/cmac"
-	"github.com/jacobsa/aes/common"
+	"github.com/jacobsa/crypto/cmac"
+	"github.com/jacobsa/crypto/common"
 )
 
 var s2vZero []byte

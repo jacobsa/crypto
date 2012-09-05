@@ -18,7 +18,7 @@ package cmac
 import (
 	"bytes"
 	"crypto/cipher"
-	"github.com/jacobsa/aes/common"
+	"github.com/jacobsa/crypto/common"
 )
 
 var subkeyZero []byte

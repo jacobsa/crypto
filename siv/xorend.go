@@ -16,7 +16,7 @@
 package siv
 
 import (
-	"github.com/jacobsa/aes/common"
+	"github.com/jacobsa/crypto/common"
 )
 
 // Given strings A and B with len(A) >= len(B), return a new slice consisting

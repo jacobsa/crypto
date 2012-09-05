@@ -18,7 +18,7 @@ package siv
 import (
 	"bytes"
 	"crypto/aes"
-	"github.com/jacobsa/aes/common"
+	"github.com/jacobsa/crypto/common"
 )
 
 var dblRb []byte

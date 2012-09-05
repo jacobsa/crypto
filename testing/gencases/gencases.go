@@ -18,7 +18,7 @@ package main
 import (
 	"encoding/gob"
 	"flag"
-	"github.com/jacobsa/aes/testing"
+	"github.com/jacobsa/crypto/testing"
 	"log"
 	"math/rand"
 	"os"

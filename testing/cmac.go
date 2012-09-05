@@ -39,7 +39,7 @@ func (c CmacTestCase) String() string {
 func CmacCases() []CmacTestCase {
 	// Find the source package.
 	pkg, err := build.Import(
-		"github.com/jacobsa/aes/testing/cases",
+		"github.com/jacobsa/crypto/testing/cases",
 		"",
 		build.FindOnly)
 

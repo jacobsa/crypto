@@ -16,7 +16,7 @@
 package common_test
 
 import (
-	"github.com/jacobsa/aes/common"
+	"github.com/jacobsa/crypto/common"
 	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
 	"testing"

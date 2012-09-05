@@ -6,5 +6,5 @@ are not included in the Go standard library. These include:
 
  *  [CMAC][cmac], a message authentication system used by SIV mode.
 
-[siv]: http://go.pkgdoc.org/github.com/jacobsa/aes/siv
-[cmac]: http://go.pkgdoc.org/github.com/jacobsa/aes/cmac
+[siv]: http://go.pkgdoc.org/github.com/jacobsa/crypto/siv
+[cmac]: http://go.pkgdoc.org/github.com/jacobsa/crypto/cmac
