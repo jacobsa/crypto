@@ -53,6 +53,14 @@ func (t *DecryptTest) LongKey() {
 	ExpectEq("TODO", "")
 }
 
+func (t *DecryptTest) NilCiphertext() {
+	ExpectEq("TODO", "")
+}
+
+func (t *DecryptTest) ShortCiphertext() {
+	ExpectEq("TODO", "")
+}
+
 func (t *DecryptTest) TooMuchAssociatedData() {
 	ExpectEq("TODO", "")
 }
