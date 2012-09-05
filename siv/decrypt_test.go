@@ -92,7 +92,12 @@ func (t *DecryptTest) TooMuchAssociatedData() {
 }
 
 func (t *DecryptTest) JustLittleEnoughAssociatedData() {
-	ExpectEq("TODO", "")
+	key := make([]byte, 64)
+	ciphertext := make([]byte, 128)
+	associated := make([][]byte, 126)
+
+	_, err := siv.Decrypt(key, ciphertext, associated)
+	ExpectEq(nil, err)
 }
 
 func (t *DecryptTest) DoesntClobberAssociatedSlice() {
