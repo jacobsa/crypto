@@ -68,5 +68,15 @@ func EncryptCases() []EncryptTestCase {
 		panic(fmt.Sprintf("Decoding: %v", err))
 	}
 
+	// Make sure the plaintext field is non-nil for all cases so that it can
+	// easily be used with a DeepEquals matcher. Gob decoding does not seem to
+	// preserve this.
+	for i, _ := range cases {
+		c := &cases[i]
+		if c.Plaintext == nil {
+			c.Plaintext = []byte{}
+		}
+	}
+
 	return cases
 }
