@@ -38,9 +38,9 @@ func dup(d []byte) []byte {
 //
 // The supplied key must be 32, 48, or 64 bytes long.
 //
-// The supplied associated data, up to 126 strings, may also be authenticated,
+// The supplied associated data, up to 126 strings, is also authenticated,
 // though it is not included in the ciphertext. The user must supply the same
-// associated data to Decrypt in order for the latter to succeed. If no
+// associated data to Decrypt in order for the Decrypt call to succeed. If no
 // associated data is desired, pass nil or an empty slice.
 //
 // If the same key, plaintext, and associated data are supplied to this
