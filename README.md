@@ -1,4 +1,5 @@
 Go routines related to AES cryptographic standards that are not included in the
-Go standard library.
+Go standard library. These include:
 
-This project is not yet ready for public consumption.
+ *  SIV mode, which provides deterministic encryption with authentication;.
+ *  CMAC, a message authentication system used by SIV mode.
