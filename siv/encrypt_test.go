@@ -104,7 +104,22 @@ func (t *EncryptTest) DoesntClobberAssociatedSlice() {
 }
 
 func (t *EncryptTest) OutputIsDeterministic() {
-	ExpectEq("TODO", "")
+	cases := aes_testing.EncryptCases()
+	AssertGt(len(cases), 37)
+	c := cases[37]
+
+	output0, err := siv.Encrypt(c.Key, c.Plaintext, c.Associated)
+	AssertEq(nil, err)
+
+	output1, err := siv.Encrypt(c.Key, c.Plaintext, c.Associated)
+	AssertEq(nil, err)
+
+	output2, err := siv.Encrypt(c.Key, c.Plaintext, c.Associated)
+	AssertEq(nil, err)
+
+	AssertGt(len(output0), 0)
+	ExpectThat(output0, DeepEquals(output1))
+	ExpectThat(output0, DeepEquals(output2))
 }
 
 func (t *EncryptTest) Rfc5297TestCaseA1() {
