@@ -39,7 +39,7 @@ func init() { RegisterTestSuite(&DecryptTest{}) }
 
 func (t *DecryptTest) NilKey() {
 	key := []byte(nil)
-	ciphertext := []byte{}
+	ciphertext := make([]byte, 16)
 
 	_, err := siv.Decrypt(key, ciphertext, nil)
 	ExpectThat(err, Error(HasSubstr("-byte")))
@@ -47,7 +47,7 @@ func (t *DecryptTest) NilKey() {
 
 func (t *DecryptTest) ShortKey() {
 	key := make([]byte, 31)
-	ciphertext := []byte{}
+	ciphertext := make([]byte, 16)
 
 	_, err := siv.Decrypt(key, ciphertext, nil)
 	ExpectThat(err, Error(HasSubstr("-byte")))
@@ -55,18 +55,30 @@ func (t *DecryptTest) ShortKey() {
 
 func (t *DecryptTest) LongKey() {
 	key := make([]byte, 65)
-	ciphertext := []byte{}
+	ciphertext := make([]byte, 16)
 
 	_, err := siv.Decrypt(key, ciphertext, nil)
 	ExpectThat(err, Error(HasSubstr("-byte")))
 }
 
 func (t *DecryptTest) NilCiphertext() {
-	ExpectEq("TODO", "")
+	key := make([]byte, 64)
+	ciphertext := []byte(nil)
+
+	_, err := siv.Decrypt(key, ciphertext, nil)
+	ExpectThat(err, Error(HasSubstr("Invalid")))
+	ExpectThat(err, Error(HasSubstr("ciphertext")))
+	ExpectThat(err, Error(HasSubstr("short")))
 }
 
 func (t *DecryptTest) ShortCiphertext() {
-	ExpectEq("TODO", "")
+	key := make([]byte, 64)
+	ciphertext := make([]byte, 15)
+
+	_, err := siv.Decrypt(key, ciphertext, nil)
+	ExpectThat(err, Error(HasSubstr("Invalid")))
+	ExpectThat(err, Error(HasSubstr("ciphertext")))
+	ExpectThat(err, Error(HasSubstr("short")))
 }
 
 func (t *DecryptTest) TooMuchAssociatedData() {
