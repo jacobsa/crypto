@@ -29,6 +29,12 @@ func TestDecrypt(t *testing.T) { RunTests(t) }
 // Helpers
 ////////////////////////////////////////////////////////////////////////
 
+func dup(d []byte) []byte {
+	result := make([]byte, len(d))
+	copy(result, d)
+	return result
+}
+
 type DecryptTest struct{}
 
 func init() { RegisterTestSuite(&DecryptTest{}) }
@@ -131,6 +137,18 @@ func (t *DecryptTest) DoesntClobberAssociatedSlice() {
 }
 
 func (t *DecryptTest) WrongKey() {
+	ExpectEq("TODO", "")
+}
+
+func (t *DecryptTest) CorruptedSiv() {
+	ExpectEq("TODO", "")
+}
+
+func (t *DecryptTest) CorruptedCiphertext() {
+	ExpectEq("TODO", "")
+}
+
+func (t *DecryptTest) CorruptedAssociatedData() {
 	ExpectEq("TODO", "")
 }
 
