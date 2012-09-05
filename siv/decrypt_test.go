@@ -171,7 +171,20 @@ func (t *DecryptTest) CorruptedSiv() {
 }
 
 func (t *DecryptTest) CorruptedCiphertext() {
-	ExpectEq("TODO", "")
+	// Grab a test case.
+	cases := aes_testing.EncryptCases()
+	AssertGt(len(cases), 10)
+	c := cases[10]
+
+	// Corrupt its ciphertext and call.
+	AssertGt(len(c.Output), 19)
+	c.Output[19]++
+
+	_, err := siv.Decrypt(c.Key, c.Output, c.Associated)
+	ExpectThat(err, HasSubstr("authentic"))
+
+	_, ok := err.(siv.NotAuthenticError)
+	ExpectTrue(ok, "Not an instance of NotAuthenticError.")
 }
 
 func (t *DecryptTest) CorruptedAssociatedData() {
