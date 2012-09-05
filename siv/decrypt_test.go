@@ -74,7 +74,7 @@ func (t *DecryptTest) NilCiphertext() {
 	_, err := siv.Decrypt(key, ciphertext, nil)
 	ExpectThat(err, Error(HasSubstr("Invalid")))
 	ExpectThat(err, Error(HasSubstr("ciphertext")))
-	ExpectThat(err, Error(HasSubstr("short")))
+	ExpectThat(err, Error(HasSubstr("length")))
 }
 
 func (t *DecryptTest) ShortCiphertext() {
@@ -84,7 +84,7 @@ func (t *DecryptTest) ShortCiphertext() {
 	_, err := siv.Decrypt(key, ciphertext, nil)
 	ExpectThat(err, Error(HasSubstr("Invalid")))
 	ExpectThat(err, Error(HasSubstr("ciphertext")))
-	ExpectThat(err, Error(HasSubstr("short")))
+	ExpectThat(err, Error(HasSubstr("length")))
 }
 
 func (t *DecryptTest) TooMuchAssociatedData() {
@@ -95,15 +95,6 @@ func (t *DecryptTest) TooMuchAssociatedData() {
 	_, err := siv.Decrypt(key, ciphertext, associated)
 	ExpectThat(err, Error(HasSubstr("associated")))
 	ExpectThat(err, Error(HasSubstr("126")))
-}
-
-func (t *DecryptTest) JustLittleEnoughAssociatedData() {
-	key := make([]byte, 64)
-	ciphertext := make([]byte, 128)
-	associated := make([][]byte, 126)
-
-	_, err := siv.Decrypt(key, ciphertext, associated)
-	ExpectEq(nil, err)
 }
 
 func (t *DecryptTest) DoesntClobberAssociatedSlice() {
