@@ -19,11 +19,13 @@ import (
 	"fmt"
 )
 
-// WrongKeyError is returned by Decrypt if the input is otherwise well-formed
-// but the key seems to be incorrect.
-type WrongKeyError string
+// NotAuthenticError is returned by Decrypt if the input is otherwise
+// well-formed but the ciphertext doesn't check out as authentic. This could be
+// due to an incorrect key, corrupted ciphertext, or incorrect/corrupted
+// associated data.
+type NotAuthenticError string
 
-func (e WrongKeyError) Error() string {
+func (e NotAuthenticError) Error() string {
 	return string(e)
 }
 
