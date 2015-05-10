@@ -16,11 +16,13 @@
 package siv_test
 
 import (
+	"crypto/rand"
+	"testing"
+
 	"github.com/jacobsa/crypto/siv"
 	aes_testing "github.com/jacobsa/crypto/testing"
 	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
-	"testing"
 )
 
 func TestDecrypt(t *testing.T) { RunTests(t) }
@@ -260,4 +262,62 @@ func (t *DecryptTest) GeneratedTestCases() {
 		AssertEq(nil, err, "Case %d: %v", i, c)
 		ExpectThat(plaintext, DeepEquals(c.Plaintext), "Case %d: %v", i, c)
 	}
+}
+
+////////////////////////////////////////////////////////////////////////
+// Benchmarks
+////////////////////////////////////////////////////////////////////////
+
+func benchmarkDecrypt(
+	b *testing.B,
+	size int) {
+	var err error
+
+	// Generate the appropriate amount of random data.
+	plaintext := make([]byte, size)
+	_, err = rand.Read(plaintext)
+	if err != nil {
+		b.Fatalf("rand.Read: %v", err)
+	}
+
+	// Create a random key.
+	const keyLen = 32
+	key := make([]byte, keyLen)
+
+	_, err = rand.Read(key)
+	if err != nil {
+		b.Fatalf("rand.Read: %v", err)
+	}
+
+	// Encrypt it.
+	ciphertext, err := siv.Encrypt(key, plaintext, nil)
+	if err != nil {
+		b.Fatalf("Encrypt: %v", err)
+	}
+
+	// Repeatedly decrypt it.
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, err = siv.Decrypt(key, ciphertext, nil)
+		if err != nil {
+			b.Fatalf("Decrypt: %v", err)
+		}
+	}
+
+	b.SetBytes(int64(size))
+}
+
+func BenchmarkDecrypt1KiB(b *testing.B) {
+	const size = 1 << 10
+	benchmarkDecrypt(b, size)
+}
+
+func BenchmarkDecrypt1MiB(b *testing.B) {
+	const size = 1 << 20
+	benchmarkDecrypt(b, size)
+}
+
+func BenchmarkDecrypt16MiB(b *testing.B) {
+	const size = 1 << 24
+	benchmarkDecrypt(b, size)
 }
