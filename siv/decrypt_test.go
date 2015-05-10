@@ -267,14 +267,33 @@ func (t *DecryptTest) GeneratedTestCases() {
 // Benchmarks
 ////////////////////////////////////////////////////////////////////////
 
-func BenchmarkDecrypt1KiB(b *testing.B) {
+func benchmarkDecrypt(
+	b *testing.B,
+	size int) {
+	// Generate the appropriate amount of random data.
 	panic("TODO")
+
+	// Encrypt it.
+	panic("TODO")
+
+	// Repeatedly decrypt it.
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		panic("TODO")
+	}
+}
+
+func BenchmarkDecrypt1KiB(b *testing.B) {
+	const size = 1 << 10
+	benchmarkDecrypt(b, size)
 }
 
 func BenchmarkDecrypt1MiB(b *testing.B) {
-	panic("TODO")
+	const size = 1 << 20
+	benchmarkDecrypt(b, size)
 }
 
 func BenchmarkDecrypt16MiB(b *testing.B) {
-	panic("TODO")
+	const size = 1 << 24
+	benchmarkDecrypt(b, size)
 }
