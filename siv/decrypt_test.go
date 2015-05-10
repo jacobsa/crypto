@@ -16,6 +16,7 @@
 package siv_test
 
 import (
+	"crypto/rand"
 	"testing"
 
 	"github.com/jacobsa/crypto/siv"
@@ -270,17 +271,40 @@ func (t *DecryptTest) GeneratedTestCases() {
 func benchmarkDecrypt(
 	b *testing.B,
 	size int) {
+	var err error
+
 	// Generate the appropriate amount of random data.
-	panic("TODO")
+	plaintext := make([]byte, size)
+	_, err = rand.Read(plaintext)
+	if err != nil {
+		b.Fatalf("rand.Read: %v", err)
+	}
+
+	// Create a random key.
+	const keyLen = 32
+	key := make([]byte, keyLen)
+
+	_, err = rand.Read(key)
+	if err != nil {
+		b.Fatalf("rand.Read: %v", err)
+	}
 
 	// Encrypt it.
-	panic("TODO")
+	ciphertext, err := siv.Encrypt(key, plaintext, nil)
+	if err != nil {
+		b.Fatalf("Encrypt: %v", err)
+	}
 
 	// Repeatedly decrypt it.
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		panic("TODO")
+		_, err = siv.Decrypt(key, ciphertext, nil)
+		if err != nil {
+			b.Fatalf("Decrypt: %v", err)
+		}
 	}
+
+	b.SetBytes(int64(size))
 }
 
 func BenchmarkDecrypt1KiB(b *testing.B) {
