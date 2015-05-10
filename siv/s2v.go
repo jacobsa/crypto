@@ -19,6 +19,7 @@ import (
 	"bytes"
 	"crypto/aes"
 	"fmt"
+
 	"github.com/jacobsa/crypto/cmac"
 	"github.com/jacobsa/crypto/common"
 )
@@ -58,7 +59,7 @@ func s2v(key []byte, strings [][]byte) []byte {
 			panic(fmt.Sprintf("h.Write: %v", err))
 		}
 
-		d = common.Xor(dbl(d), h.Sum([]byte{}))
+		common.Xor(d, dbl(d), h.Sum([]byte{}))
 		h.Reset()
 	}
 
@@ -68,7 +69,8 @@ func s2v(key []byte, strings [][]byte) []byte {
 	if len(lastString) >= aes.BlockSize {
 		t = xorend(lastString, d)
 	} else {
-		t = common.Xor(dbl(d), common.PadBlock(lastString))
+		t = make([]byte, aes.BlockSize)
+		common.Xor(t, dbl(d), common.PadBlock(lastString))
 	}
 
 	if _, err := h.Write(t); err != nil {
