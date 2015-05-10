@@ -15,16 +15,17 @@
 
 package common
 
-// Xor computes `a XOR b`, as defined by RFC 4493.
-func Xor(a []byte, b []byte) []byte {
-	if len(a) != len(b) {
+// Xor computes `a XOR b`, as defined by RFC 4493. dst, a, and b must all have
+// the same length.
+func Xor(dst []byte, a []byte, b []byte) {
+	// TODO(jacobsa): Consider making this a helper function with known sizes
+	// where it is most hot, then even trying to inline it entirely.
+
+	if len(dst) != len(a) || len(a) != len(b) {
 		panic("Xor requires buffers to have identical lengths.")
 	}
 
-	output := make([]byte, len(a))
 	for i, _ := range a {
-		output[i] = a[i] ^ b[i]
+		dst[i] = a[i] ^ b[i]
 	}
-
-	return output
 }

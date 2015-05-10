@@ -19,8 +19,9 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"fmt"
-	"github.com/jacobsa/crypto/common"
 	"hash"
+
+	"github.com/jacobsa/crypto/common"
 )
 
 type cmacHash struct {
@@ -53,9 +54,11 @@ func (h *cmacHash) Write(p []byte) (n int, err error) {
 		blocksToProcess--
 	}
 
+	y := make([]byte, blockSize)
 	for i := 0; i < blocksToProcess; i++ {
 		block := h.data[blockSize*i : blockSize*(i+1)]
-		y := common.Xor(h.x, block)
+
+		common.Xor(y, h.x, block)
 		h.ciph.Encrypt(h.x, y)
 	}
 
@@ -73,14 +76,18 @@ func (h *cmacHash) Sum(b []byte) []byte {
 	}
 
 	// Calculate M_last.
-	var mLast []byte
+	mLast := make([]byte, blockSize)
 	if dataLen == blockSize {
-		mLast = common.Xor(h.data, h.k1)
+		common.Xor(mLast, h.data, h.k1)
 	} else {
-		mLast = common.Xor(common.PadBlock(h.data), h.k2)
+		// TODO(jacobsa): Accept a destination buffer in common.PadBlock and
+		// simplify this code.
+		common.Xor(mLast, common.PadBlock(h.data), h.k2)
 	}
 
-	y := common.Xor(mLast, h.x)
+	y := make([]byte, blockSize)
+	common.Xor(y, mLast, h.x)
+
 	result := make([]byte, blockSize)
 	h.ciph.Encrypt(result, y)
 

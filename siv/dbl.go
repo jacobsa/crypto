@@ -18,6 +18,7 @@ package siv
 import (
 	"bytes"
 	"crypto/aes"
+
 	"github.com/jacobsa/crypto/common"
 )
 
@@ -38,7 +39,9 @@ func dbl(b []byte) []byte {
 	shiftedOne := common.Msb(b) == 1
 	b = common.ShiftLeft(b)
 	if shiftedOne {
-		b = common.Xor(b, dblRb)
+		tmp := make([]byte, aes.BlockSize)
+		common.Xor(tmp, b, dblRb)
+		b = tmp
 	}
 
 	return b

@@ -18,6 +18,7 @@ package cmac
 import (
 	"bytes"
 	"crypto/cipher"
+
 	"github.com/jacobsa/crypto/common"
 )
 
@@ -44,16 +45,20 @@ func generateSubkeys(ciph cipher.Block) (k1 []byte, k2 []byte) {
 
 	// Step 2: Derive the first subkey.
 	if common.Msb(l) == 0 {
+		// TODO(jacobsa): Accept a destination buffer in ShiftLeft and then hoist
+		// the allocation in the else branch below.
 		k1 = common.ShiftLeft(l)
 	} else {
-		k1 = common.Xor(common.ShiftLeft(l), subkeyRb)
+		k1 = make([]byte, blockSize)
+		common.Xor(k1, common.ShiftLeft(l), subkeyRb)
 	}
 
 	// Step 3: Derive the second subkey.
 	if common.Msb(k1) == 0 {
 		k2 = common.ShiftLeft(k1)
 	} else {
-		k2 = common.Xor(common.ShiftLeft(k1), subkeyRb)
+		k2 = make([]byte, blockSize)
+		common.Xor(k2, common.ShiftLeft(k1), subkeyRb)
 	}
 
 	return
