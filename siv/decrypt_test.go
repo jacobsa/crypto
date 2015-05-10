@@ -16,11 +16,12 @@
 package siv_test
 
 import (
+	"testing"
+
 	"github.com/jacobsa/crypto/siv"
 	aes_testing "github.com/jacobsa/crypto/testing"
 	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
-	"testing"
 )
 
 func TestDecrypt(t *testing.T) { RunTests(t) }
@@ -260,4 +261,20 @@ func (t *DecryptTest) GeneratedTestCases() {
 		AssertEq(nil, err, "Case %d: %v", i, c)
 		ExpectThat(plaintext, DeepEquals(c.Plaintext), "Case %d: %v", i, c)
 	}
+}
+
+////////////////////////////////////////////////////////////////////////
+// Benchmarks
+////////////////////////////////////////////////////////////////////////
+
+func BenchmarkDecrypt1KiB(b *testing.B) {
+	panic("TODO")
+}
+
+func BenchmarkDecrypt1MiB(b *testing.B) {
+	panic("TODO")
+}
+
+func BenchmarkDecrypt16MiB(b *testing.B) {
+	panic("TODO")
 }
