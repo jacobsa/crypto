@@ -54,11 +54,9 @@ func (h *cmacHash) Write(p []byte) (n int, err error) {
 		blocksToProcess--
 	}
 
+	y := make([]byte, blockSize)
 	for i := 0; i < blocksToProcess; i++ {
 		block := h.data[blockSize*i : blockSize*(i+1)]
-
-		// TODO(jacobsa): Hoist this.
-		y := make([]byte, blockSize)
 
 		common.Xor(y, h.x, block)
 		h.ciph.Encrypt(h.x, y)
