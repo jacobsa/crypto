@@ -34,7 +34,10 @@ func xorend(a, b []byte) []byte {
 	copy(result, a)
 
 	difference := aLen - bLen
-	copy(result[difference:], common.Xor(a[difference:], b))
+	tmp := make([]byte, bLen)
+	common.Xor(tmp, a[difference:], b)
+
+	copy(result[difference:], tmp)
 
 	return result
 }
