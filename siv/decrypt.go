@@ -16,9 +16,9 @@
 package siv
 
 import (
-	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
+	"crypto/subtle"
 	"fmt"
 )
 
@@ -93,7 +93,7 @@ func Decrypt(key, ciphertext []byte, associated [][]byte) ([]byte, error) {
 		panic(fmt.Sprintf("Unexpected output of S2V: %v", t))
 	}
 
-	if !bytes.Equal(t, v) {
+	if subtle.ConstantTimeCompare(t, v) != 1 {
 		return nil, &NotAuthenticError{
 			"Couldn't validate the authenticity of the ciphertext and " +
 				"associated data."}
