@@ -30,6 +30,9 @@ func init() {
 	s2vZero = bytes.Repeat([]byte{0x00}, aes.BlockSize)
 }
 
+// The output size of the s2v function.
+const s2vSize = cmac.Size
+
 // Run the S2V "string to vector" function of RFC 5297 using the input key and
 // string vector, which must be non-empty. (RFC 5297 defines S2V to handle the
 // empty vector case, but it is never used that way by higher-level functions.)
@@ -37,6 +40,8 @@ func init() {
 // If provided, the supplied scatch space will be used to avoid an allocation.
 // It should be (but is not required to be) as large as the last element of
 // strings.
+//
+// The result is guaranteed to be of length s2vSize.
 func s2v(key []byte, strings [][]byte, scratch []byte) []byte {
 	numStrings := len(strings)
 	if numStrings == 0 {
