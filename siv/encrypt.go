@@ -72,7 +72,8 @@ func Encrypt(dst, key, plaintext []byte, associated [][]byte) ([]byte, error) {
 	copy(s2vStrings, associated)
 	s2vStrings[associatedLen] = plaintext
 
-	v := s2v(k1, s2vStrings)
+	// TODO(jacobsa): Use the final ciphertext space as scratch space here.
+	v := s2v(k1, s2vStrings, nil)
 	if len(v) != aes.BlockSize {
 		panic(fmt.Sprintf("Unexpected vector: %v", v))
 	}

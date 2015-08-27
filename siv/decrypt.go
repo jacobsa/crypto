@@ -88,7 +88,7 @@ func Decrypt(key, ciphertext []byte, associated [][]byte) ([]byte, error) {
 	copy(s2vStrings, associated)
 	s2vStrings[associatedLen] = plaintext
 
-	t := s2v(k1, s2vStrings)
+	t := s2v(k1, s2vStrings, nil)
 	if len(t) != aes.BlockSize {
 		panic(fmt.Sprintf("Unexpected output of S2V: %v", t))
 	}

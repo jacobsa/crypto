@@ -33,7 +33,11 @@ func init() {
 // Run the S2V "string to vector" function of RFC 5297 using the input key and
 // string vector, which must be non-empty. (RFC 5297 defines S2V to handle the
 // empty vector case, but it is never used that way by higher-level functions.)
-func s2v(key []byte, strings [][]byte) []byte {
+//
+// If provided, the supplied scatch space will be used to avoid an allocation.
+// It should be (but is not required to be) as large as the last element of
+// strings.
+func s2v(key []byte, strings [][]byte, scratch []byte) []byte {
 	numStrings := len(strings)
 	if numStrings == 0 {
 		panic("strings vector must be non-empty.")
@@ -67,8 +71,14 @@ func s2v(key []byte, strings [][]byte) []byte {
 	lastString := strings[numStrings-1]
 	var t []byte
 	if len(lastString) >= aes.BlockSize {
-		// TODO(jacobsa): Hoist this allocation.
-		t = make([]byte, len(lastString))
+		// Make an output buffer the length of lastString.
+		if cap(scratch) >= len(lastString) {
+			t = scratch[:len(lastString)]
+		} else {
+			t = make([]byte, len(lastString))
+		}
+
+		// XOR d on the end of lastString.
 		xorend(t, lastString, d)
 	} else {
 		t = make([]byte, aes.BlockSize)
