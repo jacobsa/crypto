@@ -67,7 +67,9 @@ func s2v(key []byte, strings [][]byte) []byte {
 	lastString := strings[numStrings-1]
 	var t []byte
 	if len(lastString) >= aes.BlockSize {
-		t = xorend(lastString, d)
+		// TODO(jacobsa): Hoist this allocation.
+		t = make([]byte, len(lastString))
+		xorend(t, lastString, d)
 	} else {
 		t = make([]byte, aes.BlockSize)
 		common.Xor(t, dbl(d), common.PadBlock(lastString))
