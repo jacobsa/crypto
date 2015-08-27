@@ -129,7 +129,7 @@ func (h *cmacHash) Sum(b []byte) []byte {
 }
 
 func (h *cmacHash) Reset() {
-	h.data = []byte{}
+	h.data = h.data[:0]
 	h.x = make([]byte, blockSize)
 }
 
