@@ -20,6 +20,8 @@ import (
 	"crypto/cipher"
 	"fmt"
 	"hash"
+	"log"
+	"unsafe"
 
 	"github.com/jacobsa/crypto/common"
 )
@@ -93,11 +95,37 @@ func (h *cmacHash) writeBlocks(p []byte) {
 	for off := 0; off < len(p); off += blockSize {
 		block := p[off : off+blockSize]
 
-		common.Xor(y, h.x, block)
+		xorBlock(
+			unsafe.Pointer(&y[0]),
+			unsafe.Pointer(&h.x[0]),
+			unsafe.Pointer(&block[0]))
+
 		h.ciph.Encrypt(h.x, y)
 	}
 
 	return
+}
+
+// XOR the blockSize bytes starting at a and b, writing the result over dst.
+func xorBlock(
+	dstPtr unsafe.Pointer,
+	aPtr unsafe.Pointer,
+	bPtr unsafe.Pointer) {
+	// Check assumptions. (These are compile-time constants, so this should
+	// compile out.)
+	const wordSize = unsafe.Sizeof(uintptr(0))
+	if blockSize != 2*wordSize {
+		log.Panicf("%d %d", blockSize, wordSize)
+	}
+
+	// Convert.
+	a := (*[2]uintptr)(aPtr)
+	b := (*[2]uintptr)(bPtr)
+	dst := (*[2]uintptr)(dstPtr)
+
+	// Compute.
+	dst[0] = a[0] ^ b[0]
+	dst[1] = a[1] ^ b[1]
 }
 
 func (h *cmacHash) Sum(b []byte) []byte {
