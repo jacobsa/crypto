@@ -15,6 +15,8 @@
 
 package common
 
+import "log"
+
 // Xor computes `a XOR b`, as defined by RFC 4493. dst, a, and b must all have
 // the same length.
 func Xor(dst []byte, a []byte, b []byte) {
@@ -22,7 +24,7 @@ func Xor(dst []byte, a []byte, b []byte) {
 	// where it is most hot, then even trying to inline it entirely.
 
 	if len(dst) != len(a) || len(a) != len(b) {
-		panic("Xor requires buffers to have identical lengths.")
+		log.Panicf("Bad buffer lengths: %d, %d, %d", len(dst), len(a), len(b))
 	}
 
 	for i, _ := range a {

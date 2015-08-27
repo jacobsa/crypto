@@ -15,4 +15,9 @@
 
 package cmac
 
-const blockSize = 16
+import "crypto/aes"
+
+// The size of an AES-CMAC checksum, in bytes.
+const Size = aes.BlockSize
+
+const blockSize = Size

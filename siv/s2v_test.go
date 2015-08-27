@@ -16,10 +16,11 @@
 package siv
 
 import (
+	"testing"
+
 	aes_testing "github.com/jacobsa/crypto/testing"
 	. "github.com/jacobsa/oglematchers"
 	. "github.com/jacobsa/ogletest"
-	"testing"
 )
 
 func TestS2v(t *testing.T) { RunTests(t) }
@@ -40,7 +41,7 @@ func (t *S2vTest) NilKey() {
 	key := []byte(nil)
 	strings := [][]byte{[]byte{}}
 
-	f := func() { s2v(key, strings) }
+	f := func() { s2v(key, strings, nil) }
 	ExpectThat(f, Panics(HasSubstr("-byte")))
 }
 
@@ -48,7 +49,7 @@ func (t *S2vTest) ShortKey() {
 	key := make([]byte, 15)
 	strings := [][]byte{[]byte{}}
 
-	f := func() { s2v(key, strings) }
+	f := func() { s2v(key, strings, nil) }
 	ExpectThat(f, Panics(HasSubstr("-byte")))
 }
 
@@ -56,7 +57,7 @@ func (t *S2vTest) LongKey() {
 	key := make([]byte, 33)
 	strings := [][]byte{[]byte{}}
 
-	f := func() { s2v(key, strings) }
+	f := func() { s2v(key, strings, nil) }
 	ExpectThat(f, Panics(HasSubstr("-byte")))
 }
 
@@ -64,7 +65,7 @@ func (t *S2vTest) EmptyStringsVector() {
 	key := aes_testing.FromRfcHex("fffefdfc fbfaf9f8 f7f6f5f4 f3f2f1f0")
 	strings := [][]byte{}
 
-	f := func() { s2v(key, strings) }
+	f := func() { s2v(key, strings, nil) }
 	ExpectThat(f, Panics(HasSubstr("non-empty")))
 }
 
@@ -81,7 +82,7 @@ func (t *S2vTest) Rfc5297GoldenTestCaseA1() {
 
 	expected := aes_testing.FromRfcHex("85632d07 c6e8f37f 950acd32 0a2ecc93")
 
-	ExpectThat(s2v(key, strings), DeepEquals(expected))
+	ExpectThat(s2v(key, strings, nil), DeepEquals(expected))
 }
 
 func (t *S2vTest) Rfc5297GoldenTestCaseA2() {
@@ -102,7 +103,7 @@ func (t *S2vTest) Rfc5297GoldenTestCaseA2() {
 
 	expected := aes_testing.FromRfcHex("7bdb6e3b 432667eb 06f4d14b ff2fbd0f")
 
-	ExpectThat(s2v(key, strings), DeepEquals(expected))
+	ExpectThat(s2v(key, strings, nil), DeepEquals(expected))
 }
 
 func (t *S2vTest) GeneratedTestCases() {
@@ -110,6 +111,9 @@ func (t *S2vTest) GeneratedTestCases() {
 	AssertGe(len(cases), 100)
 
 	for i, c := range cases {
-		ExpectThat(s2v(c.Key, c.Strings), DeepEquals(c.Output), "Case %d: %v", i, c)
+		ExpectThat(
+			s2v(c.Key, c.Strings, nil),
+			DeepEquals(c.Output),
+			"Case %d: %v", i, c)
 	}
 }

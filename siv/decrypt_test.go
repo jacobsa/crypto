@@ -290,7 +290,7 @@ func benchmarkDecrypt(
 	}
 
 	// Encrypt it.
-	ciphertext, err := siv.Encrypt(key, plaintext, nil)
+	ciphertext, err := siv.Encrypt(nil, key, plaintext, nil)
 	if err != nil {
 		b.Fatalf("Encrypt: %v", err)
 	}

@@ -32,9 +32,10 @@ type cmacHash struct {
 	k1 []byte
 	k2 []byte
 
-	// Data that has been seen since the last block was disposed of (i.e. since
-	// we finished an iteration of the for loop in RFC 4493's AES-CMAC algorithm
-	// and were sure we were going into a new one).
+	// Data that has been seen by Write but not yet incorporated into x, due to
+	// us not being sure if it is the final block or not.
+	//
+	// INVARIANT: len(data) <= blockSize
 	data []byte
 
 	// The current value of X, as defined in the AES-CMAC algorithm in RFC 4493.
@@ -44,25 +45,57 @@ type cmacHash struct {
 }
 
 func (h *cmacHash) Write(p []byte) (n int, err error) {
-	// Consume the data.
 	n = len(p)
-	h.data = append(h.data, p...)
 
-	// Consume any blocks that we're sure aren't the last.
-	blocksToProcess := len(h.data) / blockSize
-	if blocksToProcess > 0 && len(h.data)%blockSize == 0 {
-		blocksToProcess--
+	// First step: consume enough data to expand h.data to a full block, if
+	// possible.
+	{
+		toConsume := blockSize - len(h.data)
+		if toConsume > len(p) {
+			toConsume = len(p)
+		}
+
+		h.data = append(h.data, p[:toConsume]...)
+		p = p[toConsume:]
 	}
 
+	// If there's no data left in p, it means h.data might not be a full block.
+	// Even if it is, we're not sure it's the final block, which we must treat
+	// specially. So we must stop here.
+	if len(p) == 0 {
+		return
+	}
+
+	// h.data is a full block and is not the last; process it.
+	h.writeBlocks(h.data)
+	h.data = h.data[:0]
+
+	// Consume any further full blocks in p that we're sure aren't the last. Note
+	// that we're sure that len(p) is greater than zero here.
+	blocksToProcess := (len(p) - 1) / blockSize
+	bytesToProcess := blocksToProcess * blockSize
+
+	h.writeBlocks(p[:bytesToProcess])
+	p = p[bytesToProcess:]
+
+	// Store the rest for later.
+	h.data = append(h.data, p...)
+
+	return
+}
+
+// Process block-aligned data that we're sure does not contain the final block.
+//
+// REQUIRES: len(p) % blockSize == 0
+func (h *cmacHash) writeBlocks(p []byte) {
 	y := make([]byte, blockSize)
-	for i := 0; i < blocksToProcess; i++ {
-		block := h.data[blockSize*i : blockSize*(i+1)]
+
+	for off := 0; off < len(p); off += blockSize {
+		block := p[off : off+blockSize]
 
 		common.Xor(y, h.x, block)
 		h.ciph.Encrypt(h.x, y)
 	}
-
-	h.data = h.data[blockSize*blocksToProcess:]
 
 	return
 }
@@ -96,7 +129,7 @@ func (h *cmacHash) Sum(b []byte) []byte {
 }
 
 func (h *cmacHash) Reset() {
-	h.data = []byte{}
+	h.data = h.data[:0]
 	h.x = make([]byte, blockSize)
 }
 

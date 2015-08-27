@@ -16,10 +16,11 @@
 package siv
 
 import (
-	. "github.com/jacobsa/oglematchers"
-	. "github.com/jacobsa/ogletest"
 	"strconv"
 	"testing"
+
+	. "github.com/jacobsa/oglematchers"
+	. "github.com/jacobsa/ogletest"
 )
 
 func TestXorend(t *testing.T) { RunTests(t) }
@@ -27,6 +28,13 @@ func TestXorend(t *testing.T) { RunTests(t) }
 ////////////////////////////////////////////////////////////////////////
 // Helpers
 ////////////////////////////////////////////////////////////////////////
+
+// Like xorend, but doesn't require an existing buffer.
+func easyXorend(a, b []byte) []byte {
+	dst := make([]byte, len(a))
+	xorend(dst, a, b)
+	return dst
+}
 
 func fromBinary(s string) byte {
 	AssertEq(8, len(s), "%s", s)
@@ -49,7 +57,7 @@ func (t *XorendTest) AIsShorterThanB() {
 	a := []byte{0xde}
 	b := []byte{0xde, 0xad}
 
-	f := func() { xorend(a, b) }
+	f := func() { easyXorend(a, b) }
 	ExpectThat(f, Panics(HasSubstr("length")))
 }
 
@@ -58,7 +66,7 @@ func (t *XorendTest) BothAreNil() {
 	b := []byte(nil)
 
 	expected := []byte{}
-	ExpectThat(xorend(a, b), DeepEquals(expected))
+	ExpectThat(easyXorend(a, b), DeepEquals(expected))
 }
 
 func (t *XorendTest) BIsNil() {
@@ -66,7 +74,7 @@ func (t *XorendTest) BIsNil() {
 	b := []byte(nil)
 
 	expected := a
-	ExpectThat(xorend(a, b), DeepEquals(expected))
+	ExpectThat(easyXorend(a, b), DeepEquals(expected))
 }
 
 func (t *XorendTest) BothAreEmpty() {
@@ -74,7 +82,7 @@ func (t *XorendTest) BothAreEmpty() {
 	b := []byte{}
 
 	expected := []byte{}
-	ExpectThat(xorend(a, b), DeepEquals(expected))
+	ExpectThat(easyXorend(a, b), DeepEquals(expected))
 }
 
 func (t *XorendTest) BIsEmpty() {
@@ -82,7 +90,7 @@ func (t *XorendTest) BIsEmpty() {
 	b := []byte{}
 
 	expected := a
-	ExpectThat(xorend(a, b), DeepEquals(expected))
+	ExpectThat(easyXorend(a, b), DeepEquals(expected))
 }
 
 func (t *XorendTest) BIsNonEmpty() {
@@ -103,7 +111,7 @@ func (t *XorendTest) BIsNonEmpty() {
 		fromBinary("00001111"),
 	}
 
-	ExpectThat(xorend(a, b), DeepEquals(expected))
+	ExpectThat(easyXorend(a, b), DeepEquals(expected))
 }
 
 func (t *XorendTest) DoesntClobberInputData() {
@@ -120,7 +128,7 @@ func (t *XorendTest) DoesntClobberInputData() {
 	}
 	bCopy := dup(b)
 
-	xorend(a, b)
+	easyXorend(a, b)
 	ExpectThat(a, DeepEquals(aCopy))
 	ExpectThat(b, DeepEquals(bCopy))
 }

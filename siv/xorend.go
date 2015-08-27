@@ -16,28 +16,29 @@
 package siv
 
 import (
+	"log"
+
 	"github.com/jacobsa/crypto/common"
 )
 
-// Given strings A and B with len(A) >= len(B), return a new slice consisting
-// of B xor'd onto the right end of A. This matches the xorend operator of RFC
-// 5297.
-func xorend(a, b []byte) []byte {
+// The xorend operator of RFC 5297.
+//
+// Given strings A and B with len(A) >= len(B), let D be len(A) - len(B). Write
+// A[:D] followed by xor(A[D:], B) into dst. In other words, xor B over the
+// rightmost end of A and write the result into dst.
+func xorend(dst, a, b []byte) {
 	aLen := len(a)
 	bLen := len(b)
+	dstLen := len(dst)
 
-	if aLen < bLen {
-		panic("Invalid lengths.")
+	if dstLen < aLen || aLen < bLen {
+		log.Panicf("Bad buffer lengths: %d, %d, %d", dstLen, aLen, bLen)
 	}
 
-	result := make([]byte, aLen)
-	copy(result, a)
-
+	// Copy the left part.
 	difference := aLen - bLen
-	tmp := make([]byte, bLen)
-	common.Xor(tmp, a[difference:], b)
+	copy(dst, a[:difference])
 
-	copy(result[difference:], tmp)
-
-	return result
+	// XOR in the right part.
+	common.Xor(dst[difference:difference+bLen], a[difference:], b)
 }

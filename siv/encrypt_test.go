@@ -43,7 +43,7 @@ func (t *EncryptTest) NilKey() {
 	key := []byte(nil)
 	plaintext := []byte{}
 
-	_, err := siv.Encrypt(key, plaintext, nil)
+	_, err := siv.Encrypt(nil, key, plaintext, nil)
 	ExpectThat(err, Error(HasSubstr("-byte")))
 }
 
@@ -51,7 +51,7 @@ func (t *EncryptTest) ShortKey() {
 	key := make([]byte, 31)
 	plaintext := []byte{}
 
-	_, err := siv.Encrypt(key, plaintext, nil)
+	_, err := siv.Encrypt(nil, key, plaintext, nil)
 	ExpectThat(err, Error(HasSubstr("-byte")))
 }
 
@@ -59,7 +59,7 @@ func (t *EncryptTest) LongKey() {
 	key := make([]byte, 65)
 	plaintext := []byte{}
 
-	_, err := siv.Encrypt(key, plaintext, nil)
+	_, err := siv.Encrypt(nil, key, plaintext, nil)
 	ExpectThat(err, Error(HasSubstr("-byte")))
 }
 
@@ -68,7 +68,7 @@ func (t *EncryptTest) TooMuchAssociatedData() {
 	plaintext := []byte{}
 	associated := make([][]byte, 127)
 
-	_, err := siv.Encrypt(key, plaintext, associated)
+	_, err := siv.Encrypt(nil, key, plaintext, associated)
 	ExpectThat(err, Error(HasSubstr("associated")))
 	ExpectThat(err, Error(HasSubstr("126")))
 }
@@ -78,7 +78,7 @@ func (t *EncryptTest) JustLittleEnoughAssociatedData() {
 	plaintext := []byte{}
 	associated := make([][]byte, 126)
 
-	_, err := siv.Encrypt(key, plaintext, associated)
+	_, err := siv.Encrypt(nil, key, plaintext, associated)
 	ExpectEq(nil, err)
 }
 
@@ -93,7 +93,7 @@ func (t *EncryptTest) DoesntClobberAssociatedSlice() {
 
 	// Call with a slice of associated missing the last element. The last element
 	// shouldn't be clobbered.
-	_, err := siv.Encrypt(key, plaintext, associated[:2])
+	_, err := siv.Encrypt(nil, key, plaintext, associated[:2])
 	AssertEq(nil, err)
 
 	ExpectThat(
@@ -110,13 +110,13 @@ func (t *EncryptTest) OutputIsDeterministic() {
 	AssertGt(len(cases), 37)
 	c := cases[37]
 
-	output0, err := siv.Encrypt(c.Key, c.Plaintext, c.Associated)
+	output0, err := siv.Encrypt(nil, c.Key, c.Plaintext, c.Associated)
 	AssertEq(nil, err)
 
-	output1, err := siv.Encrypt(c.Key, c.Plaintext, c.Associated)
+	output1, err := siv.Encrypt(nil, c.Key, c.Plaintext, c.Associated)
 	AssertEq(nil, err)
 
-	output2, err := siv.Encrypt(c.Key, c.Plaintext, c.Associated)
+	output2, err := siv.Encrypt(nil, c.Key, c.Plaintext, c.Associated)
 	AssertEq(nil, err)
 
 	AssertGt(len(output0), 0)
@@ -142,7 +142,7 @@ func (t *EncryptTest) Rfc5297TestCaseA1() {
 		"85632d07 c6e8f37f 950acd32 0a2ecc93" +
 			"40c02b96 90c4dc04 daef7f6a fe5c")
 
-	output, err := siv.Encrypt(key, plaintext, associated)
+	output, err := siv.Encrypt(nil, key, plaintext, associated)
 	AssertEq(nil, err)
 	ExpectThat(output, DeepEquals(expected))
 }
@@ -174,7 +174,7 @@ func (t *EncryptTest) Rfc5297TestCaseA2() {
 			"dba77ceb 094fa663 b7a3f748 ba8af829" +
 			"ea64ad54 4a272e9c 485b62a3 fd5c0d")
 
-	output, err := siv.Encrypt(key, plaintext, associated)
+	output, err := siv.Encrypt(nil, key, plaintext, associated)
 	AssertEq(nil, err)
 	ExpectThat(output, DeepEquals(expected))
 }
@@ -184,7 +184,7 @@ func (t *EncryptTest) GeneratedTestCases() {
 	AssertGe(len(cases), 100)
 
 	for i, c := range cases {
-		output, err := siv.Encrypt(c.Key, c.Plaintext, c.Associated)
+		output, err := siv.Encrypt(nil, c.Key, c.Plaintext, c.Associated)
 		AssertEq(nil, err, "Case %d: %v", i, c)
 		ExpectThat(output, DeepEquals(c.Output), "Case %d: %v", i, c)
 	}
@@ -218,7 +218,7 @@ func benchmarkEncrypt(
 	// Repeatedly encrypt.
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, err = siv.Encrypt(key, plaintext, nil)
+		_, err = siv.Encrypt(nil, key, plaintext, nil)
 		if err != nil {
 			b.Fatalf("Encrypt: %v", err)
 		}
