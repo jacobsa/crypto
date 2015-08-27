@@ -28,9 +28,9 @@ func dup(d []byte) []byte {
 }
 
 // Given a key and plaintext, encrypt the plaintext using the SIV mode of AES,
-// as defined by RFC 5297, and return the result (including both the synthetic
-// initialization vector and the ciphertext). The output can later be fed to
-// Decrypt to recover the plaintext.
+// as defined by RFC 5297, append the result (including both the synthetic
+// initialization vector and the ciphertext) to dst, and return the updated
+// slice. The output can later be fed to Decrypt to recover the plaintext.
 //
 // In addition to confidentiality, this function also offers authenticity. That
 // is, without the secret key an attacker is unable to construct a byte string
@@ -41,13 +41,13 @@ func dup(d []byte) []byte {
 // The supplied associated data, up to 126 strings, is also authenticated,
 // though it is not included in the ciphertext. The user must supply the same
 // associated data to Decrypt in order for the Decrypt call to succeed. If no
-// associated data is desired, pass nil or an empty slice.
+// associated data is desired, pass an empty slice.
 //
 // If the same key, plaintext, and associated data are supplied to this
 // function multiple times, the output is guaranteed to be identical. As per
 // RFC 5297 section 3, you may use this function for nonce-based authenticated
 // encryption by passing a nonce as the last associated data element.
-func Encrypt(key, plaintext []byte, associated [][]byte) ([]byte, error) {
+func Encrypt(dst, key, plaintext []byte, associated [][]byte) ([]byte, error) {
 	keyLen := len(key)
 	associatedLen := len(associated)
 
@@ -90,11 +90,22 @@ func Encrypt(key, plaintext []byte, associated [][]byte) ([]byte, error) {
 
 	ctrCiph := cipher.NewCTR(ciph, q)
 
-	// Create a result buffer large enough to hold the SIV and the ciphertext.
-	// Copy in the SIV then fill in the ciphertext.
-	result := make([]byte, len(v)+len(plaintext))
-	copy(result, v)
-	ctrCiph.XORKeyStream(result[len(v):], plaintext)
+	// Ensure the destination is large enough.
+	lenDstBefore := len(dst)
+	{
+		needed := lenDstBefore + len(v) + len(plaintext)
+		if cap(dst) < needed {
+			tmp := make([]byte, lenDstBefore, needed+needed/4)
+			copy(tmp, dst)
+			dst = tmp
+		}
 
-	return result, nil
+		dst = dst[:needed]
+	}
+
+	// Copy in the SIV then fill in the ciphertext.
+	copy(dst[lenDstBefore:], v)
+	ctrCiph.XORKeyStream(dst[lenDstBefore+len(v):], plaintext)
+
+	return dst, nil
 }
