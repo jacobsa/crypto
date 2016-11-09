@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// +build amd64 arm64
+// +build amd64 arm64 ppc64 ppc64le s390x mips64 mips64le
 
 package cmac
 
