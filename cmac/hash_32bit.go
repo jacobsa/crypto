@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// +build 386 arm,!arm64
+// +build 386 arm,!arm64 mips mipsle
 
 package cmac
 
