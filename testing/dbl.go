@@ -34,7 +34,7 @@ func (c DblTestCase) String() string {
 	return fmt.Sprintf("Dbl(%x) = %x", c.Input, c.Output)
 }
 
-// DblTestCases returns test cases for dbl.
+// DblCases returns test cases for dbl.
 func DblCases() []DblTestCase {
 	// Find the source package.
 	pkg, err := build.Import(

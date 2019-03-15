@@ -35,7 +35,7 @@ func (c CmacTestCase) String() string {
 	return fmt.Sprintf("AES-CMAC(%x, %x) = %x", c.Key, c.Msg, c.Mac)
 }
 
-// CmacTestCases returns test cases for AES-CMAC.
+// CmacCases returns test cases for AES-CMAC.
 func CmacCases() []CmacTestCase {
 	// Find the source package.
 	pkg, err := build.Import(

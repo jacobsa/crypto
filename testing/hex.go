@@ -21,7 +21,7 @@ import (
 	"strings"
 )
 
-// Decode a hex string that may contain spaces, as used in test vectors in
+// FromRfcHex decodes a hex string that may contain spaces, as used in test vectors in
 // RFCs. Panic if the input is illegal.
 func FromRfcHex(s string) []byte {
 	// Remove spaces.
