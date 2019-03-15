@@ -35,7 +35,7 @@ func (c S2vTestCase) String() string {
 	return fmt.Sprintf("S2v(%x, %x) = %x", c.Key, c.Strings, c.Output)
 }
 
-// S2vTestCases returns test cases for S2V.
+// S2vCases returns test cases for S2V.
 func S2vCases() []S2vTestCase {
 	// Find the source package.
 	pkg, err := build.Import(

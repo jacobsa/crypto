@@ -41,7 +41,7 @@ func (c EncryptTestCase) String() string {
 		c.Output)
 }
 
-// EncryptTestCases returns test cases for Encrypt.
+// EncryptCases returns test cases for Encrypt.
 func EncryptCases() []EncryptTestCase {
 	// Find the source package.
 	pkg, err := build.Import(
