@@ -2,3 +2,6 @@
 # Cf. http://docs.travis-ci.com/user/languages/go/
 
 language: go
+arch:
+- amd64
+- ppc64le
