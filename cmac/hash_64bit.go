@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// +build amd64 arm64 ppc64 ppc64le s390x mips64 mips64le
+// +build amd64 arm64 ppc64 ppc64le s390x loong64 mips64 mips64le
 
 // This code assumes that it's safe to perform unaligned word-sized loads. This is safe on:
 //  - arm64 per http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.den0024a/ch05s01s02.html
